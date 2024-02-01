@@ -67,13 +67,13 @@ process minimap2 {
         mkdir -p ${params.resultsDir}/${condition}/${sample}/Alignment
 
         if ${params.spliced_alignment_flag} ; then 
-		/bin/miniconda3/bin/minimap2 -ax splice -k14 --seed 1 -t ${task.cpus} reference.fasta ${fastq} | /bin/miniconda3/bin/samtools view -hSb | /bin/miniconda3/bin/samtools sort -@ ${task.cpus} -o ${params.resultsDir}/${condition}/${sample}/Alignment/minimap.bam
-		/bin/miniconda3/bin/samtools view ${params.resultsDir}/${condition}/${sample}/Alignment/minimap.bam -bh -q ${params.min_mapq} -F 2308 | /bin/miniconda3/bin/samtools sort -@ ${task.cpus} -o ${params.resultsDir}/${condition}/${sample}/Alignment/minimap.filtered.bam
-		/bin/miniconda3/bin/samtools index -@ ${task.cpus} ${params.resultsDir}/${condition}/${sample}/Alignment/minimap.filtered.bam
+		minimap2 -ax splice -k14 --seed 1 -t ${task.cpus} reference.fasta ${fastq} | samtools view -hSb | samtools sort -@ ${task.cpus} -o ${params.resultsDir}/${condition}/${sample}/Alignment/minimap.bam
+		samtools view ${params.resultsDir}/${condition}/${sample}/Alignment/minimap.bam -bh -q ${params.min_mapq} -F 2308 | samtools sort -@ ${task.cpus} -o ${params.resultsDir}/${condition}/${sample}/Alignment/minimap.filtered.bam
+		samtools index -@ ${task.cpus} ${params.resultsDir}/${condition}/${sample}/Alignment/minimap.filtered.bam
 	else
-		/bin/miniconda3/bin/minimap2 -ax map-ont -k14 --seed 1 -t ${task.cpus} reference.fasta ${fastq} | /bin/miniconda3/bin/samtools view -hSb | /bin/miniconda3/bin/samtools sort -@ ${task.cpus} -o ${params.resultsDir}/${condition}/${sample}/Alignment/minimap.bam
-                /bin/miniconda3/bin/samtools view ${params.resultsDir}/${condition}/${sample}/Alignment/minimap.bam -bh -q ${params.min_mapq} -F 2324 | /bin/miniconda3/bin/samtools sort -@ ${task.cpus} -o ${params.resultsDir}/${condition}/${sample}/Alignment/minimap.filtered.bam
-		/bin/miniconda3/bin/samtools index -@ ${task.cpus} ${params.resultsDir}/${condition}/${sample}/Alignment/minimap.filtered.bam
+		minimap2 -ax map-ont -k14 --seed 1 -t ${task.cpus} reference.fasta ${fastq} | samtools view -hSb | samtools sort -@ ${task.cpus} -o ${params.resultsDir}/${condition}/${sample}/Alignment/minimap.bam
+                samtools view ${params.resultsDir}/${condition}/${sample}/Alignment/minimap.bam -bh -q ${params.min_mapq} -F 2324 | samtools sort -@ ${task.cpus} -o ${params.resultsDir}/${condition}/${sample}/Alignment/minimap.filtered.bam
+		samtools index -@ ${task.cpus} ${params.resultsDir}/${condition}/${sample}/Alignment/minimap.filtered.bam
 	fi
 
 	ln -s ${params.resultsDir}/${condition}/${sample}/Alignment/minimap.filtered.bam ./minimap.filtered.bam
