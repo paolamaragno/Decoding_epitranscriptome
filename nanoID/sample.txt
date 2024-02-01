@@ -1,0 +1,2 @@
+SampleName  Condition   DataPath
+Test	WT	/path/to/workspace/
