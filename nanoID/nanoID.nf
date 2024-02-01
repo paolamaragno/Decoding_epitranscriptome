@@ -118,9 +118,9 @@ process genomicAlignment {
     """
         mkdir -p ${params.resultsDir}/${condition}/${sample}/genomeAlignment/
         
-        /bin/miniconda3/bin/minimap2 -ax splice -k14 --seed 1 -t ${task.cpus} ${params.genome_fasta} ${params.resultsDir}/${condition}/${sample}/FASTQ_DNA.fastq | /bin/miniconda3/bin/samtools view -hSb | /bin/miniconda3/bin/samtools sort -@ ${task.cpus} -o ${params.resultsDir}/${condition}/${sample}/genomeAlignment/minimap.G.bam
-        /bin/miniconda3/bin/samtools view ${params.resultsDir}/${condition}/${sample}/genomeAlignment/minimap.G.bam -bh -t genome.fa.fai -F 2308 -q ${params.alignmentqValue} | /bin/miniconda3/bin/samtools sort -@ ${task.cpus} -o ${params.resultsDir}/${condition}/${sample}/genomeAlignment/minimap.filt.G.bam
-        /bin/miniconda3/bin/samtools index -@ ${task.cpus} ${params.resultsDir}/${condition}/${sample}/genomeAlignment/minimap.filt.G.bam
+        minimap2 -ax splice -k14 --seed 1 -t ${task.cpus} ${params.genome_fasta} ${params.resultsDir}/${condition}/${sample}/FASTQ_DNA.fastq | samtools view -hSb | samtools sort -@ ${task.cpus} -o ${params.resultsDir}/${condition}/${sample}/genomeAlignment/minimap.G.bam
+        samtools view ${params.resultsDir}/${condition}/${sample}/genomeAlignment/minimap.G.bam -bh -t genome.fa.fai -F 2308 -q ${params.alignmentqValue} | samtools sort -@ ${task.cpus} -o ${params.resultsDir}/${condition}/${sample}/genomeAlignment/minimap.filt.G.bam
+        samtools index -@ ${task.cpus} ${params.resultsDir}/${condition}/${sample}/genomeAlignment/minimap.filt.G.bam
 
         ln -s ${params.resultsDir}/${condition}/${sample}/genomeAlignment/minimap.filt.G.bam ./minimap.filt.G.bam
         ln -s ${params.resultsDir}/${condition}/${sample}/genomeAlignment/minimap.filt.G.bam.bai ./minimap.filt.G.bam.bai
