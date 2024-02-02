@@ -1,13 +1,4 @@
 #!/usr/bin/env nextflow
-/*
-========================================================================================
-                         MaestSi/nf-m6anet
-========================================================================================
- MaestSi/nf-m6anet analysis pipeline.
- #### Homepage / Documentation
- https://github.com/MaestSi/nf-m6anet
-----------------------------------------------------------------------------------------
-*/
 
 def helpMessage() {
 		log.info"""
@@ -62,9 +53,9 @@ process minimap2 {
     if(params.minimap2)
 	"""
 		mkdir -p ${params.resultsDir}/${condition}/${sample}/transcriptomeAlignment/
-		/bin/miniconda3/bin/minimap2 -x map-ont -k14 --seed 1 -t ${task.cpus} -a transcriptome.fa ${fastq} | /bin/miniconda3/bin/samtools view -hSb | /bin/miniconda3/bin/samtools sort -@ ${task.cpus} -o ${params.resultsDir}/${condition}/${sample}/transcriptomeAlignment/minimapT.bam
-		/bin/miniconda3/bin/samtools view ${params.resultsDir}/${condition}/${sample}/transcriptomeAlignment/minimapT.bam -bh -F 2324 -q ${params.min_mapq} | /bin/miniconda3/bin/samtools sort -@ ${task.cpus} -o ${params.resultsDir}/${condition}/${sample}/transcriptomeAlignment/minimap.filt.sortT.bam	
-		/bin/miniconda3/bin/samtools index -@ ${task.cpus} ${params.resultsDir}/${condition}/${sample}/transcriptomeAlignment/minimap.filt.sortT.bam
+		minimap2 -x map-ont -k14 --seed 1 -t ${task.cpus} -a transcriptome.fa ${fastq} | samtools view -hSb | samtools sort -@ ${task.cpus} -o ${params.resultsDir}/${condition}/${sample}/transcriptomeAlignment/minimapT.bam
+		samtools view ${params.resultsDir}/${condition}/${sample}/transcriptomeAlignment/minimapT.bam -bh -F 2324 -q ${params.min_mapq} | samtools sort -@ ${task.cpus} -o ${params.resultsDir}/${condition}/${sample}/transcriptomeAlignment/minimap.filt.sortT.bam	
+		samtools index -@ ${task.cpus} ${params.resultsDir}/${condition}/${sample}/transcriptomeAlignment/minimap.filt.sortT.bam
 		ln -s ${params.resultsDir}/${condition}/${sample}/transcriptomeAlignment/minimap.filt.sort.bam ./minimap.filt.sortT.bam
 		ln -s ${params.resultsDir}/${condition}/${sample}/transcriptomeAlignment/minimap.filt.sort.bam.bai ./minimap.filt.sortT.bam.bai
 	"""
@@ -166,8 +157,8 @@ process postprocessing {
 
 		Rscript ${params.postprocessingScript} \
 			input_file=${params.resultsDir}/${condition}/m6anet/data.site_proba.csv \
-			output_file=${params.resultsDir}/${condition}/m6anet_postprocessing/data.site_proba0.${params.prob_mod_thr}.tsv \
-			output_file_genome=${params.resultsDir}/${condition}/m6anet_postprocessing/data.site_proba0.genome.${params.prob_mod_thr}.tsv \
+			output_file=${params.resultsDir}/${condition}/m6anet_postprocessing/data.site_proba0.tsv \
+			output_file_genome=${params.resultsDir}/${condition}/m6anet_postprocessing/data.site_proba0.genome.tsv \
 			genome_gtf=${params.gtf} \
 			mccores=${task.cpus} \
 			prob_mod_thr=${params.prob_mod_thr}
