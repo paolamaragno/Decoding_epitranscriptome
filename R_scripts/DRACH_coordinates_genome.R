@@ -1,15 +1,10 @@
-# from the fasta sequence of the Human genome, the coordinates of all the DRACH sites, both on the positive and on the
-# negative strand, are identified.
-# Then, the percentage of m6Anet analysed sites (probability of modification between 0 and 1) that are in DRACH context
-# is computed for each fraction
-
 library('Biostrings')
 library('GenomicAlignments')
 library('GenomicRanges')
 library('GenomicFeatures')
 
 # path to the genome reference file in fasta format
-genome <- readDNAStringSet('/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/references/Homo_sapiens.GRCh38.dna.primary_assembly.fa', format="fasta")
+genome <- readDNAStringSet('/path/to/Homo_sapiens.GRCh38.dna.primary_assembly.fa', format="fasta")
 names(genome) <- unlist(lapply(strsplit(names(genome), split=' '), function(x) x[1]))
 # look for DRACH motif on the genome positive strand
 DRACH_forward <- GRanges(vmatchPattern(pattern = "DRACH", subject = genome, fixed = 'subject'))
@@ -19,7 +14,7 @@ strand(DRACH_forward) <- '+'
 DRACH_reverse <- GRanges(vmatchPattern(pattern = reverseComplement(DNAString('DRACH')), subject = genome, fixed = 'subject'))
 strand(DRACH_reverse) <- '-'
 DRACH <- c(DRACH_forward,DRACH_reverse)
-save(DRACH, file='/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/R_data/DRACH_forward_strand.Rda')
+save(DRACH, file='/path/to/R_data/DRACH_forward_strand.Rda')
 
 ##########
 
