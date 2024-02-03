@@ -1,9 +1,3 @@
-# generate a heatmap reporting, for each fraction and each gene with at least one ELIGOS hit
-# mapping on it in that fraction, how many ELIGOS hits are present in each gene part.
-# This is done on nascent+pre-existing reads from both replicates, on nascent+pre-existing reads 
-# from each replicate separately, only on nascent reads and on nascent+pre-existing reads with same
-# library-level subsampling threshold used for nascent reads
-
 library('GenomicFeatures')
 library('GenomicRanges')
 library('pheatmap')
@@ -13,20 +7,18 @@ library('xlsx')
 library('rtracklayer')
 library('grid')
 
-gtf_file <- "/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/references/Homo_sapiens.GRCh38.104.gtf"
+gtf_file <- "/path/to/Homo_sapiens.GRCh38.104.gtf"
 gtf <- readGFF(gtf_file)
 # extract the annotation of the genes
 genes <- gtf[gtf$type=='gene',]
 
 # GRangesList containing for each gene a GRanges with the coordinates of its 5'UTRs, 3'UTRs, stop codon, introns and exons
-load('/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/R_data/protein_coding_genes_5UTR_3UTR_introns_exons_stop.RDa')
+load('/path/to/R_data/protein_coding_genes_5UTR_3UTR_introns_exons_stop.RDa')
 
-# identify the gene names of protein coding genes and how many of the annotated genes are
-# protein coding
+# identify the gene names of protein coding genes and how many of the annotated genes are protein coding
 protein_coding <- genes[genes$gene_biotype=='protein_coding',]
 protein_coding_names <- protein_coding$gene_id
 length(names(protein_coding_genes_5UTR_3UTR_introns_exons_stop)[names(protein_coding_genes_5UTR_3UTR_introns_exons_stop) %in% protein_coding_names])
-# 19,966
 
 # extract the gene biotype of the genes annotated in protein_coding_genes_5UTR_3UTR_introns_exons_stop
 type <- unlist(lapply(as.list(names(protein_coding_genes_5UTR_3UTR_introns_exons_stop)), function(x) {
@@ -36,7 +28,7 @@ type <- unlist(lapply(as.list(names(protein_coding_genes_5UTR_3UTR_introns_exons
 # create a data frame reporting for each annotated gene the corresponding biotype 
 gene_biotype <- data.frame(gene_biotype=type)
 rownames(gene_biotype) <- names(protein_coding_genes_5UTR_3UTR_introns_exons_stop)
-save(gene_biotype, file='/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/R_data/gene_biotype.Rda')
+save(gene_biotype, file='/path/to/R_data/gene_biotype.Rda')
 
 #########################################
 
@@ -171,7 +163,7 @@ count_mods <- function(directory) {
         fraction = c('Cytoplasmic')
       }
       
-      # compute Spearman correlation between the number of hits identified in each gene part and 
+      # compute the Spearman correlation between the number of hits identified in each gene part and 
       # the number of reads mapping on the corresponding gene
       cor_read_counts <- unlist(lapply(1:ncol(m), function(x,y,i){
         round(cor(x[!is.na(y[,i])], y[,i][!is.na(y[,i])], method = 'spearman'),2)
@@ -179,7 +171,7 @@ count_mods <- function(directory) {
       cor_read_counts[is.na(cor_read_counts)] <- 0
       correlation_read_counts[fraction,] <- cor_read_counts
       
-      # compute Spearman correlation between the number of hits identified in each gene part and 
+      # compute the Spearman correlation between the number of hits identified in each gene part and 
       # the length of the corresponding gene
       cor_gene_length <- unlist(lapply(1:ncol(m), function(x,y,i){
         round(cor(x[!is.na(y[,i])], y[,i][!is.na(y[,i])], method = 'spearman'),2)
@@ -187,7 +179,7 @@ count_mods <- function(directory) {
       cor_gene_length[is.na(cor_gene_length)] <- 0
       correlation_gene_length[fraction,] <- cor_gene_length
       
-      # compute Spearman correlation between the number of hits identified in each gene part and 
+      # compute the Spearman correlation between the number of hits identified in each gene part and 
       # the strand of the corresponding gene
       cor_gene_strand <- unlist(lapply(1:ncol(m), function(x,y,i){
         round(cor(x[!is.na(y[,i])], y[,i][!is.na(y[,i])], method = 'spearman'),2)
@@ -280,17 +272,17 @@ count_mods <- function(directory) {
   f2(R_objects_DRACH)
 }
 
-count_mods(directory= '/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/fractions_eligos_4sU_library_gene_subsampling_min05_min05_mag1/')
-count_mods(directory='/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/fractions_eligos_4sU_library_gene_subsampling_rep1_min05_min05_mag1/')
-count_mods(directory='/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/fractions_eligos_4sU_library_gene_subsampling_rep2_min05_min05_mag1/')
-count_mods(directory='/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/fractions_eligos_4sU_library_gene_subsampling_nascent_min05_min05_mag1/')
-count_mods(directory='/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/fractions_eligos_4sU_library_gene_subsampling_total_510645_min05_min05_mag1/')
+count_mods(directory= '/path/to/fractions_eligos_4sU_library_gene_subsampling_min05_min05_mag1/')
+count_mods(directory='/path/to/fractions_eligos_4sU_library_gene_subsampling_rep1_min05_min05_mag1/')
+count_mods(directory='/path/to/fractions_eligos_4sU_library_gene_subsampling_rep2_min05_min05_mag1/')
+count_mods(directory='/path/to/fractions_eligos_4sU_library_gene_subsampling_nascent_min05_min05_mag1/')
+count_mods(directory='/path/to/fractions_eligos_4sU_library_gene_subsampling_total_510645_min05_min05_mag1/')
 
 
 ###########
 
-# function identical to the previous one but I changed the path of input and output to adapt it 
-# to the location in which I saved ELIGOS DRACH+ and DRACH- hits only in nascent chromatin associated RNAs  
+# function identical to the previous one but the path of input and output are different to adapt it 
+# to the location in which ELIGOS DRACH+ and DRACH- hits only in nascent chromatin associated RNAs are stored
 count_mods_nascent_only_chr <- function(directory) { 
   
   f2 <- function(R_objects) {
@@ -415,7 +407,7 @@ count_mods_nascent_only_chr <- function(directory) {
         fraction = c('Cytoplasmic')
       }
       
-      # compute Spearman correlation between the number of hits identified in each gene part and 
+      # compute the Spearman correlation between the number of hits identified in each gene part and 
       # the number of reads mapping on the corresponding gene
       cor_read_counts <- unlist(lapply(1:ncol(m), function(x,y,i){
         round(cor(x[!is.na(y[,i])], y[,i][!is.na(y[,i])], method = 'spearman'),2)
@@ -423,7 +415,7 @@ count_mods_nascent_only_chr <- function(directory) {
       cor_read_counts[is.na(cor_read_counts)] <- 0
       correlation_read_counts[fraction,] <- cor_read_counts
       
-      # compute Spearman correlation between the number of hits identified in each gene part and 
+      # compute the Spearman correlation between the number of hits identified in each gene part and 
       # the length of the corresponding gene
       cor_gene_length <- unlist(lapply(1:ncol(m), function(x,y,i){
         round(cor(x[!is.na(y[,i])], y[,i][!is.na(y[,i])], method = 'spearman'),2)
@@ -431,7 +423,7 @@ count_mods_nascent_only_chr <- function(directory) {
       cor_gene_length[is.na(cor_gene_length)] <- 0
       correlation_gene_length[fraction,] <- cor_gene_length
       
-      # compute Spearman correlation between the number of hits identified in each gene part and 
+      # compute the Spearman correlation between the number of hits identified in each gene part and 
       # the strand of the corresponding gene
       cor_gene_strand <- unlist(lapply(1:ncol(m), function(x,y,i){
         round(cor(x[!is.na(y[,i])], y[,i][!is.na(y[,i])], method = 'spearman'),2)
@@ -491,5 +483,5 @@ count_mods_nascent_only_chr <- function(directory) {
 
 # copy /gene_counts/ folder inside /only_chr/with_DRACH/ folder and /only_chr/without_DRACH/ 
 # containing ELIGOS DRACH+ and DRACH- hits only in nascent chromatin associated RNAs
-count_mods_nascent_only_chr(directory='/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/fractions_eligos_4sU_library_gene_subsampling_nascent_min05_min05_mag1/only_chr/with_DRACH/')
-count_mods_nascent_only_chr(directory='/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/fractions_eligos_4sU_library_gene_subsampling_nascent_min05_min05_mag1/only_chr/without_DRACH/')
+count_mods_nascent_only_chr(directory='/path/to/fractions_eligos_4sU_library_gene_subsampling_nascent_min05_min05_mag1/only_chr/with_DRACH/')
+count_mods_nascent_only_chr(directory='/path/to/fractions_eligos_4sU_library_gene_subsampling_nascent_min05_min05_mag1/only_chr/without_DRACH/')
