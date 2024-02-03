@@ -1,10 +1,3 @@
-# import ELIGOS and m6Anet results, define the corresponding hits, which of them contain the 
-# DRACH motif. The number of hits per fraction are computed as well as their overlap.
-# Eventually the comparison between ELIGOS and m6Anet results is done.
-# This analysis is done on nascent+pre-existing reads from both replicates, on nascent+pre-existing reads 
-# from each replicate separately, only on nascent reads and on nascent+pre-existing reads with same
-# library-level subsampling threshold used for nascent reads
-
 library('GenomicFeatures')
 library('compEpiTools')
 library('ggplot2')
@@ -15,7 +8,7 @@ library('seqinr')
 library('xlsx')
 
 # path to GTF annotation file
-gtf_file <- "/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/references/Homo_sapiens.GRCh38.104.gtf"
+gtf_file <- "/path/to/Homo_sapiens.GRCh38.104.gtf"
 txdb <- makeTxDbFromGFF(gtf_file)
 genes_txdb <- GenomicFeatures::genes(txdb)
 
@@ -65,7 +58,7 @@ ELIGOS_results <- function(path_directory,
   }
   
   gr_eligos_chr_ass <- eligos_output(eligos_chr_ass, 2)
-  # assign each hit to the gene on which it maps (I did this step again since there are errors in ELIGOS results)
+  # assign each hit to the gene on which it maps (this step is done since there are errors in ELIGOS results)
   for (i in 1:length(gr_eligos_chr_ass)) {
     gene_ids <- c()
     for (j in 1:length(gr_eligos_chr_ass[[i]])){
@@ -242,7 +235,7 @@ ELIGOS_results <- function(path_directory,
   
   mods <- matrix(0,ncol=3,nrow=3)
   colnames(mods) <- c('chr_ass','nucleo','cyto')
-  rownames(mods) <- c('# hits >= 1 samplings*','# hits >= 5 samplings**', '# hits >= 5 samplings after reduce***')
+  rownames(mods) <- c('# hits >= 1 samplings','# hits >= 5 samplings', '# hits >= 5 samplings after reduce')
   
   mods[1,1] <- length(eligos_chr_ass_all_replicate_10nt)
   mods[2,1] <- sum(confirmed_by_chr[5:10,2])
@@ -295,7 +288,7 @@ DRACH_overlap_ELIGOS <- function(path_directory, hits_ELIGOS_chr, hits_ELIGOS_nu
   hits_eligos_confirmed_by_all <- overlap_eligos_3_sets[unique(queryHits(overlap_eligos_chr_cyto_nucleo))]
   summary_table[4,1] <- as.character(length(hits_eligos_confirmed_by_all))
   
-  load('/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/R_data/DRACH_forward_strand.Rda')
+  load('/path/to/R_data/DRACH_forward_strand.Rda')
   # identify which and how many hits are DRACH+/DRACH-
   overlap_DRACH_chr <- findOverlaps(hits_ELIGOS_chr, DRACH, type='any', ignore.strand=FALSE)
   hits_eligos_chr_ass_confirmed_5_with_DRACH <- hits_ELIGOS_chr[unique(queryHits(overlap_DRACH_chr))]
@@ -332,7 +325,7 @@ DRACH_overlap_ELIGOS <- function(path_directory, hits_ELIGOS_chr, hits_ELIGOS_nu
   save(union_hits_without_DRACH, file=paste0(path_directory,'/without_DRACH/union_hits_without_DRACH.Rda'))
   
   # save the fasta sequences corresponding to each of the 20-nucleotides DRACH- regions  
-  chrs <- readDNAStringSet('/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/references/Homo_sapiens.GRCh38.dna.primary_assembly.fa', format="fasta")
+  chrs <- readDNAStringSet('/path/to/Homo_sapiens.GRCh38.dna.primary_assembly.fa', format="fasta")
   names(chrs) <- gsub(x = names(chrs), pattern = " .*", replacement = "")
   for (j in 1:length(union_hits_without_DRACH)) {
     write.fasta(file.out = paste0(path_directory, '/ELIGOS_without_DRACH.fa'), sequences = as.character(getSeq(chrs, union_hits_without_DRACH[j])), names = as.character(j),open = 'a')
@@ -670,7 +663,7 @@ m6Anet_results <- function(path_directory, gr_m6Anet_chr_ass, gr_m6Anet_nucleo, 
   
   mods <- matrix(0,ncol=3,nrow=3)
   colnames(mods) <- c('chr_ass','nucleo','cyto')
-  rownames(mods) <- c('# hits >= 1 samplings*','# hits >= 5 samplings**', '# hits >= 5 samplings after reduce***')
+  rownames(mods) <- c('# hits >= 1 samplings','# hits >= 5 samplings', '# hits >= 5 samplings after reduce')
   
   mods[1,1] <- length(m6anet_chr_ass_all_replicate_10nt)
   mods[2,1] <- sum(confirmed_by_chr[5:10,2])
@@ -721,7 +714,7 @@ DRACH_overlap_m6Anet <- function(path_directory, hits_m6Anet_chr, hits_m6Anet_nu
   hits_m6anet_confirmed_by_all <- overlap_m6anet_3_sets[unique(queryHits(overlap_m6anet_chr_cyto_nucleo))]
   summary_table[4,1] <- as.character(length(hits_m6anet_confirmed_by_all))
   
-  load('/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/R_data/DRACH_forward_strand.Rda')
+  load('/path/to/R_data/DRACH_forward_strand.Rda')
   # identify which and how many hits are DRACH+/DRACH-
   overlap_DRACH_chr <- findOverlaps(hits_m6Anet_chr, DRACH, type='any', ignore.strand=FALSE)
   hits_m6anet_chr_ass_confirmed_5_with_DRACH <- hits_m6Anet_chr[unique(queryHits(overlap_DRACH_chr))]
@@ -903,23 +896,23 @@ comparison_ELIGOS_m6Anet <- function(path_directory, hits_ELIGOS_chr, hits_ELIGO
 
 
 # ELIGOS ANALYSIS ON NASCENT+PRE-EXISTING READS (pvalue<0.05, ad.pval<0.05, OR>1)
-confirmed_hits_ELIGOS_min05_min05_mag1 <- ELIGOS_results(path_directory = '/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/fractions_eligos_4sU_library_gene_subsampling_min05_min05_mag1/',
+confirmed_hits_ELIGOS_min05_min05_mag1 <- ELIGOS_results(path_directory = '/path/to/fractions_eligos_4sU_library_gene_subsampling_min05_min05_mag1/',
                                                          name_pdf_overlap_10samplings_cyto = 'overlap_cyto_replicates_4sU_10nt.pdf', name_pdf_overlap_10samplings_chr_ass = 'overlap_chr_ass_replicates_4sU_10nt.pdf', name_pdf_overlap_10samplings_nucleo = 'overlap_nucleo_replicates_4sU_10nt.pdf',
                                                          name_pdf_histogram_cyto = 'number_rep_with_hit_cyto_4sU.pdf', name_pdf_histogram_chr_ass = 'number_rep_with_hit_chr_ass_4sU.pdf', name_pdf_histogram_nucleo = 'number_rep_with_hit_nucleo_4sU.pdf',
                                                          name_pdf_overlap_3fractions = 'overlap_hits_eligos_confirmed_5_4sU_10nt.pdf', p=0.05,ap=0.05,OR=1)
 
-confirmed_hits_DRACH_ELIGOS_min05_min05_mag1 <- DRACH_overlap_ELIGOS(path_directory = '/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/fractions_eligos_4sU_library_gene_subsampling_min05_min05_mag1/',
+confirmed_hits_DRACH_ELIGOS_min05_min05_mag1 <- DRACH_overlap_ELIGOS(path_directory = '/path/to/fractions_eligos_4sU_library_gene_subsampling_min05_min05_mag1/',
                                                                      hits_ELIGOS_chr = confirmed_hits_ELIGOS_min05_min05_mag1[[1]], hits_ELIGOS_nucleo = confirmed_hits_ELIGOS_min05_min05_mag1[[2]], hits_ELIGOS_cyto = confirmed_hits_ELIGOS_min05_min05_mag1[[3]])
 
 # m6Anet ANALYSIS ON NASCENT+PRE-EXISTING READS (prob.modification>0.75)
 # load the tsv file with the output of m6Anet for the three fractions for all the 10 samplings
-m6Anet_fractions_4sU_chr_ass <- list.files(path = '/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/fractions_m6anet_4sU_library_gene_subsampling_prob0.75/chr', pattern = 'tsv', full.names = TRUE)
-m6Anet_fractions_4sU_nucleo <- list.files(path = '/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/fractions_m6anet_4sU_library_gene_subsampling_prob0.75/nucleo', pattern = 'tsv', full.names = TRUE)
-m6Anet_fractions_4sU_cyto <- list.files(path = '/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/fractions_m6anet_4sU_library_gene_subsampling_prob0.75/cyto', pattern = 'tsv', full.names = TRUE)
+m6Anet_fractions_4sU_chr_ass <- list.files(path = '/path/to/fractions_m6anet_4sU_library_gene_subsampling_prob0.75/chr', pattern = 'tsv', full.names = TRUE)
+m6Anet_fractions_4sU_nucleo <- list.files(path = '/path/to/fractions_m6anet_4sU_library_gene_subsampling_prob0.75/nucleo', pattern = 'tsv', full.names = TRUE)
+m6Anet_fractions_4sU_cyto <- list.files(path = '/path/to/fractions_m6anet_4sU_library_gene_subsampling_prob0.75/cyto', pattern = 'tsv', full.names = TRUE)
 
 # load the vector with the transcript names as names and the names of the gene from which 
 # they are transcribed as values
-load('/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/R_data/tx_gene.Rda')
+load('/path/to/R_data/tx_gene.Rda')
 tx_txdb <- GenomicFeatures::transcripts(txdb)
 
 m6Anet_output <- function(dir) {
@@ -999,33 +992,33 @@ gr_m6Anet_cyto_4sU <- lapply(gr_m6Anet_cyto_4sU, function(x) {
   }
 })
 
-confirmed_hits_m6Anet_prob0.75 <- m6Anet_results(path_directory = '/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/fractions_m6anet_4sU_library_gene_subsampling_prob0.75/',
+confirmed_hits_m6Anet_prob0.75 <- m6Anet_results(path_directory = '/path/to/fractions_m6anet_4sU_library_gene_subsampling_prob0.75/',
                                                  gr_m6Anet_chr_ass = gr_m6Anet_chr_ass_4sU, gr_m6Anet_nucleo = gr_m6Anet_nucleo_4sU, gr_m6Anet_cyto = gr_m6Anet_cyto_4sU,
                                                  name_pdf_overlap_10samplings_chr_ass = 'overlap_chr_ass_replicates_4sU_10nt.pdf', name_pdf_overlap_10samplings_nucleo = 'overlap_nucleo_replicates_4sU_10nt.pdf', name_pdf_overlap_10samplings_cyto = 'overlap_cyto_replicates_4sU_10nt.pdf',
                                                  name_pdf_histogram_chr_ass = 'number_rep_with_hit_chr_ass_4sU.pdf', name_pdf_histogram_nucleo = 'number_rep_with_hit_nucleo_4sU.pdf', name_pdf_histogram_cyto = 'number_rep_with_hit_cyto_4sU.pdf',
                                                  name_pdf_overlap_3fractions = 'overlap_hits_m6anet_confirmed_5_4sU_10nt.pdf')
 
-confirmed_hits_DRACH_m6Anet_prob0.75 <- DRACH_overlap_m6Anet(path_directory = '/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/fractions_m6anet_4sU_library_gene_subsampling_prob0.75/',
+confirmed_hits_DRACH_m6Anet_prob0.75 <- DRACH_overlap_m6Anet(path_directory = '/path/to/fractions_m6anet_4sU_library_gene_subsampling_prob0.75/',
                                                              hits_m6Anet_chr = confirmed_hits_m6Anet_prob0.75[[1]], hits_m6Anet_nucleo = confirmed_hits_m6Anet_prob0.75[[2]], hits_m6Anet_cyto = confirmed_hits_m6Anet_prob0.75[[3]])
 
-ELIGOS_vs_m6Anet <- comparison_ELIGOS_m6Anet(path_directory = '/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/fractions_m6anet_4sU_library_gene_subsampling_prob0.75/',hits_ELIGOS_chr = confirmed_hits_ELIGOS_min05_min05_mag1[[1]], hits_ELIGOS_nucleo = confirmed_hits_ELIGOS_min05_min05_mag1[[2]], hits_ELIGOS_cyto = confirmed_hits_ELIGOS_min05_min05_mag1[[3]],
+ELIGOS_vs_m6Anet <- comparison_ELIGOS_m6Anet(path_directory = '/path/to/fractions_m6anet_4sU_library_gene_subsampling_prob0.75/',hits_ELIGOS_chr = confirmed_hits_ELIGOS_min05_min05_mag1[[1]], hits_ELIGOS_nucleo = confirmed_hits_ELIGOS_min05_min05_mag1[[2]], hits_ELIGOS_cyto = confirmed_hits_ELIGOS_min05_min05_mag1[[3]],
                                              hits_ELIGOS_chr_DRACH = confirmed_hits_DRACH_ELIGOS_min05_min05_mag1[[1]], hits_ELIGOS_nucleo_DRACH = confirmed_hits_DRACH_ELIGOS_min05_min05_mag1[[2]], hits_ELIGOS_cyto_DRACH = confirmed_hits_DRACH_ELIGOS_min05_min05_mag1[[3]],
                                              hits_m6Anet_chr = confirmed_hits_m6Anet_prob0.75[[1]], hits_m6Anet_nucleo = confirmed_hits_m6Anet_prob0.75[[2]], hits_m6Anet_cyto = confirmed_hits_m6Anet_prob0.75[[3]],
                                              hits_m6Anet_chr_DRACH = confirmed_hits_DRACH_m6Anet_prob0.75[[1]], hits_m6Anet_nucleo_DRACH = confirmed_hits_DRACH_m6Anet_prob0.75[[2]], hits_m6Anet_cyto_DRACH = confirmed_hits_DRACH_m6Anet_prob0.75[[3]],
-                                             path_pdf_overlap_ELIGOS_m6Anet_DRACH_chr = '/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/fractions_m6anet_4sU_library_gene_subsampling_prob0.75/overlap_all_hits_eligos_hits_eligos_DRACH_all_hits_m6anet_chr_ass_10nt.pdf',
-                                             path_pdf_overlap_ELIGOS_m6Anet_DRACH_nucleo = '/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/fractions_m6anet_4sU_library_gene_subsampling_prob0.75/overlap_all_hits_eligos_hits_eligos_DRACH_all_hits_m6anet_nucleo_10nt.pdf',
-                                             path_pdf_overlap_ELIGOS_m6Anet_DRACH_cyto = '/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/fractions_m6anet_4sU_library_gene_subsampling_prob0.75/overlap_all_hits_eligos_hits_eligos_DRACH_all_hits_m6anet_cyto_10nt.pdf')
+                                             path_pdf_overlap_ELIGOS_m6Anet_DRACH_chr = '/path/to/fractions_m6anet_4sU_library_gene_subsampling_prob0.75/overlap_all_hits_eligos_hits_eligos_DRACH_all_hits_m6anet_chr_ass_10nt.pdf',
+                                             path_pdf_overlap_ELIGOS_m6Anet_DRACH_nucleo = '/path/to/fractions_m6anet_4sU_library_gene_subsampling_prob0.75/overlap_all_hits_eligos_hits_eligos_DRACH_all_hits_m6anet_nucleo_10nt.pdf',
+                                             path_pdf_overlap_ELIGOS_m6Anet_DRACH_cyto = '/path/to/fractions_m6anet_4sU_library_gene_subsampling_prob0.75/overlap_all_hits_eligos_hits_eligos_DRACH_all_hits_m6anet_cyto_10nt.pdf')
 
 ######################
 # m6Anet ANALYSIS ON NASCENT+PRE-EXISTING READS (prob.modification>0.9)
 # load the tsv file with the output of m6Anet for the three fractions for all the 10 samplings
-m6Anet_fractions_4sU_chr_ass <- list.files(path = '/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/fractions_m6anet_4sU_library_gene_subsampling_prob0.9/chr', pattern = 'tsv', full.names = TRUE)
-m6Anet_fractions_4sU_nucleo <- list.files(path = '/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/fractions_m6anet_4sU_library_gene_subsampling_prob0.9/nucleo', pattern = 'tsv', full.names = TRUE)
-m6Anet_fractions_4sU_cyto <- list.files(path = '/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/fractions_m6anet_4sU_library_gene_subsampling_prob0.9/cyto', pattern = 'tsv', full.names = TRUE)
+m6Anet_fractions_4sU_chr_ass <- list.files(path = '/path/to/fractions_m6anet_4sU_library_gene_subsampling_prob0.9/chr', pattern = 'tsv', full.names = TRUE)
+m6Anet_fractions_4sU_nucleo <- list.files(path = '/path/to/fractions_m6anet_4sU_library_gene_subsampling_prob0.9/nucleo', pattern = 'tsv', full.names = TRUE)
+m6Anet_fractions_4sU_cyto <- list.files(path = '/path/to/fractions_m6anet_4sU_library_gene_subsampling_prob0.9/cyto', pattern = 'tsv', full.names = TRUE)
 
 # load the vector with the transcript names as names and the names of the gene from which 
 # they are transcribed as values
-load('/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/R_data/tx_gene.Rda')
+load('/path/to/R_data/tx_gene.Rda')
 tx_txdb <- GenomicFeatures::transcripts(txdb)
 
 m6Anet_output <- function(dir) {
@@ -1105,55 +1098,55 @@ gr_m6Anet_cyto_4sU <- lapply(gr_m6Anet_cyto_4sU, function(x) {
   }
 })
 
-confirmed_hits_m6Anet_prob0.9 <- m6Anet_results(path_directory = '/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/fractions_m6anet_4sU_library_gene_subsampling_prob0.9/',
+confirmed_hits_m6Anet_prob0.9 <- m6Anet_results(path_directory = '/path/to/fractions_m6anet_4sU_library_gene_subsampling_prob0.9/',
                                                 gr_m6Anet_chr_ass = gr_m6Anet_chr_ass_4sU, gr_m6Anet_nucleo = gr_m6Anet_nucleo_4sU, gr_m6Anet_cyto = gr_m6Anet_cyto_4sU,
                                                 name_pdf_overlap_10samplings_chr_ass = 'overlap_chr_ass_replicates_4sU_10nt.pdf', name_pdf_overlap_10samplings_nucleo = 'overlap_nucleo_replicates_4sU_10nt.pdf', name_pdf_overlap_10samplings_cyto = 'overlap_cyto_replicates_4sU_10nt.pdf',
                                                 name_pdf_histogram_chr_ass = 'number_rep_with_hit_chr_ass_4sU.pdf', name_pdf_histogram_nucleo = 'number_rep_with_hit_nucleo_4sU.pdf', name_pdf_histogram_cyto = 'number_rep_with_hit_cyto_4sU.pdf',
                                                 name_pdf_overlap_3fractions = 'overlap_hits_m6anet_confirmed_5_4sU_10nt.pdf')
 
-confirmed_hits_DRACH_m6Anet_prob0.9 <- DRACH_overlap_m6Anet(path_directory = '/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/fractions_m6anet_4sU_library_gene_subsampling_prob0.9/',
+confirmed_hits_DRACH_m6Anet_prob0.9 <- DRACH_overlap_m6Anet(path_directory = '/path/to/fractions_m6anet_4sU_library_gene_subsampling_prob0.9/',
                                                             hits_m6Anet_chr = confirmed_hits_m6Anet_prob0.9[[1]], hits_m6Anet_nucleo = confirmed_hits_m6Anet_prob0.9[[2]], hits_m6Anet_cyto = confirmed_hits_m6Anet_prob0.9[[3]])
 
-ELIGOS_vs_m6Anet <- comparison_ELIGOS_m6Anet(path_directory = '/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/fractions_m6anet_4sU_library_gene_subsampling_prob0.9/',hits_ELIGOS_chr = confirmed_hits_ELIGOS_min05_min05_mag1[[1]], hits_ELIGOS_nucleo = confirmed_hits_ELIGOS_min05_min05_mag1[[2]], hits_ELIGOS_cyto = confirmed_hits_ELIGOS_min05_min05_mag1[[3]],
+ELIGOS_vs_m6Anet <- comparison_ELIGOS_m6Anet(path_directory = '/path/to/fractions_m6anet_4sU_library_gene_subsampling_prob0.9/',hits_ELIGOS_chr = confirmed_hits_ELIGOS_min05_min05_mag1[[1]], hits_ELIGOS_nucleo = confirmed_hits_ELIGOS_min05_min05_mag1[[2]], hits_ELIGOS_cyto = confirmed_hits_ELIGOS_min05_min05_mag1[[3]],
                                              hits_ELIGOS_chr_DRACH = confirmed_hits_DRACH_ELIGOS_min05_min05_mag1[[1]], hits_ELIGOS_nucleo_DRACH = confirmed_hits_DRACH_ELIGOS_min05_min05_mag1[[2]], hits_ELIGOS_cyto_DRACH = confirmed_hits_DRACH_ELIGOS_min05_min05_mag1[[3]],
                                              hits_m6Anet_chr = confirmed_hits_m6Anet_prob0.9[[1]], hits_m6Anet_nucleo = confirmed_hits_m6Anet_prob0.9[[2]], hits_m6Anet_cyto = confirmed_hits_m6Anet_prob0.9[[3]],
                                              hits_m6Anet_chr_DRACH = confirmed_hits_DRACH_m6Anet_prob0.9[[1]], hits_m6Anet_nucleo_DRACH = confirmed_hits_DRACH_m6Anet_prob0.9[[2]], hits_m6Anet_cyto_DRACH = confirmed_hits_DRACH_m6Anet_prob0.9[[3]],
-                                             path_pdf_overlap_ELIGOS_m6Anet_DRACH_chr = '/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/fractions_m6anet_4sU_library_gene_subsampling_prob0.9/overlap_all_hits_eligos_hits_eligos_DRACH_all_hits_m6anet_chr_ass_10nt.pdf',
-                                             path_pdf_overlap_ELIGOS_m6Anet_DRACH_nucleo = '/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/fractions_m6anet_4sU_library_gene_subsampling_prob0.9/overlap_all_hits_eligos_hits_eligos_DRACH_all_hits_m6anet_nucleo_10nt.pdf',
-                                             path_pdf_overlap_ELIGOS_m6Anet_DRACH_cyto = '/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/fractions_m6anet_4sU_library_gene_subsampling_prob0.9/overlap_all_hits_eligos_hits_eligos_DRACH_all_hits_m6anet_cyto_10nt.pdf')
+                                             path_pdf_overlap_ELIGOS_m6Anet_DRACH_chr = '/path/to/fractions_m6anet_4sU_library_gene_subsampling_prob0.9/overlap_all_hits_eligos_hits_eligos_DRACH_all_hits_m6anet_chr_ass_10nt.pdf',
+                                             path_pdf_overlap_ELIGOS_m6Anet_DRACH_nucleo = '/path/to/fractions_m6anet_4sU_library_gene_subsampling_prob0.9/overlap_all_hits_eligos_hits_eligos_DRACH_all_hits_m6anet_nucleo_10nt.pdf',
+                                             path_pdf_overlap_ELIGOS_m6Anet_DRACH_cyto = '/path/to/fractions_m6anet_4sU_library_gene_subsampling_prob0.9/overlap_all_hits_eligos_hits_eligos_DRACH_all_hits_m6anet_cyto_10nt.pdf')
 
 #######################
 # ELIGOS ANALYSIS ON NASCENT+PRE-EXISTING READS from replicate 1 (pvalue<0.05, ad.pval<0.05, OR>1)
 
-confirmed_hits_ELIGOS_rep1_min05_min05_mag1 <- ELIGOS_results(path_directory = '/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/fractions_eligos_4sU_library_gene_subsampling_rep1_min05_min05_mag1/',
+confirmed_hits_ELIGOS_rep1_min05_min05_mag1 <- ELIGOS_results(path_directory = '/path/to/fractions_eligos_4sU_library_gene_subsampling_rep1_min05_min05_mag1/',
                                                               name_pdf_overlap_10samplings_cyto = 'overlap_cyto_replicates_4sU_10nt_rep1.pdf', name_pdf_overlap_10samplings_chr_ass = 'overlap_chr_ass_replicates_4sU_10nt_rep1.pdf', name_pdf_overlap_10samplings_nucleo = 'overlap_nucleo_replicates_4sU_10nt_rep1.pdf',
                                                               name_pdf_histogram_cyto = 'number_rep_with_hit_cyto_4sU_rep1.pdf', name_pdf_histogram_chr_ass = 'number_rep_with_hit_chr_ass_4sU_rep1.pdf', name_pdf_histogram_nucleo = 'number_rep_with_hit_nucleo_4sU_rep1.pdf',
                                                               name_pdf_overlap_3fractions = 'overlap_hits_eligos_confirmed_5_4sU_10nt_rep1.pdf', p=0.05, ap=0.05, OR=1)
 
-confirmed_hits_DRACH_ELIGOS_rep1_min05_min05_mag1 <- DRACH_overlap_ELIGOS(path_directory = '/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/fractions_eligos_4sU_library_gene_subsampling_rep1_min05_min05_mag1/',
+confirmed_hits_DRACH_ELIGOS_rep1_min05_min05_mag1 <- DRACH_overlap_ELIGOS(path_directory = '/path/to/fractions_eligos_4sU_library_gene_subsampling_rep1_min05_min05_mag1/',
                                                                           hits_ELIGOS_chr = confirmed_hits_ELIGOS_rep1_min05_min05_mag1[[1]], hits_ELIGOS_nucleo = confirmed_hits_ELIGOS_rep1_min05_min05_mag1[[2]], hits_ELIGOS_cyto = confirmed_hits_ELIGOS_rep1_min05_min05_mag1[[3]])
 
 #######################
 # ELIGOS ANALYSIS ON NASCENT+PRE-EXISTING READS from replicate 2 (pvalue<0.05, ad.pval<0.05, OR>1)
 
-confirmed_hits_ELIGOS_rep2_min05_min05_mag1 <- ELIGOS_results(path_directory = '/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/fractions_eligos_4sU_library_gene_subsampling_rep2_min05_min05_mag1/',
+confirmed_hits_ELIGOS_rep2_min05_min05_mag1 <- ELIGOS_results(path_directory = '/path/to/fractions_eligos_4sU_library_gene_subsampling_rep2_min05_min05_mag1/',
                                                               name_pdf_overlap_10samplings_cyto = 'overlap_cyto_replicates_4sU_10nt_rep2.pdf', name_pdf_overlap_10samplings_chr_ass = 'overlap_chr_ass_replicates_4sU_10nt_rep2.pdf', name_pdf_overlap_10samplings_nucleo = 'overlap_nucleo_replicates_4sU_10nt_rep2.pdf',
                                                               name_pdf_histogram_cyto = 'number_rep_with_hit_cyto_4sU_rep2.pdf', name_pdf_histogram_chr_ass = 'number_rep_with_hit_chr_ass_4sU_rep2.pdf', name_pdf_histogram_nucleo = 'number_rep_with_hit_nucleo_4sU_rep2.pdf',
                                                               name_pdf_overlap_3fractions = 'overlap_hits_eligos_confirmed_5_4sU_10nt_rep2.pdf', p=0.05, ap=0.05, OR=1)
 
-confirmed_hits_DRACH_ELIGOS_rep2_min05_min05_mag1 <- DRACH_overlap_ELIGOS(path_directory = '/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/fractions_eligos_4sU_library_gene_subsampling_rep2_min05_min05_mag1/',
+confirmed_hits_DRACH_ELIGOS_rep2_min05_min05_mag1 <- DRACH_overlap_ELIGOS(path_directory = '/path/to/fractions_eligos_4sU_library_gene_subsampling_rep2_min05_min05_mag1/',
                                                                           hits_ELIGOS_chr = confirmed_hits_ELIGOS_rep2_min05_min05_mag1[[1]], hits_ELIGOS_nucleo = confirmed_hits_ELIGOS_rep2_min05_min05_mag1[[2]], hits_ELIGOS_cyto = confirmed_hits_ELIGOS_rep2_min05_min05_mag1[[3]])
 
 
 ########################
 # ELIGOS ANALYSIS ON NASCENT READS (pvalue<0.05, ad.pval<0.05, OR>1)
 
-confirmed_hits_ELIGOS_nascent_min05_min05_mag1 <- ELIGOS_results(path_directory = '/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/fractions_eligos_4sU_library_gene_subsampling_nascent_min05_min05_mag1/',
+confirmed_hits_ELIGOS_nascent_min05_min05_mag1 <- ELIGOS_results(path_directory = '/path/to/fractions_eligos_4sU_library_gene_subsampling_nascent_min05_min05_mag1/',
                                                                  name_pdf_overlap_10samplings_cyto = 'overlap_cyto_replicates_4sU_10nt.pdf', name_pdf_overlap_10samplings_chr_ass = 'overlap_chr_ass_replicates_4sU_10nt.pdf', name_pdf_overlap_10samplings_nucleo = 'overlap_nucleo_replicates_4sU_10nt.pdf',
                                                                  name_pdf_histogram_cyto = 'number_rep_with_hit_cyto_4sU.pdf', name_pdf_histogram_chr_ass = 'number_rep_with_hit_chr_ass_4sU.pdf', name_pdf_histogram_nucleo = 'number_rep_with_hit_nucleo_4sU.pdf',
                                                                  name_pdf_overlap_3fractions = 'overlap_hits_eligos_confirmed_5_4sU_10nt_nascent.pdf', p=0.05, ap=0.05, OR=1)
 
-confirmed_hits_DRACH_ELIGOS_nascent_min05_min05_mag1 <- DRACH_overlap_ELIGOS(path_directory = '/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/fractions_eligos_4sU_library_gene_subsampling_nascent_min05_min05_mag1/',
+confirmed_hits_DRACH_ELIGOS_nascent_min05_min05_mag1 <- DRACH_overlap_ELIGOS(path_directory = '/path/to/fractions_eligos_4sU_library_gene_subsampling_nascent_min05_min05_mag1/',
                                                                              hits_ELIGOS_chr = confirmed_hits_ELIGOS_nascent_min05_min05_mag1[[1]], hits_ELIGOS_nucleo = confirmed_hits_ELIGOS_nascent_min05_min05_mag1[[2]], hits_ELIGOS_cyto = confirmed_hits_ELIGOS_nascent_min05_min05_mag1[[3]])
 
 # identify which ELIGOS hits (DRACH+ and DRACH-) from nascent reads are only in Chromatin fraction
@@ -1163,22 +1156,22 @@ confirmed_hits_DRACH_ELIGOS_nascent_min05_min05_mag1 <- DRACH_overlap_ELIGOS(pat
 # /without_DRACH/ to save ELIGOS DRACH- hits only present in chromatin fraction
 only_chr <- confirmed_hits_DRACH_ELIGOS_nascent_min05_min05_mag1[[1]][-unique(subjectHits(findOverlaps(confirmed_hits_DRACH_ELIGOS_nascent_min05_min05_mag1[[2]],confirmed_hits_DRACH_ELIGOS_nascent_min05_min05_mag1[[1]], type='any')))]
 only_chr <- only_chr[-unique(queryHits(findOverlaps(only_chr, confirmed_hits_DRACH_ELIGOS_nascent_min05_min05_mag1[[3]],type='any')))]
-save(only_chr, file='/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/fractions_eligos_4sU_library_gene_subsampling_nascent_min05_min05_mag1/only_chr/with_DRACH/hits_eligos_only_chr_with_DRACH.Rda')
+save(only_chr, file='/path/to/fractions_eligos_4sU_library_gene_subsampling_nascent_min05_min05_mag1/only_chr/with_DRACH/hits_eligos_only_chr_with_DRACH.Rda')
 
-load('/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/fractions_eligos_4sU_library_gene_subsampling_nascent_min05_min05_mag1/without_DRACH/hits_eligos_chr_ass_confirmed_5_without_DRACH.Rda')
-load('/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/fractions_eligos_4sU_library_gene_subsampling_nascent_min05_min05_mag1/without_DRACH/hits_eligos_nucleo_confirmed_5_without_DRACH.Rda')
-load('/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/fractions_eligos_4sU_library_gene_subsampling_nascent_min05_min05_mag1/without_DRACH/hits_eligos_cyto_confirmed_5_without_DRACH.Rda')
+load('/path/to/fractions_eligos_4sU_library_gene_subsampling_nascent_min05_min05_mag1/without_DRACH/hits_eligos_chr_ass_confirmed_5_without_DRACH.Rda')
+load('/path/to/fractions_eligos_4sU_library_gene_subsampling_nascent_min05_min05_mag1/without_DRACH/hits_eligos_nucleo_confirmed_5_without_DRACH.Rda')
+load('/path/to/fractions_eligos_4sU_library_gene_subsampling_nascent_min05_min05_mag1/without_DRACH/hits_eligos_cyto_confirmed_5_without_DRACH.Rda')
 only_chr <- hits_eligos_chr_ass_confirmed_5_without_DRACH[-unique(subjectHits(findOverlaps(hits_eligos_nucleo_confirmed_5_without_DRACH,hits_eligos_chr_ass_confirmed_5_without_DRACH, type='any')))]
 only_chr <- only_chr[-unique(queryHits(findOverlaps(only_chr, hits_eligos_cyto_confirmed_5_without_DRACH, type='any')))]
-save(only_chr, file='/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/fractions_eligos_4sU_library_gene_subsampling_nascent_min05_min05_mag1/only_chr/without_DRACH/hits_eligos_only_chr_without_DRACH.Rda')
+save(only_chr, file='/path/to/fractions_eligos_4sU_library_gene_subsampling_nascent_min05_min05_mag1/only_chr/without_DRACH/hits_eligos_only_chr_without_DRACH.Rda')
 
 ######################## 
 # ELIGOS ANALYSIS ON NASCENT+PRE-EXISTING READS with library-level subsampling of nascent ELIGOS (pvalue<0.05, ad.pval<0.05, or>1)
 
-confirmed_hits_ELIGOS_2_min05_min05_mag1 <- ELIGOS_results(path_directory = '/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/fractions_eligos_4sU_library_gene_subsampling_total_510645_min05_min05_mag1/',
+confirmed_hits_ELIGOS_2_min05_min05_mag1 <- ELIGOS_results(path_directory = '/path/to/fractions_eligos_4sU_library_gene_subsampling_total_510645_min05_min05_mag1/',
                                                            name_pdf_overlap_10samplings_cyto = 'overlap_cyto_replicates_4sU_10nt.pdf', name_pdf_overlap_10samplings_chr_ass = 'overlap_chr_ass_replicates_4sU_10nt.pdf', name_pdf_overlap_10samplings_nucleo = 'overlap_nucleo_replicates_4sU_10nt.pdf',
                                                            name_pdf_histogram_cyto = 'number_rep_with_hit_cyto_4sU.pdf', name_pdf_histogram_chr_ass = 'number_rep_with_hit_chr_ass_4sU.pdf', name_pdf_histogram_nucleo = 'number_rep_with_hit_nucleo_4sU.pdf',
                                                            name_pdf_overlap_3fractions = 'overlap_hits_eligos_confirmed_5_4sU_10nt.pdf', p=0.05, ap=0.05, OR=1)
 
-confirmed_hits_DRACH_ELIGOS_2_min05_min05_mag1 <- DRACH_overlap_ELIGOS(path_directory = '/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/fractions_eligos_4sU_library_gene_subsampling_total_510645_min05_min05_mag1/',
+confirmed_hits_DRACH_ELIGOS_2_min05_min05_mag1 <- DRACH_overlap_ELIGOS(path_directory = '/path/to/fractions_eligos_4sU_library_gene_subsampling_total_510645_min05_min05_mag1/',
                                                                        hits_ELIGOS_chr = confirmed_hits_ELIGOS_2_min05_min05_mag1[[1]], hits_ELIGOS_nucleo = confirmed_hits_ELIGOS_2_min05_min05_mag1[[2]], hits_ELIGOS_cyto = confirmed_hits_ELIGOS_2_min05_min05_mag1[[3]])
