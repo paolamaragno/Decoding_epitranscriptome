@@ -1,11 +1,6 @@
-# compute ELIGOS and m6Anet recall and precision when the adjusted p-value is 0.0001/0.05 and
-# the probability of modification is 0.75/0.9.
-# the curves precision-recall of the tools are plotted in the same plot
-
-# PR data from benchmarking 
-load('/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/PR_benchmark/ELIGOS_PRcurve_window_50bp.Rdata')
+load('/path/to/ELIGOS_PRcurve_window_50bp.Rdata')
 pr_ELIGOS <- pr
-load('/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/PR_benchmark/m6Anet_PRcurve_window_50bp.Rdata')
+load('/path/to/m6Anet_PRcurve_window_50bp.Rdata')
 pr_m6anet <- pr
 
 ELIGOS_recall <- pr_ELIGOS$curve[,1]
@@ -79,7 +74,7 @@ pr_m6anet$curve[index,]
 # 0.09539404 0.88616290 0.89993680
 
 
-pdf('/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/PR_benchmark/PR_ELIGOS_m6Anet.pdf')
+pdf('/path/to/PR_ELIGOS_m6Anet.pdf')
 plot(ELIGOS_recall, ELIGOS_precision,type = 'l', col='red',xlab='Recall', ylab = 'Precision', main='ELIGOS and m6Anet recall vs precision')
 points(x = c(0.0378195648,0.07775195), y= c(0.9421052632,0.83023125), pch = 15, cex = 2,  col=c('green', 'orange'))
 lines(m6anet_recall, m6anet_precision, type='l', col='grey')
