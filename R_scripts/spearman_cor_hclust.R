@@ -90,6 +90,6 @@ abline(0, 1, col = 2)
 dev.off()
 
 # hierarchical clustering 
-pdf('path/to/Hclust_number_reads_per_gene_after_library_sub.pdf')
+pdf('/path/to/Hclust_number_reads_per_gene_after_library_sub.pdf')
 plot(hclust(as.dist(1 - cor(genes_counts_20, use = "na.or.complete", method = "spearman"))), xlab = "", ylab = "1-Spearman_correlation", main = "Hierarchical clustering between the number of reads per gene\nin each fraction after the library-level subsampling")
 dev.off()
