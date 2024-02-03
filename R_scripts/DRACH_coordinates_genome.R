@@ -19,13 +19,13 @@ save(DRACH, file='/path/to/R_data/DRACH_forward_strand.Rda')
 ##########
 
 # load the tsv file with the output of m6Anet for the three fractions for all the 10 samplings
-m6Anet_fractions_4sU_chr_ass <- list.files(path = '/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/fractions_m6anet_4sU_library_gene_subsampling_prob0.9/chr', pattern = 'tsv', full.names = TRUE)
-m6Anet_fractions_4sU_nucleo <- list.files(path = '/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/fractions_m6anet_4sU_library_gene_subsampling_prob0.9/nucleo', pattern = 'tsv', full.names = TRUE)
-m6Anet_fractions_4sU_cyto <- list.files(path = '/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/fractions_m6anet_4sU_library_gene_subsampling_prob0.9/cyto', pattern = 'tsv', full.names = TRUE)
+m6Anet_fractions_4sU_chr_ass <- list.files(path = '/path/to/fractions_m6anet_4sU_library_gene_subsampling_prob0.9/chr', pattern = 'tsv', full.names = TRUE)
+m6Anet_fractions_4sU_nucleo <- list.files(path = '/path/to/fractions_analysis_Paola_SUM159/fractions_m6anet_4sU_library_gene_subsampling_prob0.9/nucleo', pattern = 'tsv', full.names = TRUE)
+m6Anet_fractions_4sU_cyto <- list.files(path = '/path/to/fractions_analysis_Paola_SUM159/fractions_m6anet_4sU_library_gene_subsampling_prob0.9/cyto', pattern = 'tsv', full.names = TRUE)
 
 # load the vector with the transcript names as names and the names of the gene from which 
 # they are transcribed as values
-load('/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/R_data/tx_gene.Rda')
+load('/path/to/R_data/tx_gene.Rda')
 
 # extract, from each tsv file, the sites that have been analysed by m6Anet
 m6Anet_output <- function(dir) {
@@ -55,7 +55,7 @@ gr_m6Anet_nucleo_4sU <- unlist(as(gr_m6Anet_nucleo_4sU, 'GRangesList'))
 gr_m6Anet_cyto_4sU <- m6Anet_output(m6Anet_fractions_4sU_cyto)
 gr_m6Anet_cyto_4sU <- unlist(as(gr_m6Anet_cyto_4sU, 'GRangesList'))
 
-gtf_file <- "/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/references/Homo_sapiens.GRCh38.104.gtf"
+gtf_file <- "/path/to/Homo_sapiens.GRCh38.104.gtf"
 txdb <- makeTxDbFromGFF(gtf_file)
 tx_txdb <- GenomicFeatures::transcripts(txdb)
 
@@ -106,11 +106,11 @@ gr_m6Anet_cyto_4sU <- gr_unique(gr_m6Anet_cyto_4sU)
 # compute the percentage of m6Anet analysed sites containing the DRACH motif
 chr_ass_m6Anet_DRACH <- findOverlaps(gr_m6Anet_chr_ass_4sU, DRACH, type='any', ignore.strand=FALSE)
 length(unique(queryHits(chr_ass_m6Anet_DRACH)))/length(gr_m6Anet_chr_ass_4sU)
-# 0.8881808
+
 nucleo_m6Anet_DRACH <- findOverlaps(gr_m6Anet_nucleo_4sU, DRACH, type='any')
 length(unique(queryHits(nucleo_m6Anet_DRACH)))/length(gr_m6Anet_nucleo_4sU)
-# 0.8851911
+
 cyto_m6Anet_DRACH <- findOverlaps(gr_m6Anet_cyto_4sU, DRACH, type='any')
 length(unique(queryHits(cyto_m6Anet_DRACH)))/length(gr_m6Anet_cyto_4sU)
-# 0.9060923
+
 
