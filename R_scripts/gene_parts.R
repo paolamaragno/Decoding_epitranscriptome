@@ -1,11 +1,7 @@
-# use a gtf annotation file to extract the coordinates of the different parts of the genes (not only 
-# protein-coding genes): 5'UTR, coding exons, introns, stop codons and 3'UTR.
-# a GRangesList is generated containing a GRanges per gene with the coordinates of all its parts
-
 library('GenomicFeatures')
 library('GenomicRanges')
 
-# function that acts on the single GRanges relative to a gene reporting all its cds (also from different transcripts) 
+# function that acts on the single GRanges relative to a gene reporting all its cds (from all its transcripts) 
 # and produces a new GRanges that, for each transcript of that gene, reports its last cds 
 f <- function(x) {
   tx_unique <- unique(names(x))
@@ -45,7 +41,7 @@ f_resize <- function(x) {
 }
 
 ########################
-gtf_file <- "/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/references/Homo_sapiens.GRCh38.104.gtf"
+gtf_file <- "/path/to/Homo_sapiens.GRCh38.104.gtf"
 txdb <- makeTxDbFromGFF(gtf_file)
 
 genes_txdb <- GenomicFeatures::genes(txdb)
@@ -58,13 +54,13 @@ tmp <- lapply(seq_along(tx), function(y, n, i) {
 tx_gene <- do.call(rbind, tmp)
 rownames(tx_gene) <- tx_gene[, 1]
 tx_gene <- tx_gene[, 2]
-save(tx_gene, file="/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/R_data/tx_gene.RDa")
+save(tx_gene, file="path/to/output_dir/tx_gene.RDa")
 
 # EXONS
 exon_coord <- exonsBy(txdb, by = 'gene')
 # merge the overlapping ranges 
 exon_coord_red <- lapply(exon_coord, reduce)
-save(exon_coord_red, file="/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/R_data/exon_coord_red.RDa")
+save(exon_coord_red, file="path/to/output_dir/exon_coord_red.RDa")
 
 # create a vector with the exon names as names and the names of the gene to which they belong as values
 tmp <- lapply(seq_along(exon_coord), function(y, n, i) {
@@ -73,7 +69,7 @@ tmp <- lapply(seq_along(exon_coord), function(y, n, i) {
 exon_gene <- do.call(rbind, tmp)
 rownames(exon_gene) <- exon_gene[, 1]
 exon_gene <- exon_gene[, 2]
-save(exon_gene, file="/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/R_data/exon_gene.RDa")
+save(exon_gene, file="path/to/output_dir/exon_gene.RDa")
 
 # 5'UTR
 five_UTR_coord <- fiveUTRsByTranscript(txdb)
@@ -82,13 +78,13 @@ five_UTR_coord <- fiveUTRsByTranscript(txdb)
 five_UTR_coord_genes_names <- lapply(five_UTR_coord, function(x) exon_gene[mcols(x)$exon_name])
 # split the vector of 5'UTR names on the base of the the vector of gene names
 five_UTR_coord_bygene <- split(unlist(five_UTR_coord), unname(unlist(five_UTR_coord_genes_names)))
-# merge the overlapping ranges: each GRanges is a gene and the ranges are the 5'UTR regions of that gene
+# merge the overlapping ranges
 five_UTR_coord_bygene_red <- lapply(five_UTR_coord_bygene, reduce)
 five_UTR_coord_bygene_red <- lapply(five_UTR_coord_bygene_red, function(x) {
   mcols(x) <- cbind(mcols(x), feature='5UTR')
   x
 })
-save(five_UTR_coord_bygene_red, file="/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/R_data/five_UTR_coord_bygene_red.RDa")
+save(five_UTR_coord_bygene_red, file="path/to/output_dir/five_UTR_coord_bygene_red.RDa")
 
 # 3'UTR
 three_UTR_coord <- threeUTRsByTranscript(txdb)
@@ -97,13 +93,13 @@ three_UTR_coord <- threeUTRsByTranscript(txdb)
 three_UTR_coord_genes_names <- lapply(three_UTR_coord, function(x) exon_gene[mcols(x)$exon_name])
 # split the vector of 3'UTR names on the base of the the vector of gene names
 three_UTR_coord_bygene <- split(unlist(three_UTR_coord), unname(unlist(three_UTR_coord_genes_names)))
-# merge the overlapping ranges: each GRanges is a gene and the ranges are the 3'UTR regions of that gene
+# merge the overlapping ranges
 three_UTR_coord_bygene_red <- lapply(three_UTR_coord_bygene, reduce)
 three_UTR_coord_bygene_red <- lapply(three_UTR_coord_bygene_red, function(x) {
   mcols(x) <- cbind(mcols(x), feature='3UTR')
   x
 })
-save(three_UTR_coord_bygene_red, file="/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/R_data/three_UTR_coord_bygene_red.RDa")
+save(three_UTR_coord_bygene_red, file="path/to/output_dir/three_UTR_coord_bygene_red.RDa")
 
 # CODING EXONS
 # coding exons are defined as the exon regions that are neither 5'UTR nor 3'UTR
@@ -130,7 +126,7 @@ coding_exons <- lapply(coding_exons, function(x) {
   mcols(x) <- cbind(mcols(x), feature='coding exon')
   x
 })
-save(coding_exons, file="/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/R_data/coding_exons.RDa")
+save(coding_exons, file="path/to/output_dir/coding_exons.RDa")
 
 # STOP CODON
 cds_coord <- cdsBy(txdb, by = 'tx',use.names=TRUE)
@@ -154,7 +150,7 @@ stop_codon_coord_red <- lapply(stop_codon_coord_red, function(x) {
   mcols(x) <- cbind(mcols(x), feature='stop codon')
   x
 })
-save(stop_codon_coord_red, file="/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/R_data/stop_codon_coord_red.RDa")
+save(stop_codon_coord_red, file="path/to/output_dir/stop_codon_coord_red.RDa")
 
 # INTRONS
 # introns are defined as the transcript regions that are never exons (coding exons/5'UTR/3'UTR)
@@ -175,7 +171,7 @@ introns <- lapply(seq_along(tx_start_end), function(y, n, i, f) {
 }, y = tx_start_end, n = names(tx_start_end), f = exon_coord_red)
 
 names(introns) <- names(tx_start_end)
-# merge the overlapping ranges (introns)
+# merge the overlapping ranges 
 introns_coord_red <- lapply(introns, reduce)
 
 # remove the genes without introns
@@ -185,7 +181,7 @@ introns_coord_red <- lapply(introns_coord_red, function(x) {
   mcols(x) <- cbind(mcols(x), feature='intron')
   x
 })
-save(introns_coord_red, file="/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/R_data/introns_coord_red.RDa")
+save(introns_coord_red, file="path/to/output_dir/introns_coord_red.RDa")
 
 all_genes_annotated <- c(names(five_UTR_coord_bygene_red), names(three_UTR_coord_bygene_red), names(stop_codon_coord_red),
                          names(coding_exons), names(introns_coord_red))
@@ -227,4 +223,4 @@ names(protein_coding_genes_5UTR_3UTR_introns_exons_stop) <- all_genes_annotated
 # convert into GRangesList
 protein_coding_genes_5UTR_3UTR_introns_exons_stop <- as(protein_coding_genes_5UTR_3UTR_introns_exons_stop,'GRangesList')
 
-save(protein_coding_genes_5UTR_3UTR_introns_exons_stop, file="/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/R_data/protein_coding_genes_5UTR_3UTR_introns_exons_stop.RDa")
+save(protein_coding_genes_5UTR_3UTR_introns_exons_stop, file="path/to/output_dir/protein_coding_genes_5UTR_3UTR_introns_exons_stop.RDa")
