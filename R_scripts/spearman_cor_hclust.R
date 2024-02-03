@@ -1,21 +1,15 @@
-# from the alignment of all the reads of each fraction on Human genome only the library-level
-# subsampling is performed. Then, for the genes with coverage at least 20X in all the fractions, 
-# the Spearman correlation between the number of reads mapping on them in each pairwise comparison between fractions
-# is computed. The hierarchical clustering is done between the different fractions based on the number
-# of reads mapping, in each fraction, on the genes with coverage > 20X
-
 library('GenomicFeatures')
 library('GenomicAlignments')
 
 # path to GTF annotation file
-gtf_file <- "/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/references/Homo_sapiens.GRCh38.104.gtf"
+gtf_file <- "/path/to/Homo_sapiens.GRCh38.104.gtf"
 txdb <- makeTxDbFromGFF(gtf_file)
 genes_txdb <- GenomicFeatures::genes(txdb)
 
 # import, for each fraction, the filtered bam file with the reads of all the replicates of that fraction
-bam_chr <- readGAlignments('/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/fractions_eligos_4sU_library_gene_subsampling_min05_min05_mag1/chromatin_associated_PASS_rep1_rep2_rep3_rep4_4sU_spliced_mapped_to_Homo_sapiens.GRCh38.dna.primary_assembly_filtered.bam', use.names=TRUE)
-bam_nucleo <- readGAlignments('/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/fractions_eligos_4sU_library_gene_subsampling_min05_min05_mag1/nucleoplasmic_PASS_rep1_rep2_4sU_spliced_mapped_to_Homo_sapiens.GRCh38.dna.primary_assembly_filtered.bam', use.names=TRUE)
-bam_cyto <- readGAlignments('/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/fractions_eligos_4sU_library_gene_subsampling_min05_min05_mag1/cytoplasmic_PASS_rep1_rep2_4sU_spliced_mapped_to_Homo_sapiens.GRCh38.dna.primary_assembly_filtered.bam', use.names=TRUE)
+bam_chr <- readGAlignments('/path/to/chromatin_associated_filtered.bam', use.names=TRUE)
+bam_nucleo <- readGAlignments('/path/to/nucleoplasmic_filtered.bam', use.names=TRUE)
+bam_cyto <- readGAlignments('/path/to/cytoplasmic_filtered.bam', use.names=TRUE)
 
 # overlap between the coordinates of each mapping read and the coordinates of all the genes
 chr_ass_genes_over <- findOverlaps(bam_chr,genes_txdb)
@@ -81,7 +75,7 @@ cor_chr_nucleo <- cor(genes_counts_20[,1],genes_counts_20[,2], method = "s")
 cor_nucleo_cyto <- cor(genes_counts_20[,2],genes_counts_20[,3], method = "s")
 
 # scatter plot of all pairwise comparisons between the number of reads per gene
-pdf('/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/fractions_eligos_4sU_library_gene_subsampling_min05_min05_mag1/sp_cor_pairs_of_fractions.pdf')
+pdf('/path/to/sp_cor_pairs_of_fractions.pdf')
 par(mfrow = c(2,2))
 
 plot(log = 'xy', x=genes_counts_20[,3], y=genes_counts_20[,1], xlab = c('Number of reads from cytoplasmic RNAs'), ylab = c('Number of reads from chr. associated RNAs'), main = paste0("Cytoplasmic VS Chromatin Associated\n", "rSp. = ", sprintf("%.2f", cor_chr_cyto)), cex=0.1, cex.main=1)
@@ -96,6 +90,6 @@ abline(0, 1, col = 2)
 dev.off()
 
 # hierarchical clustering 
-pdf('/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/fractions_eligos_4sU_library_gene_subsampling_min05_min05_mag1/Hclust_number_reads_per_gene_after_library_sub.pdf')
+pdf('path/to/Hclust_number_reads_per_gene_after_library_sub.pdf')
 plot(hclust(as.dist(1 - cor(genes_counts_20, use = "na.or.complete", method = "spearman"))), xlab = "", ylab = "1-Spearman_correlation", main = "Hierarchical clustering between the number of reads per gene\nin each fraction after the library-level subsampling")
 dev.off()
