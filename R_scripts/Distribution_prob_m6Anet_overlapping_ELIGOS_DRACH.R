@@ -1,15 +1,7 @@
-# Plot the distribution of the median and max probability of modification of m6Anet analysed sites
-# overlapping with each ELIGOS DRACH+ hit. ELIGOS DRACH+ hits are defined in different ways:
-# p-value ≤ 0.05, adjusted p-value ≤ 0.05, odds-ratio ≥ 1;
-# p-value ≤ 0.05, adjusted p-value ≤ 0.05, odds-ratio < 1;
-# p-value ≤ 0.05, adjusted p-value > 0.05, odds-ratio ≥ 1;
-# p-value ≤ 0.05, adjusted p-value > 0.05, odds-ratio < 1.
-
-
 library('GenomicFeatures')
 library('GenomicRanges')
 
-gtf_file <- "/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/references/Homo_sapiens.GRCh38.104.gtf"
+gtf_file <- "/path/to/Homo_sapiens.GRCh38.104.gtf"
 txdb <- makeTxDbFromGFF(gtf_file)
 genes_txdb <- GenomicFeatures::genes(txdb)
 
@@ -302,7 +294,7 @@ ELIGOS_results <- function(path_directory, gr) {
 
 DRACH_overlap_ELIGOS <- function(path_directory, hits_ELIGOS_chr, hits_ELIGOS_nucleo, hits_ELIGOS_cyto) {
   
-  load('/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/R_data/DRACH_forward_strand.Rda')
+  load('/path/to/R_data/DRACH_forward_strand.Rda')
   overlap_DRACH_chr <- findOverlaps(hits_ELIGOS_chr, DRACH, type='any', ignore.strand=FALSE)
   hits_eligos_chr_ass_confirmed_5_with_DRACH <- hits_ELIGOS_chr[unique(queryHits(overlap_DRACH_chr))]
   save(hits_eligos_chr_ass_confirmed_5_with_DRACH, file=paste0(path_directory,'/hits_ELIGOS/hits_eligos_chr_ass_confirmed_5_with_DRACH.Rda'))
@@ -318,32 +310,32 @@ DRACH_overlap_ELIGOS <- function(path_directory, hits_ELIGOS_chr, hits_ELIGOS_nu
 
 ####################
 
-gr_ELIGOS_min05_min05_min1 <- ELIGOS_results_min05_min_05_min1(path_directory = '/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/fractions_eligos_4sU_library_gene_subsampling_min05_min05_min1/', p=0.05,ap=0.05,OR=1)
-confirmed_hits_ELIGOS_min05_min05_min1 <- ELIGOS_results(path_directory = '/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/fractions_eligos_4sU_library_gene_subsampling_min05_min05_min1/',gr_ELIGOS_min05_min05_min1)
-confirmed_hits_DRACH_ELIGOS_min05_min05_min1 <- DRACH_overlap_ELIGOS(path_directory = '/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/fractions_eligos_4sU_library_gene_subsampling_min05_min05_min1/',
+gr_ELIGOS_min05_min05_min1 <- ELIGOS_results_min05_min_05_min1(path_directory = '/path/to/fractions_eligos_4sU_library_gene_subsampling_min05_min05_min1/', p=0.05,ap=0.05,OR=1)
+confirmed_hits_ELIGOS_min05_min05_min1 <- ELIGOS_results(path_directory = '/path/to/fractions_analysis_Paola_SUM159/fractions_eligos_4sU_library_gene_subsampling_min05_min05_min1/',gr_ELIGOS_min05_min05_min1)
+confirmed_hits_DRACH_ELIGOS_min05_min05_min1 <- DRACH_overlap_ELIGOS(path_directory = '/path/to/fractions_eligos_4sU_library_gene_subsampling_min05_min05_min1/',
                                                                      hits_ELIGOS_chr = confirmed_hits_ELIGOS_min05_min05_min1[[1]], hits_ELIGOS_nucleo = confirmed_hits_ELIGOS_min05_min05_min1[[2]], hits_ELIGOS_cyto = confirmed_hits_ELIGOS_min05_min05_min1[[3]])
 
-gr_ELIGOS_min05_mag05_mag1 <- ELIGOS_results_min05_mag05_mag1(path_directory = '/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/fractions_eligos_4sU_library_gene_subsampling_min05_mag05_mag1/', p=0.05,ap=0.05,OR=1)
-confirmed_hits_ELIGOS_min05_mag05_mag1 <- ELIGOS_results(path_directory = '/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/fractions_eligos_4sU_library_gene_subsampling_min05_mag05_mag1/', gr_ELIGOS_min05_mag05_mag1)
-confirmed_hits_DRACH_ELIGOS_min05_mag05_mag1 <- DRACH_overlap_ELIGOS(path_directory = '/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/fractions_eligos_4sU_library_gene_subsampling_min05_mag05_mag1/',
+gr_ELIGOS_min05_mag05_mag1 <- ELIGOS_results_min05_mag05_mag1(path_directory = '/path/to/fractions_eligos_4sU_library_gene_subsampling_min05_mag05_mag1/', p=0.05,ap=0.05,OR=1)
+confirmed_hits_ELIGOS_min05_mag05_mag1 <- ELIGOS_results(path_directory = '/path/to/fractions_eligos_4sU_library_gene_subsampling_min05_mag05_mag1/', gr_ELIGOS_min05_mag05_mag1)
+confirmed_hits_DRACH_ELIGOS_min05_mag05_mag1 <- DRACH_overlap_ELIGOS(path_directory = '/path/to/fractions_eligos_4sU_library_gene_subsampling_min05_mag05_mag1/',
                                                                      hits_ELIGOS_chr = confirmed_hits_ELIGOS_min05_mag05_mag1[[1]], hits_ELIGOS_nucleo = confirmed_hits_ELIGOS_min05_mag05_mag1[[2]], hits_ELIGOS_cyto = confirmed_hits_ELIGOS_min05_mag05_mag1[[3]])
 
-gr_ELIGOS_min05_mag05_min1 <- ELIGOS_results_min05_mag05_min1(path_directory = '/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/fractions_eligos_4sU_library_gene_subsampling_min05_mag05_min1/', p=0.05,ap=0.05,OR=1)
-confirmed_hits_ELIGOS_min05_mag05_min1 <- ELIGOS_results(path_directory = '/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/fractions_eligos_4sU_library_gene_subsampling_min05_mag05_min1/',gr_ELIGOS_min05_mag05_min1)
-confirmed_hits_DRACH_ELIGOS_min05_mag05_min1 <- DRACH_overlap_ELIGOS(path_directory = '/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/fractions_eligos_4sU_library_gene_subsampling_min05_mag05_min1/',
+gr_ELIGOS_min05_mag05_min1 <- ELIGOS_results_min05_mag05_min1(path_directory = '/path/to/fractions_eligos_4sU_library_gene_subsampling_min05_mag05_min1/', p=0.05,ap=0.05,OR=1)
+confirmed_hits_ELIGOS_min05_mag05_min1 <- ELIGOS_results(path_directory = '/path/to/fractions_eligos_4sU_library_gene_subsampling_min05_mag05_min1/',gr_ELIGOS_min05_mag05_min1)
+confirmed_hits_DRACH_ELIGOS_min05_mag05_min1 <- DRACH_overlap_ELIGOS(path_directory = '/path/to/fractions_eligos_4sU_library_gene_subsampling_min05_mag05_min1/',
                                                                      hits_ELIGOS_chr = confirmed_hits_ELIGOS_min05_mag05_min1[[1]], hits_ELIGOS_nucleo = confirmed_hits_ELIGOS_min05_mag05_min1[[2]], hits_ELIGOS_cyto = confirmed_hits_ELIGOS_min05_mag05_min1[[3]])
 
 ##############
 
 # load the tsv file with the output of m6Anet for the three fractions for all the 10 samplings
-m6Anet_fractions_4sU_chr_ass <- list.files(path = '/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/fractions_m6anet_4sU_library_gene_subsampling_prob0.9/chr', pattern = 'tsv', full.names = TRUE)
-m6Anet_fractions_4sU_nucleo <- list.files(path = '/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/fractions_m6anet_4sU_library_gene_subsampling_prob0.9/nucleo', pattern = 'tsv', full.names = TRUE)
-m6Anet_fractions_4sU_cyto <- list.files(path = '/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/fractions_m6anet_4sU_library_gene_subsampling_prob0.9/cyto', pattern = 'tsv', full.names = TRUE)
+m6Anet_fractions_4sU_chr_ass <- list.files(path = '/path/to/fractions_m6anet_4sU_library_gene_subsampling_prob0.9/chr', pattern = 'tsv', full.names = TRUE)
+m6Anet_fractions_4sU_nucleo <- list.files(path = '/path/to/fractions_m6anet_4sU_library_gene_subsampling_prob0.9/nucleo', pattern = 'tsv', full.names = TRUE)
+m6Anet_fractions_4sU_cyto <- list.files(path = '/path/to/fractions_m6anet_4sU_library_gene_subsampling_prob0.9/cyto', pattern = 'tsv', full.names = TRUE)
 
 # load the vector with the transcript names as names and the names of the gene from which 
 # they are transcribed as values
-load('/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/R_data/tx_gene.Rda')
-gtf_file <- "/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/references/Homo_sapiens.GRCh38.104.gtf"
+load('/path/to/R_data/tx_gene.Rda')
+gtf_file <- "/path/to/Homo_sapiens.GRCh38.104.gtf"
 txdb <- makeTxDbFromGFF(gtf_file)
 tx_txdb <- GenomicFeatures::transcripts(txdb)
 
@@ -493,8 +485,8 @@ prob_distribution <- function(path_directory) {
   dev.off()
 }
 
-prob_distribution('/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/fractions_eligos_4sU_library_gene_subsampling_min05_min05_mag1/')
-prob_distribution('/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/fractions_eligos_4sU_library_gene_subsampling_min05_min05_min1/')
-prob_distribution('/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/fractions_eligos_4sU_library_gene_subsampling_min05_mag05_mag1/')
-prob_distribution('/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/fractions_eligos_4sU_library_gene_subsampling_min05_mag05_min1/')
+prob_distribution('/path/to/fractions_eligos_4sU_library_gene_subsampling_min05_min05_mag1/')
+prob_distribution('/path/to/fractions_eligos_4sU_library_gene_subsampling_min05_min05_min1/')
+prob_distribution('/path/to/fractions_eligos_4sU_library_gene_subsampling_min05_mag05_mag1/')
+prob_distribution('/path/to/fractions_eligos_4sU_library_gene_subsampling_min05_mag05_min1/')
 
