@@ -60,7 +60,7 @@ save(tx_gene, file="path/to/output_dir/tx_gene.RDa")
 exon_coord <- exonsBy(txdb, by = 'gene')
 # merge the overlapping ranges 
 exon_coord_red <- lapply(exon_coord, reduce)
-save(exon_coord_red, file="path/to/output_dir/exon_coord_red.RDa")
+save(exon_coord_red, file="/path/to/output_dir/exon_coord_red.RDa")
 
 # create a vector with the exon names as names and the names of the gene to which they belong as values
 tmp <- lapply(seq_along(exon_coord), function(y, n, i) {
@@ -69,7 +69,7 @@ tmp <- lapply(seq_along(exon_coord), function(y, n, i) {
 exon_gene <- do.call(rbind, tmp)
 rownames(exon_gene) <- exon_gene[, 1]
 exon_gene <- exon_gene[, 2]
-save(exon_gene, file="path/to/output_dir/exon_gene.RDa")
+save(exon_gene, file="/path/to/output_dir/exon_gene.RDa")
 
 # 5'UTR
 five_UTR_coord <- fiveUTRsByTranscript(txdb)
@@ -84,7 +84,7 @@ five_UTR_coord_bygene_red <- lapply(five_UTR_coord_bygene_red, function(x) {
   mcols(x) <- cbind(mcols(x), feature='5UTR')
   x
 })
-save(five_UTR_coord_bygene_red, file="path/to/output_dir/five_UTR_coord_bygene_red.RDa")
+save(five_UTR_coord_bygene_red, file="/path/to/output_dir/five_UTR_coord_bygene_red.RDa")
 
 # 3'UTR
 three_UTR_coord <- threeUTRsByTranscript(txdb)
@@ -99,7 +99,7 @@ three_UTR_coord_bygene_red <- lapply(three_UTR_coord_bygene_red, function(x) {
   mcols(x) <- cbind(mcols(x), feature='3UTR')
   x
 })
-save(three_UTR_coord_bygene_red, file="path/to/output_dir/three_UTR_coord_bygene_red.RDa")
+save(three_UTR_coord_bygene_red, file="/path/to/output_dir/three_UTR_coord_bygene_red.RDa")
 
 # CODING EXONS
 # coding exons are defined as the exon regions that are neither 5'UTR nor 3'UTR
@@ -126,7 +126,7 @@ coding_exons <- lapply(coding_exons, function(x) {
   mcols(x) <- cbind(mcols(x), feature='coding exon')
   x
 })
-save(coding_exons, file="path/to/output_dir/coding_exons.RDa")
+save(coding_exons, file="/path/to/output_dir/coding_exons.RDa")
 
 # STOP CODON
 cds_coord <- cdsBy(txdb, by = 'tx',use.names=TRUE)
@@ -150,7 +150,7 @@ stop_codon_coord_red <- lapply(stop_codon_coord_red, function(x) {
   mcols(x) <- cbind(mcols(x), feature='stop codon')
   x
 })
-save(stop_codon_coord_red, file="path/to/output_dir/stop_codon_coord_red.RDa")
+save(stop_codon_coord_red, file="/path/to/output_dir/stop_codon_coord_red.RDa")
 
 # INTRONS
 # introns are defined as the transcript regions that are never exons (coding exons/5'UTR/3'UTR)
@@ -181,7 +181,7 @@ introns_coord_red <- lapply(introns_coord_red, function(x) {
   mcols(x) <- cbind(mcols(x), feature='intron')
   x
 })
-save(introns_coord_red, file="path/to/output_dir/introns_coord_red.RDa")
+save(introns_coord_red, file="/path/to/output_dir/introns_coord_red.RDa")
 
 all_genes_annotated <- c(names(five_UTR_coord_bygene_red), names(three_UTR_coord_bygene_red), names(stop_codon_coord_red),
                          names(coding_exons), names(introns_coord_red))
@@ -223,4 +223,4 @@ names(protein_coding_genes_5UTR_3UTR_introns_exons_stop) <- all_genes_annotated
 # convert into GRangesList
 protein_coding_genes_5UTR_3UTR_introns_exons_stop <- as(protein_coding_genes_5UTR_3UTR_introns_exons_stop,'GRangesList')
 
-save(protein_coding_genes_5UTR_3UTR_introns_exons_stop, file="path/to/output_dir/protein_coding_genes_5UTR_3UTR_introns_exons_stop.RDa")
+save(protein_coding_genes_5UTR_3UTR_introns_exons_stop, file="/path/to/output_dir/protein_coding_genes_5UTR_3UTR_introns_exons_stop.RDa")
