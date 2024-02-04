@@ -21,7 +21,7 @@ motif_analysis <- function(path_directory) {
   
   # create a data frame reporting, for each fraction, the number of ELIGOS DRACH- hits containing each of the selected motifs
   seq <- rep(motifs$CONSENSUS, each=3) 
-  Fraction <- factor(rep(c("Chromatin Associated", "Nucleoplasmic", "Cytoplasmic"), length(motifs$CONSENSUS)), levels = c("Chromatin Associated", "Nucleoplasmic", "Cytoplasmic"))
+  Fraction <- factor(rep(c("Chromatin", "Nucleoplasm", "Cytoplasm"), length(motifs$CONSENSUS)), levels = c("Chromatin", "Nucleoplasm", "Cytoplasm"))
   sites <- rep(0,length(motifs$CONSENSUS)*3)
   stats <- data.frame(seq,Fraction,sites)
   
@@ -35,17 +35,17 @@ motif_analysis <- function(path_directory) {
     
     # identify which are ELIGOS DRACH- hits overlapping with the 20-nucleotides regions containing that motif
     seqs_chr_motif <- hits_eligos_chr_ass_confirmed_5_without_DRACH[unique(queryHits(findOverlaps(hits_eligos_chr_ass_confirmed_5_without_DRACH,seqs_motif,type='any')))]
-    stats[which(stats$seq == motifs$CONSENSUS[i] & stats$Fraction =='Chromatin Associated'),3]  <- length(seqs_chr_motif)
+    stats[which(stats$seq == motifs$CONSENSUS[i] & stats$Fraction =='Chromatin'),3]  <- length(seqs_chr_motif)
     mcols(seqs_chr_motif) <- cbind(mcols(seqs_chr_motif),consensus = motifs$CONSENSUS[i], fraction='chr') 
     save(seqs_chr_motif, file=paste0(path_directory,'/xstreme/',motifs$CONSENSUS[i],'_chr.Rda'))
     
     seqs_nucleo_motif <- hits_eligos_nucleo_confirmed_5_without_DRACH[unique(queryHits(findOverlaps(hits_eligos_nucleo_confirmed_5_without_DRACH,seqs_motif,type='any')))]
-    stats[which(stats$seq == motifs$CONSENSUS[i] & stats$Fraction =='Nucleoplasmic'),3]  <- length(seqs_nucleo_motif)
+    stats[which(stats$seq == motifs$CONSENSUS[i] & stats$Fraction =='Nucleoplasm'),3]  <- length(seqs_nucleo_motif)
     mcols(seqs_nucleo_motif) <- cbind(mcols(seqs_nucleo_motif),consensus = motifs$CONSENSUS[i], fraction='nucleo') 
     save(seqs_nucleo_motif, file=paste0(path_directory,'/xstreme/',motifs$CONSENSUS[i],'_nucleo.Rda'))
     
     seqs_cyto_motif <- hits_eligos_cyto_confirmed_5_without_DRACH[unique(queryHits(findOverlaps(hits_eligos_cyto_confirmed_5_without_DRACH,seqs_motif,type='any')))]
-    stats[which(stats$seq == motifs$CONSENSUS[i] & stats$Fraction =='Cytoplasmic'),3] <- length(seqs_cyto_motif)
+    stats[which(stats$seq == motifs$CONSENSUS[i] & stats$Fraction =='Cytoplasm'),3] <- length(seqs_cyto_motif)
     mcols(seqs_cyto_motif) <- cbind(mcols(seqs_cyto_motif),consensus = motifs$CONSENSUS[i], fraction='cyto') 
     save(seqs_cyto_motif, file=paste0(path_directory,'/xstreme/',motifs$CONSENSUS[i],'_cyto.Rda'))
     
@@ -125,18 +125,18 @@ motif_analysis <- function(path_directory) {
     names(motif_evalue) <- motifs$CONSENSUS
     
     if (unique(all_hits$fraction) == 'chr') {
-      fraction = c('Chromatin Associated')
+      fraction = c('Chromatin')
     } else if (unique(all_hits$fraction) == 'nucleo') {
-      fraction = c('Nucleoplasmic')
+      fraction = c('Nucleoplasm')
     } else {
-      fraction = c('Cytoplasmic')
+      fraction = c('Cytoplasm')
     }
     
     ann <- data.frame(motif_evalue = motif_evalue[rownames(m)])
     rownames(ann) <- rownames(m)
     print(ann)
     
-    if (fraction == 'Chromatin Associated') {
+    if (fraction == 'Chromatin') {
       pdf(paste0(path_directory, 'xstreme/motifs_distribution_on_gene_', fraction, '.pdf'), height = 7, width = 6)
       pheatmap(m, cluster_rows = FALSE, cluster_cols = FALSE, show_rownames = TRUE, 
              annotation_row = ann, annotation_legend = FALSE, treeheight_row = 0, main = fraction, fontsize = 10, color = colorRampPalette(c("white", "red"))(50), 
