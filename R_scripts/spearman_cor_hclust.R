@@ -59,12 +59,12 @@ all_genes <- union(all_genes, names(nucleo_number_reads_per_gene))
 # create a matrix with a row per gene and three columns, one for each fraction (initialize to 0)
 genes_counts <- matrix(data = 0, nrow = length(all_genes), ncol=3)
 rownames(genes_counts) <- all_genes
-colnames(genes_counts) <- c("Chromatin\nAssociated", "Nucleoplasmic", "Cytoplasmic")
+colnames(genes_counts) <- c("Chromatin", "Nucleoplasm", "Cytoplasm")
 
 # update the number of reads mapping on each gene in each fraction (letting 0 when there are no reads mapping on the gene)
-genes_counts[names(chr_ass_number_reads_per_gene), "Chromatin\nAssociated"] <- unname(chr_ass_number_reads_per_gene)
-genes_counts[names(nucleo_number_reads_per_gene), "Nucleoplasmic"] <- unname(nucleo_number_reads_per_gene)
-genes_counts[names(cyto_number_reads_per_gene), "Cytoplasmic"] <- unname(cyto_number_reads_per_gene)
+genes_counts[names(chr_ass_number_reads_per_gene), "Chromatin"] <- unname(chr_ass_number_reads_per_gene)
+genes_counts[names(nucleo_number_reads_per_gene), "Nucleoplasm"] <- unname(nucleo_number_reads_per_gene)
+genes_counts[names(cyto_number_reads_per_gene), "Cytoplasm"] <- unname(cyto_number_reads_per_gene)
 
 # keep the genes with at least 20 mapping reads in all the fractions
 genes_counts_20 <- genes_counts[which(genes_counts[,1]>=20 & genes_counts[,2]>=20 & genes_counts[,3]>=20),]
@@ -78,13 +78,13 @@ cor_nucleo_cyto <- cor(genes_counts_20[,2],genes_counts_20[,3], method = "s")
 pdf('/path/to/sp_cor_pairs_of_fractions.pdf')
 par(mfrow = c(2,2))
 
-plot(log = 'xy', x=genes_counts_20[,3], y=genes_counts_20[,1], xlab = c('Number of reads from cytoplasmic RNAs'), ylab = c('Number of reads from chr. associated RNAs'), main = paste0("Cytoplasmic VS Chromatin Associated\n", "rSp. = ", sprintf("%.2f", cor_chr_cyto)), cex=0.1, cex.main=1)
+plot(log = 'xy', x=genes_counts_20[,3], y=genes_counts_20[,1], xlab = c('Number of reads from cytoplasmic RNAs'), ylab = c('Number of reads from chr. associated RNAs'), main = paste0("Cytoplasm VS Chromatin\n", "rSp. = ", sprintf("%.2f", cor_chr_cyto)), cex=0.1, cex.main=1)
 abline(0, 1, col = 2)
 
-plot(log = 'xy', x=genes_counts_20[,3],y=genes_counts_20[,2], xlab = c('Number of reads from cytoplasmic RNAs'), ylab = c('Number of reads from nucleoplasmic RNAs'), main = paste0("Cytoplasmic VS Nucleoplasmic\n", "rSp. = ", sprintf("%.2f", cor_nucleo_cyto)), cex=0.1, cex.main=1)
+plot(log = 'xy', x=genes_counts_20[,3],y=genes_counts_20[,2], xlab = c('Number of reads from cytoplasmic RNAs'), ylab = c('Number of reads from nucleoplasmic RNAs'), main = paste0("Cytoplasm VS Nucleoplasm\n", "rSp. = ", sprintf("%.2f", cor_nucleo_cyto)), cex=0.1, cex.main=1)
 abline(0, 1, col = 2)
 
-plot(log = 'xy',x=genes_counts_20[,1],y=genes_counts_20[,2], xlab = c('Number of reads from chr. associated RNAs'), ylab = c('Number of reads from nucleoplasmic RNAs'), main = paste0("Chromatin Associated VS Nucleoplasmic\n", "rSp. = ", sprintf("%.2f", cor_chr_nucleo)), cex=0.1, cex.main=1)
+plot(log = 'xy',x=genes_counts_20[,1],y=genes_counts_20[,2], xlab = c('Number of reads from chr. associated RNAs'), ylab = c('Number of reads from nucleoplasmic RNAs'), main = paste0("Chromatin VS Nucleoplasm\n", "rSp. = ", sprintf("%.2f", cor_chr_nucleo)), cex=0.1, cex.main=1)
 abline(0, 1, col = 2)
 
 dev.off()
