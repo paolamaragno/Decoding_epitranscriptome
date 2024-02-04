@@ -207,7 +207,7 @@ ELIGOS_results <- function(path_directory,
     geom_bar(stat="identity") +
     theme_classic(base_size = 16) +
     scale_x_continuous(breaks=seq(1,10)) +
-    labs(title='Chromatin associated') +
+    labs(title='Chromatin') +
     xlab('Num samplings with hit')+
     ylab('Number of hits')
   
@@ -217,7 +217,7 @@ ELIGOS_results <- function(path_directory,
     geom_bar(stat="identity") +
     theme_classic(base_size = 16) +
     scale_x_continuous(breaks=seq(1,10)) +
-    labs(title='Nucleoplasmic') +
+    labs(title='Nucleoplasm') +
     xlab('Num samplings with hit')+
     ylab('Number of hits')
   
@@ -227,7 +227,7 @@ ELIGOS_results <- function(path_directory,
     geom_bar(stat="identity") +
     theme_classic(base_size = 16) +
     scale_x_continuous(breaks=seq(1,10)) +
-    labs(title='Cytoplasmic') +
+    labs(title='Cytoplasm') +
     xlab('Num samplings with hit')+
     ylab('Number of hits')
   
@@ -255,7 +255,7 @@ ELIGOS_results <- function(path_directory,
   
   # heatmap with the pairwise overlap between ELIGOS hits in the different fractions
   overlap_hits_eligos_confirmed_5 <- list(hits_eligos_chr_ass_confirmed_5,hits_eligos_nucleo_confirmed_5,hits_eligos_cyto_confirmed_5)
-  names(overlap_hits_eligos_confirmed_5) <- c('Chromatin\nAssociated', 'Nucleoplasmic','Cytoplasmic')
+  names(overlap_hits_eligos_confirmed_5) <- c('Chromatin', 'Nucleoplasm','Cytoplasm')
   
   pdf(file = paste0(path_directory, '/', name_pdf_overlap_3fractions), width = 7, height = 5)
   overlapOfGRanges(overlap_hits_eligos_confirmed_5,plot = TRUE)
@@ -272,7 +272,7 @@ DRACH_overlap_ELIGOS <- function(path_directory, hits_ELIGOS_chr, hits_ELIGOS_nu
   
   summary_table <- matrix(ncol=3, nrow=4)
   colnames(summary_table) <- c('Total number of hits', 'DRACH+ hits', 'DRACH- hits')
-  rownames(summary_table) <- c('Chromatin Associated', 'Nucleoplasmic', 'Cytoplasmic', 'Overlap')
+  rownames(summary_table) <- c('Chromatin', 'Nucleoplasm', 'Cytoplasm', 'Overlap')
   
   summary_table[1,1] <- as.character(length(hits_ELIGOS_chr))
   summary_table[2,1] <- as.character(length(hits_ELIGOS_nucleo))
@@ -391,7 +391,7 @@ DRACH_overlap_ELIGOS <- function(path_directory, hits_ELIGOS_chr, hits_ELIGOS_nu
   }
   
   heatmap_matrix_eligos <- heatmap_matrix_eligos[-1,]
-  colnames(heatmap_matrix_eligos) <- c('Chromatin\nAssociated','Nucleoplasmic','Cytoplasmic')
+  colnames(heatmap_matrix_eligos) <- c('Chromatin','Nucleoplasm','Cytoplasm')
   rownames(heatmap_matrix_eligos) <- 1:nrow(heatmap_matrix_eligos)
   order <- list(c(1,0,0), c(0,1,0), c(0,0,1),c(1,1,0), c(0,1,1), c(1,0,1),c(1,1,1))
   
@@ -461,7 +461,7 @@ DRACH_overlap_ELIGOS <- function(path_directory, hits_ELIGOS_chr, hits_ELIGOS_nu
   }
   
   heatmap_matrix_eligos <- heatmap_matrix_eligos[-1,]
-  colnames(heatmap_matrix_eligos) <- c('Chromatin\nAssociated','Nucleoplasmic','Cytoplasmic')
+  colnames(heatmap_matrix_eligos) <- c('Chromatin','Nucleoplasm','Cytoplasm')
   rownames(heatmap_matrix_eligos) <- 1:nrow(heatmap_matrix_eligos)
   order <- list(c(1,0,0), c(0,1,0), c(0,0,1),c(1,1,0), c(0,1,1), c(1,0,1),c(1,1,1))
   
@@ -635,7 +635,7 @@ m6Anet_results <- function(path_directory, gr_m6Anet_chr_ass, gr_m6Anet_nucleo, 
     geom_bar(stat="identity") +
     theme_classic(base_size = 16) +
     scale_x_continuous(breaks=seq(1,10)) +
-    labs(title='Chromatin associated') +
+    labs(title='Chromatin') +
     xlab('Num samplings with hit')+
     ylab('Number of hits')
   
@@ -645,7 +645,7 @@ m6Anet_results <- function(path_directory, gr_m6Anet_chr_ass, gr_m6Anet_nucleo, 
     geom_bar(stat="identity") +
     theme_classic(base_size = 16) +
     scale_x_continuous(breaks=seq(1,10)) +
-    labs(title='Nucleoplasmic') +
+    labs(title='Nucleoplasm') +
     xlab('Num samplings with hit')+
     ylab('Number of hits')
   
@@ -655,7 +655,7 @@ m6Anet_results <- function(path_directory, gr_m6Anet_chr_ass, gr_m6Anet_nucleo, 
     geom_bar(stat="identity") +
     theme_classic(base_size = 16) +
     scale_x_continuous(breaks=seq(1,10)) +
-    labs(title='Cytoplasmic') +
+    labs(title='Cytoplasm') +
     xlab('Num samplings with hit')+
     ylab('Number of hits')
   
@@ -683,7 +683,7 @@ m6Anet_results <- function(path_directory, gr_m6Anet_chr_ass, gr_m6Anet_nucleo, 
   
   # heatmap with the pairwise overlap between m6Anet hits in the different fractions
   overlap_hits_m6anet_confirmed_5 <- list(hits_m6anet_chr_ass_confirmed_5,hits_m6anet_nucleo_confirmed_5,hits_m6anet_cyto_confirmed_5)
-  names(overlap_hits_m6anet_confirmed_5) <- c('Chromatin\nAssociated', 'Nucleoplasmic','Cytoplasmic')
+  names(overlap_hits_m6anet_confirmed_5) <- c('Chromatin', 'Nucleoplasm','Cytoplasm')
   
   pdf(file = paste0(path_directory, '/', name_pdf_overlap_3fractions), width = 7, height = 5)
   overlapOfGRanges(overlap_hits_m6anet_confirmed_5,plot = TRUE)
@@ -698,7 +698,7 @@ DRACH_overlap_m6Anet <- function(path_directory, hits_m6Anet_chr, hits_m6Anet_nu
   
   summary_table <- matrix(ncol=3, nrow=4)
   colnames(summary_table) <- c('Total number of hits', 'DRACH+ hits', 'DRACH- hits')
-  rownames(summary_table) <- c('Chromatin Associated', 'Nucleoplasmic', 'Cytoplasmic', 'Overlap')
+  rownames(summary_table) <- c('Chromatin', 'Nucleoplasm', 'Cytoplasm', 'Overlap')
   
   summary_table[1,1] <- as.character(length(hits_m6Anet_chr))
   summary_table[2,1] <- as.character(length(hits_m6Anet_nucleo))
@@ -802,7 +802,7 @@ comparison_ELIGOS_m6Anet <- function(path_directory, hits_ELIGOS_chr, hits_ELIGO
   # compute the overlap between ELIGOS hits confirmed by at least 5 samplings and m6Anet hits confirmed by at least 5 samplings
   summary_table <- matrix(ncol=3, nrow=3)
   colnames(summary_table) <- c('Total number of ELIGOS hits', 'Total number of m6Anet hits', 'Overlap')
-  rownames(summary_table) <- c('Chromatin Associated', 'Nucleoplasmic', 'Cytoplasmic')
+  rownames(summary_table) <- c('Chromatin', 'Nucleoplasm', 'Cytoplasm')
   
   summary_table[1,1] <- as.character(length(hits_ELIGOS_chr))
   summary_table[2,1] <- as.character(length(hits_ELIGOS_nucleo))
@@ -845,7 +845,7 @@ comparison_ELIGOS_m6Anet <- function(path_directory, hits_ELIGOS_chr, hits_ELIGO
   # confirmed by at least 5 samplings
   summary_table <- matrix(ncol=3, nrow=3)
   colnames(summary_table) <- c('DRACH+ ELIGOS hits', 'DRACH+ m6Anet hits', 'Overlap')
-  rownames(summary_table) <- c('Chromatin Associated', 'Nucleoplasmic', 'Cytoplasmic')
+  rownames(summary_table) <- c('Chromatin', 'Nucleoplasm', 'Cytoplasm')
   
   summary_table[1,1] <- as.character(length(hits_ELIGOS_chr_DRACH))
   summary_table[2,1] <- as.character(length(hits_ELIGOS_nucleo_DRACH))
