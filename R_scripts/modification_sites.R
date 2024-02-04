@@ -1,6 +1,3 @@
-# Integrate the information from RMBase3 and RMVar databases (RNA marks and effectors' binding sites).
-# Annotate ELIGOS DRACH+ and DRACH- hits from the different fractions using the databases.
-
 library('GenomicRanges')
 library('GenomicFeatures')
 library('ggplot2')
@@ -12,31 +9,30 @@ library('dplyr')
 
 ## DATABASES OF RNA MARKS
 
-# I downloaded from RMBase3 https://rna.sysu.edu.cn/rmbase3/download.php (RNA modifications session) the bed files with the coordinates of
+# Download from RMBase3 https://rna.sysu.edu.cn/rmbase3/download.php (RNA modifications session) the bed files with the coordinates of
 # m6A, m1A, m5C, m7G, Y, Nm, A-I and other RNA modifications selecting Mammal group, Homo sapiens hg38 genome.
-# These bed files were saved in a folder called /mod/
-# I renamed the file with the coordinates of other RNA modifications "other_RNA_mods_total.bed" and I extracted from it
-# the coordinates of m5U and m6Am  
-others <- read.table(file = '/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/mod/other_RNA_mods_total.bed')
+# Save these bed files in a folder called /mod/, rename the file with the coordinates of other RNA modifications "other_RNA_mods_total.bed"
+# and extract from it the coordinates of m5U and m6Am  
+others <- read.table(file = '/path/to/mod/other_RNA_mods_total.bed')
 m5U <- others[which(others$V7 == 'm5U'),]
-write.table(x = m5U, file = '/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/mod/m5U.bed',row.names = FALSE, col.names = FALSE)
+write.table(x = m5U, file = '/path/to/mod/m5U.bed',row.names = FALSE, col.names = FALSE)
 m6am <- others[which(others$V7 == 'm6Am'),]
-write.table(x = m6am, file = '/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/mod/m6am.bed',row.names = FALSE, col.names = FALSE)
+write.table(x = m6am, file = '/path/to/mod/m6am.bed',row.names = FALSE, col.names = FALSE)
 others <- others[-which(others$V7 == 'm6Am' | others$V7 == 'm5U'),]
 
 # remove 'chr' from the annotation of the chromosome on which each RNA mark maps and 
 # consider only the RNA marks on chromosomes 1-22, X and MT
 others$V1 <- gsub('chr','',others$V1)
 others <- others[which(others$V1 %in% c(as.character(seq(1,22)),'X','M')),]
-write.table(others, '/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/mod/other_RNA_mods_total.bed',row.names = FALSE, col.names = FALSE)
+write.table(others, '/path/to/mod/other_RNA_mods_total.bed',row.names = FALSE, col.names = FALSE)
 
-# I downloaded from RMVar https://rmvar.renlab.org/download.html the txt files with the coordinates of
+# Download from RMVar https://rmvar.renlab.org/download.html the txt files with the coordinates of
 # m6A, Nm, A-I, m1A, m5C, m5U, m6Am, m7G and Y relative to Human.
 # These txt files were saved in the same folder /mod/
 
 # For each RNA modification type the bed file and the txt file were renamed as "modification_type.bed" or "modification_type.txt"
 
-files <- list.files(path = '/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/mod', pattern = 'txt', full.names = TRUE)
+files <- list.files(path = '/path/to/mod', pattern = 'txt', full.names = TRUE)
 
 # iterate over the RNA modification types
 for (f in files) {
@@ -107,61 +103,6 @@ for (f in files) {
   print(paste0(unique(RMvar$modification_type), ': ', as.character(round(length(overlap_subject)/length(all_granges[[order[2]]])*100, 2)),'% in ', names(all_granges)[[order[2]]]))
 }
 
-# [1] "A-to-I: 47747"                                                                                                                                                        
-# [1] "A-to-I: 143780"
-# [1] "A-to-I: 14.51% in RMvar"
-# [1] "A-to-I: 5.15% in RMBase3"
-# [1] "A-to-I: 18.69% in RMvar"
-# [1] "A-to-I: 8.71% in RMBase3"
-# [1] "m1A: 50803"                                                                                                                                                           
-# [1] "m1A: 1103"
-# [1] "m1A: 23.84% in RMBase3"
-# [1] "m1A: 0.53% in RMvar"
-# [1] "m1A: 24.84% in RMBase3"
-# [1] "m1A: 0.56% in RMvar"
-# [1] "m5C: 19601"                                                                                                                                                           
-# [1] "m5C: 45735"
-# [1] "m5C: 41.76% in RMvar"
-# [1] "m5C: 20.91% in RMBase3"
-# [1] "m5C: 44.72% in RMvar"
-# [1] "m5C: 29.16% in RMBase3"
-# [1] "m5U: 341"                                                                                                                                                             
-# [1] "m5U: 44"
-# [1] "m5U: 68.18% in RMBase3"
-# [1] "m5U: 8.8% in RMvar"
-# [1] "m5U: 68.18% in RMBase3"
-# [1] "m5U: 14.08% in RMvar"
-# [1] "m6A: 720548"                                                                                                                                                          
-# [1] "m6A: 878852"
-# [1] "m6A: 42.06% in RMvar"
-# [1] "m6A: 33.49% in RMBase3"
-# [1] "m6A: 44.14% in RMvar"
-# [1] "m6A: 38.46% in RMBase3"
-# [1] "m6Am: 1647"                                                                                                                                                           
-# [1] "m6Am: 48"
-# [1] "m6Am: 0% in RMBase3"
-# [1] "m6Am: 0% in RMvar"
-# [1] "m6Am: 0% in RMBase3"
-# [1] "m6Am: 0% in RMvar"
-# [1] "m7G: 42533"                                                                                                                                                           
-# [1] "m7G: 887"
-# [1] "m7G: 49.38% in RMBase3"
-# [1] "m7G: 1.01% in RMvar"
-# [1] "m7G: 52.99% in RMBase3"
-# [1] "m7G: 1.09% in RMvar"
-# [1] "2'-O-Me: 1551"                                                                                                                                                        
-# [1] "2'-O-Me: 7060"
-# [1] "2'-O-Me: 15.67% in RMvar"
-# [1] "2'-O-Me: 3.48% in RMBase3"
-# [1] "2'-O-Me: 16.63% in RMvar"
-# [1] "2'-O-Me: 5.41% in RMBase3"
-# [1] "pseudouridine: 1038"                                                                                                                                                  
-# [1] "pseudouridine: 5023"
-# [1] "pseudouridine: 12.81% in RMvar"
-# [1] "pseudouridine: 2.67% in RMBase3"
-# [1] "pseudouridine: 18.3% in RMvar"
-# [1] "pseudouridine: 4.06% in RMBase3"
-
 # iterate over the RNA modification types  
 for (f in files) {
   
@@ -189,7 +130,7 @@ for (f in files) {
   RMBase3 <- read.table(file = bed_file, fill=TRUE)
   RMBase3 <- RMBase3[which(RMBase3$V1 %in% RMvar$chromosome),]
   
-  if (f == '/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/mod/Nm.txt') {
+  if (f == '/path/to/mod/Nm.txt') {
     mod_grange_RMBase3 <- GRanges(seqnames = gsub(pattern = 'M', replacement = 'MT', x = gsub(pattern='chr', replacement = '', x=RMBase3$V1)),
                                   ranges = IRanges(start = RMBase3$V2, end=RMBase3$V3),
                                   strand = Rle(RMBase3$V6),
@@ -219,44 +160,25 @@ for (f in files) {
     total <- c(mod_grange_RMvar, mod_grange_RMBase3)
     print(length(total))
     total_table <- data.frame(chr = as.vector(seqnames(total)), start=start(total), end=end(total), strand=strand(total), mod_type= unique(mod_grange_RMBase3$mod_type), cell_line =total$cell_line, DB = total$DB)
-    write.table(total_table, file = paste0('/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/mod/','/', unique(mod_grange_RMBase3$mod_type), '_total.bed'))
+    write.table(total_table, file = paste0('/path/to/mod/','/', unique(mod_grange_RMBase3$mod_type), '_total.bed'))
   } else {
     print(unique(mod_grange_RMBase3$mod_type))
     total <- c(all_granges[[order[1]]], all_granges[[order[2]]][-unique(subjectHits(overlap))])
     print(length(total))
     total_table <- data.frame(chr = as.vector(seqnames(total)), start=start(total), end=end(total), strand=strand(total), mod_type= unique(mod_grange_RMBase3$mod_type), cell_line =total$cell_line, DB = total$DB)
-    write.table(total_table, file = paste0('/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/mod/','/', unique(mod_grange_RMBase3$mod_type), '_total.bed'))
+    write.table(total_table, file = paste0('/path/to/mod/','/', unique(mod_grange_RMBase3$mod_type), '_total.bed'))
   }
 }
-# [1] "A-I"                                                                                                                                                                  
-# [1] 184126
-# [1] "m1A"                                                                                                                                                                  
-# [1] 51636
-# [1] "m5C"                                                                                                                                                                  
-# [1] 55772
-# [1] "m5U"                                                                                                                                                                  
-# [1] 355
-# [1] "m6A"                                                                                                                                                                  
-# [1] 1305050
-# [1] "m6Am"                                                                                                                                                                 
-# [1] 1695
-# [1] "m7G"                                                                                                                                                                  
-# [1] 42989
-# [1] "Nm"                                                                                                                                                                   
-# [1] 8365
-# [1] "Y"                                                                                                                                                                    
-# [1] 5927
-
 ###############
 
-gtf_file <- "/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/references/Homo_sapiens.GRCh38.104.gtf"
+gtf_file <- "/path/to/Homo_sapiens.GRCh38.104.gtf"
 txdb <- makeTxDbFromGFF(gtf_file)
 
-# function that produces a barplot for each RNA modification type, reporting the number of RNA marks 
+# function that produces a barplot, for each RNA modification type, reporting the number of RNA marks 
 # identified in each cell line
 num_cell_lines <- function(cell_lines_RMBase, cell_lines_RMvar, mod_type) {
   
-  # substitute NA values with Unknown
+  # substitute NA values with "Unknown"
   cell_lines_RMBase[is.na(cell_lines_RMBase)] <- 'Unknown'
   cell_lines_RMBase[cell_lines_RMBase == '^-'] <- 'Unknown'
   cell_lines_RMBase <- unlist(lapply(as.list(cell_lines_RMBase), function(x) {
@@ -321,12 +243,12 @@ num_cell_lines <- function(cell_lines_RMBase, cell_lines_RMvar, mod_type) {
   return(p)
 }
 
-mod <- list.files(path = '/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/mod', pattern = "total.bed", full.names = TRUE)
+mod <- list.files(path = '/path/to/mod', pattern = "total.bed", full.names = TRUE)
 for (f in mod) {
   
   mod_file <- read.table(f)
   
-  if (f == "/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/mod/other_RNA_mods_total.bed") {
+  if (f == "/path/to/mod/other_RNA_mods_total.bed") {
     cell_line_RMBase <- mod_file[,12]
     p <- num_cell_lines(cell_line_RMBase, c(), 'Others')
   } else {
@@ -335,13 +257,13 @@ for (f in mod) {
     p <- num_cell_lines(cell_line_RMBase, cell_line_RMvar, unique(mod_file$mod_type))
   }
   
-  if (f == "/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/mod/other_RNA_mods_total.bed") {
+  if (f == "/path/to/mod/other_RNA_mods_total.bed") {
     mod <- 'Others'
   } else {
     mod <- unique(mod_file$mod_type)
   }
   
-  ggsave(paste0('/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/mod/', mod, '_cell_lines_bothBD.pdf'), plot = p, height = 15, width = 40)
+  ggsave(paste0('/path/to/mod/', mod, '_cell_lines_bothBD.pdf'), plot = p, height = 15, width = 40)
 }
 
 #################
@@ -359,7 +281,7 @@ overlap_marks <- function(hits_chr_grange,hits_nucleo_grange,hits_cyto_grange,m6
   # and the overall number (and percentage) of ELIGOS hits annotated at least to one RNA modification type. 
   # The matrix will also report the number of ELIGOS hits containing the same RNA mod type and shared by all the fractions
   number_hits_per_mod <- matrix(0,nrow=5, ncol=12)
-  rownames(number_hits_per_mod) <- c('Chromatin Associated', 'Nucleoplasmic', 'Cytoplasmic', 'Overlap','Number of annotated marks')
+  rownames(number_hits_per_mod) <- c('Chromatin', 'Nucleoplasm', 'Cytoplasm', 'Overlap','Number of annotated marks')
   if (m6A) {
     colnames(number_hits_per_mod) <- c('m6A','Y','m1A','m5C', 'm7G','A-I', 'Nm', 'm6Am', 'm5U', 'Others', 'DRACH+ hits annotated', 'Tot DRACH+ hits')
   } else {
@@ -381,7 +303,7 @@ overlap_marks <- function(hits_chr_grange,hits_nucleo_grange,hits_cyto_grange,m6
     
     mod_file <- read.table(f)
     
-    if (f == "/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/mod/other_RNA_mods_total.bed") {
+    if (f == "/path/to/mod/other_RNA_mods_total.bed") {
       mod_grange <- GRanges(seqnames = gsub(pattern = 'M', replacement = 'MT', x = gsub(pattern='chr', replacement = '', x=mod_file[,1])),
                             ranges = IRanges(start = mod_file[,2], end=mod_file[,3]),
                             strand = Rle(mod_file[,6]),
@@ -403,7 +325,7 @@ overlap_marks <- function(hits_chr_grange,hits_nucleo_grange,hits_cyto_grange,m6
       query_matching_mark_chr <- c(query_matching_mark_chr, unique(queryHits(overlap_chr)))
       hits_chr_with_mod <- hits_chr_grange[unique(queryHits(overlap_chr))]
       # report in the matrix the number (and percentage) of hits that can be annotated with this RNA mod type
-      if (f == "/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/mod/other_RNA_mods_total.bed") {
+      if (f == "/path/to/mod/other_RNA_mods_total.bed") {
         number_hits_per_mod[1,'Others'] <- paste0(as.character(length(unique(queryHits(overlap_chr)))), ' - ', as.character(round(length(unique(queryHits(overlap_chr)))*100/as.numeric(number_hits_per_mod[1,12]),2)),'%')
       } else {
         number_hits_per_mod[1,unique(mod_grange$mod_type)] <- paste0(as.character(length(unique(queryHits(overlap_chr)))), ' - ', as.character(round(length(unique(queryHits(overlap_chr)))*100/as.numeric(number_hits_per_mod[1,12]),2)),'%')
@@ -425,7 +347,7 @@ overlap_marks <- function(hits_chr_grange,hits_nucleo_grange,hits_cyto_grange,m6
       query_matching_mark_nucleo <- c(query_matching_mark_nucleo, unique(queryHits(overlap_nucleo)))
       hits_nucleo_with_mod <- hits_nucleo_grange[unique(queryHits(overlap_nucleo))]
       # report in the matrix the number (and percentage) of hits that can be annotated with this RNA mod type
-      if (f == "/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/mod/other_RNA_mods_total.bed") {
+      if (f == "/path/to/mod/other_RNA_mods_total.bed") {
         number_hits_per_mod[2,'Others'] <- paste0(as.character(length(unique(queryHits(overlap_nucleo)))), ' - ', as.character(round(length(unique(queryHits(overlap_nucleo)))*100/as.numeric(number_hits_per_mod[2,12]),2)),'%')
       } else {
         number_hits_per_mod[2,unique(mod_grange$mod_type)] <- paste0(as.character(length(unique(queryHits(overlap_nucleo)))), ' - ', as.character(round(length(unique(queryHits(overlap_nucleo)))*100/as.numeric(number_hits_per_mod[2,12]),2)),'%')
@@ -447,7 +369,7 @@ overlap_marks <- function(hits_chr_grange,hits_nucleo_grange,hits_cyto_grange,m6
       query_matching_mark_cyto <- c(query_matching_mark_cyto, unique(queryHits(overlap_cyto)))
       hits_cyto_with_mod <- hits_cyto_grange[unique(queryHits(overlap_cyto))]
       # report in the matrix the number (and percentage) of hits that can be annotated with this RNA mod type
-      if (f == "/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/mod/other_RNA_mods_total.bed") {
+      if (f == "/path/to/mod/other_RNA_mods_total.bed") {
         number_hits_per_mod[3,'Others'] <- paste0(as.character(length(unique(queryHits(overlap_cyto)))), ' - ', as.character(round(length(unique(queryHits(overlap_cyto)))*100/as.numeric(number_hits_per_mod[3,12]),2)),'%')
       } else {
         number_hits_per_mod[3,unique(mod_grange$mod_type)] <- paste0(as.character(length(unique(queryHits(overlap_cyto)))), ' - ', as.character(round(length(unique(queryHits(overlap_cyto)))*100/as.numeric(number_hits_per_mod[3,12]),2)),'%')
@@ -462,7 +384,7 @@ overlap_marks <- function(hits_chr_grange,hits_nucleo_grange,hits_cyto_grange,m6
       }
     }
     
-    # compute how many ELIGOS hits overlapping with this RNA modification type are shared by all the fractions and add
+    # compute how many ELIGOS hits, overlapping with this RNA modification type, are shared by all the fractions and add
     # this information to the matrix
     if (length(hits_chr_with_mod) !=0 & length(hits_nucleo_with_mod) != 0 & length(hits_cyto_with_mod) != 0) {
       hits_with_mod <- list(hits_chr_with_mod, hits_nucleo_with_mod, hits_cyto_with_mod)
@@ -471,7 +393,7 @@ overlap_marks <- function(hits_chr_grange,hits_nucleo_grange,hits_cyto_grange,m6
       overlap <- findOverlaps(hits_with_mod[[order[1]]],hits_with_mod[[order[2]]], type = 'any')
       overlap2 <- hits_with_mod[[order[1]]][unique(queryHits(overlap))]
       overlap_all <- findOverlaps(overlap2,hits_with_mod[[order[3]]], type = 'any')
-      if (f == "/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/mod/other_RNA_mods_total.bed") {
+      if (f == "/path/to/mod/other_RNA_mods_total.bed") {
         number_hits_per_mod[4,'Others'] <- length(overlap2[unique(queryHits(overlap_all))]) 
       } else {
         number_hits_per_mod[4,unique(mod_grange$mod_type)] <- length(overlap2[unique(queryHits(overlap_all))]) 
@@ -529,8 +451,8 @@ ELIGOS_hits_DB_marks <- function(directory_mod, directory_hits) {
   load(paste0(directory_hits,'/without_DRACH/hits_eligos_cyto_confirmed_5_without_DRACH.Rda'))
   load(paste0(directory_hits,'/without_DRACH/hits_eligos_nucleo_confirmed_5_without_DRACH.Rda'))
   
-  # add a metadata column to each GRanges object in which the RNA marks with which each hit overlaps will be reported (initiated 
-  # with Unknown)
+  # add a metadata column to each GRanges object in which the RNA modification types with which each hit overlaps will be reported (initiated 
+  # with "Unknown")
   mcols(hits_eligos_chr_ass_confirmed_5_with_DRACH) <- cbind(mcols(hits_eligos_chr_ass_confirmed_5_with_DRACH), mod_type= 'Unknown')
   mcols(hits_eligos_nucleo_confirmed_5_with_DRACH) <- cbind(mcols(hits_eligos_nucleo_confirmed_5_with_DRACH), mod_type= 'Unknown')
   mcols(hits_eligos_cyto_confirmed_5_with_DRACH) <- cbind(mcols(hits_eligos_cyto_confirmed_5_with_DRACH), mod_type= 'Unknown')
@@ -538,13 +460,13 @@ ELIGOS_hits_DB_marks <- function(directory_mod, directory_hits) {
   mcols(hits_eligos_nucleo_confirmed_5_without_DRACH) <- cbind(mcols(hits_eligos_nucleo_confirmed_5_without_DRACH), mod_type= 'Unknown')
   mcols(hits_eligos_cyto_confirmed_5_without_DRACH) <- cbind(mcols(hits_eligos_cyto_confirmed_5_without_DRACH), mod_type= 'Unknown')
   
-  # perform the overlap between ELIGOS DRACH+ hits and RNA marks, of each RNA mod type, from the two databases
+  # perform the overlap between ELIGOS DRACH+ hits and the RNA marks, of each RNA mod type, from the two databases
   hits_DRACH <- overlap_marks(hits_eligos_chr_ass_confirmed_5_with_DRACH,hits_eligos_nucleo_confirmed_5_with_DRACH,hits_eligos_cyto_confirmed_5_with_DRACH,TRUE,directory_hits,directory_mod)
   hits_eligos_chr_ass_confirmed_5_with_DRACH <- hits_DRACH[[1]]
   hits_eligos_nucleo_confirmed_5_with_DRACH <- hits_DRACH[[2]]
   hits_eligos_cyto_confirmed_5_with_DRACH <- hits_DRACH[[3]]
   
-  # perform the overlap between ELIGOS DRACH- hits and RNA marks, of each RNA mod type, from the two databases
+  # perform the overlap between ELIGOS DRACH- hits and the RNA marks, of each RNA mod type, from the two databases
   hits_non_DRACH <- overlap_marks(hits_eligos_chr_ass_confirmed_5_without_DRACH,hits_eligos_nucleo_confirmed_5_without_DRACH,hits_eligos_cyto_confirmed_5_without_DRACH,FALSE,directory_hits,directory_mod)
   hits_eligos_chr_ass_confirmed_5_without_DRACH <- hits_non_DRACH[[1]]
   hits_eligos_nucleo_confirmed_5_without_DRACH <- hits_non_DRACH[[2]]
@@ -558,79 +480,79 @@ ELIGOS_hits_DB_marks <- function(directory_mod, directory_hits) {
   save(hits_eligos_cyto_confirmed_5_without_DRACH, file=paste0(directory_hits,'/without_DRACH/hits_eligos_cyto_confirmed_5_without_DRACH_mod_type.Rda'))
 }
 
-ELIGOS_hits_DB_marks(directory_mod = '/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/mod', 
-                     directory_hits = '/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/fractions_eligos_4sU_library_gene_subsampling_min05_min05_mag1/')
+ELIGOS_hits_DB_marks(directory_mod = '/path/to/mod', 
+                     directory_hits = '/path/to/fractions_eligos_4sU_library_gene_subsampling_min05_min05_mag1/')
 
-ELIGOS_hits_DB_marks(directory_mod = '/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/mod', 
-                     directory_hits = '/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/fractions_eligos_4sU_library_gene_subsampling_nascent_min05_min05_mag1/')
+ELIGOS_hits_DB_marks(directory_mod = '/path/to/mod', 
+                     directory_hits = '/path/to/fractions_eligos_4sU_library_gene_subsampling_nascent_min05_min05_mag1/')
 
-ELIGOS_hits_DB_marks(directory_mod = '/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/mod', 
-                     directory_hits = '/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/fractions_eligos_4sU_library_gene_subsampling_total_510645_min05_min05_mag1/')
+ELIGOS_hits_DB_marks(directory_mod = '/path/to/mod', 
+                     directory_hits = '/path/to/fractions_eligos_4sU_library_gene_subsampling_total_510645_min05_min05_mag1/')
 
 
 
 ## DATABASES OF EFFECTORS' BINDING SITES
 
-# I downloaded from RMBase3 https://rna.sysu.edu.cn/rmbase3/download.php (RNA Modifications related to RBPs session) the bed files with the 
+# Download from RMBase3 https://rna.sysu.edu.cn/rmbase3/download.php (RNA Modifications related to RBPs session) the bed files with the 
 # coordinates of the binding sites of m6A writers/readers/erasers, m5C writers/readers, Y writers, Nm writers, A-I writers and other effectors
 # associated with other RNA modifications selecting Mammal group, Homo sapiens hg38 genome.
 # These bed files were saved in a folder called /RBPs/ and renamed "modification_type_RBPs.bed" and "other_RNA_mods_RBPs.bed".
 
 # concatenate the different bed files reporting the coordinates of the different categories of effectors (writer..)
 # associated with the same RNA modification type
-m6A_writers <- read.table('/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/RBPs/human.hg38.modrbp.m6A.writer.bed', fill =TRUE)
-m6A_erasers <- read.table('/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/RBPs/human.hg38.modrbp.m6A.eraser.bed', fill =TRUE)
-m6A_readers <- read.table('/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/RBPs/human.hg38.modrbp.m6A.reader.bed', fill =TRUE)
-write.table(rbind(m6A_writers, m6A_erasers, m6A_readers), file = '/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/RBPs/m6A_RBPs.bed', row.names = FALSE, col.names = FALSE)
+m6A_writers <- read.table('/path/to/RBPs/human.hg38.modrbp.m6A.writer.bed', fill =TRUE)
+m6A_erasers <- read.table('/path/to/RBPs/human.hg38.modrbp.m6A.eraser.bed', fill =TRUE)
+m6A_readers <- read.table('/path/to/RBPs/human.hg38.modrbp.m6A.reader.bed', fill =TRUE)
+write.table(rbind(m6A_writers, m6A_erasers, m6A_readers), file = '/path/to/RBPs/m6A_RBPs.bed', row.names = FALSE, col.names = FALSE)
 
-m5C_writers <- read.table('/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/RBPs/human.hg38.modrbp.m5C.writer.bed', fill =TRUE)
-m5C_readers <- read.table('/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/RBPs/human.hg38.modrbp.m5C.reader.bed', fill =TRUE)
-write.table(rbind(m5C_writers, m5C_readers), file = '/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/RBPs/m5C_RBPs.bed', row.names = FALSE, col.names = FALSE)
+m5C_writers <- read.table('/path/to/RBPs/human.hg38.modrbp.m5C.writer.bed', fill =TRUE)
+m5C_readers <- read.table('/path/to/RBPs/human.hg38.modrbp.m5C.reader.bed', fill =TRUE)
+write.table(rbind(m5C_writers, m5C_readers), file = '/path/to/RBPs/m5C_RBPs.bed', row.names = FALSE, col.names = FALSE)
 
 # From other_RNA_mods_RBPs.bed the coordinates of the binding sites associated with known RNA mod types are extracted and appended to 
 # the already present files. Only the 4 columns of interest are kept
-effectors_others_RMBase <- read.table('/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/RBPs/other_RNA_mods_RBPs.bed', fill=TRUE)[,c(2,3,10,17)]
+effectors_others_RMBase <- read.table('/path/to/RBPs/other_RNA_mods_RBPs.bed', fill=TRUE)[,c(2,3,10,17)]
 m6A1 <- effectors_others_RMBase[which(effectors_others_RMBase$V10 == 'm6A'),]
-m6A2 <- read.table('/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/RBPs/m6A_RBPs.bed', fill = TRUE)[,c(2,3,10,17)]
-write.table(x = rbind(m6A1, m6A2), file = '/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/RBPs/m6A_RBPs.bed', row.names = FALSE, col.names = FALSE)
+m6A2 <- read.table('/path/to/RBPs/m6A_RBPs.bed', fill = TRUE)[,c(2,3,10,17)]
+write.table(x = rbind(m6A1, m6A2), file = '/path/to/RBPs/m6A_RBPs.bed', row.names = FALSE, col.names = FALSE)
 
 m5C1 <- effectors_others_RMBase[which(effectors_others_RMBase$V10 == 'm5C'),]
-m5C2 <- read.table('/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/RBPs/m5C_RBPs.bed', fill = TRUE)[,c(2,3,10,17)]
-write.table(x = rbind(m5C1, m5C2), file = '/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/RBPs/m5C_RBPs.bed', row.names = FALSE, col.names = FALSE)
+m5C2 <- read.table('/path/to/RBPs/m5C_RBPs.bed', fill = TRUE)[,c(2,3,10,17)]
+write.table(x = rbind(m5C1, m5C2), file = '/path/to/RBPs/m5C_RBPs.bed', row.names = FALSE, col.names = FALSE)
 
 AI1 <- effectors_others_RMBase[which(effectors_others_RMBase$V10 == 'A-I'),]
-AI2 <- read.table('/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/RBPs/A-I_RBPs.bed', fill = TRUE)[,c(2,3,10,17)]
-write.table(x = rbind(AI1, AI2), file = '/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/RBPs/A-I_RBPs.bed', row.names = FALSE, col.names = FALSE)
+AI2 <- read.table('/path/to/RBPs/A-I_RBPs.bed', fill = TRUE)[,c(2,3,10,17)]
+write.table(x = rbind(AI1, AI2), file = '/path/to/RBPs/A-I_RBPs.bed', row.names = FALSE, col.names = FALSE)
 
 Y1 <- effectors_others_RMBase[which(effectors_others_RMBase$V10 == 'Y'),]
-Y2 <- read.table('/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/RBPs/Y_RBPs.bed', fill = TRUE)[,c(2,3,10,17)]
-write.table(x = rbind(Y1,Y2), file = '/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/RBPs/Y_RBPs.bed', row.names = FALSE, col.names = FALSE)
+Y2 <- read.table('/path/to/RBPs/Y_RBPs.bed', fill = TRUE)[,c(2,3,10,17)]
+write.table(x = rbind(Y1,Y2), file = '/path/to/RBPs/Y_RBPs.bed', row.names = FALSE, col.names = FALSE)
 
 m1A <- effectors_others_RMBase[which(effectors_others_RMBase$V10 == 'm1A'),]
-write.table(x = m1A, file = '/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/RBPs/m1A_RBPs.bed',  row.names = FALSE, col.names = FALSE)
+write.table(x = m1A, file = '/path/to/RBPs/m1A_RBPs.bed',  row.names = FALSE, col.names = FALSE)
 
 m6Am <- effectors_others_RMBase[which(effectors_others_RMBase$V10 == 'm6Am'),]
-write.table(x = m6Am, file = '/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/RBPs/m6Am_RBPs.bed', row.names = FALSE, col.names = FALSE)
+write.table(x = m6Am, file = '/path/to/RBPs/m6Am_RBPs.bed', row.names = FALSE, col.names = FALSE)
 
 m7G <- effectors_others_RMBase[which(effectors_others_RMBase$V10 == 'm7G'),]
-write.table(x = m7G, file = '/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/RBPs/m7G_RBPs.bed', row.names = FALSE, col.names = FALSE)
+write.table(x = m7G, file = '/path/to/RBPs/m7G_RBPs.bed', row.names = FALSE, col.names = FALSE)
 
 m5U <- effectors_others_RMBase[which(effectors_others_RMBase$V10 == 'm5U'),]
-write.table(x = m5U, file = '/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/RBPs/m5U_RBPs.bed', row.names = FALSE, col.names = FALSE)
+write.table(x = m5U, file = '/path/to/RBPs/m5U_RBPs.bed', row.names = FALSE, col.names = FALSE)
 
 Nm1 <- effectors_others_RMBase[which(effectors_others_RMBase$V10 %in% c('Um', 'Am', 'Cm', 'Gm')),]
-Nm2 <- read.table('/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/RBPs/Nm_RBPs.bed', fill = TRUE)[,c(2,3,10,17)]
-write.table(x = rbind(Nm1,Nm2), file = '/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/RBPs/Nm_RBPs.bed', row.names = FALSE, col.names = FALSE)
+Nm2 <- read.table('/path/to/RBPs/Nm_RBPs.bed', fill = TRUE)[,c(2,3,10,17)]
+write.table(x = rbind(Nm1,Nm2), file = '/path/to/RBPs/Nm_RBPs.bed', row.names = FALSE, col.names = FALSE)
 
 effectors_others_RMBase <- effectors_others_RMBase[-which(effectors_others_RMBase$V10 %in% c('m6A', 'm5C', 'A-I', 'Y', 'm1A', 'm6Am', 'm7G', 'm5U', 'Um', 'Am', 'Cm', 'Gm')),]
-write.table(effectors_others_RMBase, '/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/RBPs/other_RNA_mods_RBPs.bed', row.names = FALSE, col.names = FALSE)
+write.table(effectors_others_RMBase, '/path/to/RBPs/other_RNA_mods_RBPs.bed', row.names = FALSE, col.names = FALSE)
 
 # from each bed file with the coordinates of the binding sites associated with each RNA mod type extract the 
 # unique rows (effector, coordinates, mod, type_effector)
-RBPs <- list.files(path = '/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/RBPs', pattern = 'bed', full.names = TRUE)
+RBPs <- list.files(path = '/path/to/RBPs', pattern = 'bed', full.names = TRUE)
 for (i in 1:length(RBPs)) {
   f <- read.table(RBPs[i])
-  if (RBPs[i] == '/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/RBPs/Nm_RBPs.bed') {
+  if (RBPs[i] == '/path/to/RBPs/Nm_RBPs.bed') {
     f[,3] <- 'Nm'
   }
   f_unique <- f %>% distinct()
@@ -648,44 +570,20 @@ for (f in RBPs) {
   print(f)
   print(nrow(unique(read.table(f)[,c(1,2,3)])))
 }
-# [1] "/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/RBPs/A-I_RBPs.bed"
-# [1] 56409
-# [1] "/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/RBPs/m1A_RBPs.bed"
-# [1] 10080
-# [1] "/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/RBPs/m5C_RBPs.bed"
-# [1] 89989
-# [1] "/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/RBPs/m5U_RBPs.bed"
-# [1] 726
-# [1] "/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/RBPs/m6A_RBPs.bed"
-# [1] 3017715
-# [1] "/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/RBPs/m6Am_RBPs.bed"
-# [1] 240
-# [1] "/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/RBPs/m7G_RBPs.bed"
-# [1] 7416
-# [1] "/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/RBPs/Nm_RBPs.bed"
-# [1] 42295
-# [1] "/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/RBPs/other_RNA_mods_RBPs.bed"
-# [1] 7259
-# [1] "/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/RBPs/Y_RBPs.bed"
-# [1] 28165
+
 nrow(tot_sites %>% distinct())
-# total binding sites RMBase3: 3,158,400
 unique_RMBase3_binding_sites <- unique((tot_sites %>% distinct())[,2])
-
 enzymes_RMBase <- unique(enzymes_RMBase)
-# 203 different enzymes 
 
-# I downloaded from RMVar https://rmvar.renlab.org/download.html the txt file with the coordinates of the binding sites of
+# Download from RMVar https://rmvar.renlab.org/download.html the txt file with the coordinates of the binding sites of
 # effectors associated with RNA modifications. This file is called RMVar_Human_RBP_info.txt and was saved in the same folder /RBPs/
-RBPs_RMvar <- read_tsv('/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/RBPs/RMVar_Human_RBP_info.txt',  col_types = cols())
+RBPs_RMvar <- read_tsv('/path/to/RBPs/RMVar_Human_RBP_info.txt',  col_types = cols())
 # the columns of interest and the unique binding sites are extracted 
 RBPs_RMvar <- RBPs_RMvar[,c(2,6)]
 RBPs_RMvar <- RBPs_RMvar %>% distinct()
 # compute the overall number of binding sites and of effectors associated with RNA modification types reported in RMVar
 nrow(RBPs_RMvar)
-# total binding sites RMvar: 1,244,544
 enzymes_RMvar <- unique(RBPs_RMvar$RBP)
-# 201 different enzymes
 
 # create a data frame reporting the name of the effector, the function of the effector (writer, eraser, reader, other) and 
 # the modification type associated to it (on the base of the information reported in RMBase3)
@@ -707,25 +605,25 @@ nrow(enzyme_type_mod_unique[,c(1,2)] %>% distinct())
 # 203 -> the same enzyme is always annotated to the same function 
 
 # identify which effectors are associated only with one RNA mod type (specific) and
-# which with more than one (ambiguous)
-# in each RMBase file there are no duplicates of the same binding site (the binding site of each effectors is not duplicated). 
-# But the same binding site of the same effector can be associated with different modifications (contained in different RMBase files)
+# which with more than one (ambiguous).
+# in each RMBase file there are no duplicates of the same binding site (the binding site of each effectors is not duplicated); 
+# but the same binding site of the same effector can be associated with different modifications (contained in different RMBase3 files)
 specific_effectors <- names(table(enzyme_type_mod_unique$Name_effector)[table(enzyme_type_mod_unique$Name_effector)==1])
 # 31 specific effectors 
-save(specific_effectors, file = '/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/RBPs/specific_effectors.RDa')
+save(specific_effectors, file = '/path/to/RBPs/specific_effectors.RDa')
 
 specific_effectors_only_m6A <- enzyme_type_mod_unique[enzyme_type_mod_unique$Name_effector %in% specific_effectors,][enzyme_type_mod_unique[enzyme_type_mod_unique$Name_effector %in% specific_effectors,]$Mod_type =='m6A',]$Name_effector
 # 22 specific effectors associated with m6A
-save(specific_effectors_only_m6A, file = '/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/RBPs/specific_effectors_only_m6A.RDa')
+save(specific_effectors_only_m6A, file = '/path/to/RBPs/specific_effectors_only_m6A.RDa')
 
 specific_effectors_non_m6A <- specific_effectors[!specific_effectors %in% specific_effectors_only_m6A]
 # 9 specific effectors associated with a RNA mod different from m6A
-save(specific_effectors_non_m6A, file = '/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/RBPs/specific_effectors_non_m6A.RDa')
+save(specific_effectors_non_m6A, file = '/path/to/RBPs/specific_effectors_non_m6A.RDa')
 
 # identify which effectors are reported only in RMVar
 enzymes_only_RMvar <-setdiff(unique(RBPs_RMvar$RBP),unique(enzyme_type_mod_unique$Name_effector))
 
-# add to the data frame the names of the effectors only present in RMVar, in this case the relative function and modification type are set to Unknown
+# add to the data frame the names of the effectors only present in RMVar, in this case the relative function and modification type are set to "Unknown"
 enzyme_type_mod_unique <- rbind(enzyme_type_mod_unique, data.frame(Name_effector=enzymes_only_RMvar,Function=rep('Unknown', length(enzymes_only_RMvar)),Mod_type=rep('Unknown', length(enzymes_only_RMvar))))
 
 length(unique(enzyme_type_mod_unique$Name_effector))
@@ -733,9 +631,9 @@ length(unique(enzyme_type_mod_unique$Name_effector))
 
 ambiguous_effectors <- unique(setdiff(unique(enzyme_type_mod_unique$Name_effector), specific_effectors))
 # 176 ambiguous effectors 
-save(ambiguous_effectors, file = '/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/RBPs/ambiguous_effectors.RDa')
+save(ambiguous_effectors, file = '/path/to/RBPs/ambiguous_effectors.RDa')
 
-save(enzyme_type_mod_unique, file = '/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/RBPs/enzyme_type_mod_unique.RDa')
+save(enzyme_type_mod_unique, file = '/path/to/RBPs/enzyme_type_mod_unique.RDa')
 
 # distribution of the dimension of the binding sites (narrow peak) from all the bed files from RMBase3
 dim_RMBase <- unlist(lapply(as.list(unique_RMBase3_binding_sites), function(x) {
@@ -746,8 +644,6 @@ dim_RMBase <- unlist(lapply(as.list(unique_RMBase3_binding_sites), function(x) {
 }))
 
 summary(dim_RMBase)
-# Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
-# 1.00   24.00   37.00   50.27   58.00 7360.00 
 
 # saturation at 200 nucleotides
 dim_RMBase[dim_RMBase>200] <- 200
@@ -760,7 +656,7 @@ p <- ggplot(as.data.frame(dim_RMBase), aes(x=dim_RMBase)) +
   xlab('Binding site dimension')+
   ylab('Number of effectors')
 
-ggsave('/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/RBPs/binding_site_dimension_RMBase.jpeg', plot = p, height = 7, width = 7)
+ggsave('/path/to/RBPs/binding_site_dimension_RMBase.jpeg', plot = p, height = 7, width = 7)
 
 # distribution of the dimension of the binding sites (narrow peak) from RMVar
 dim_RMVar <- unlist(lapply(as.list(unique(RBPs_RMvar$binding_region)), function(x) {
@@ -771,8 +667,6 @@ dim_RMVar <- unlist(lapply(as.list(unique(RBPs_RMvar$binding_region)), function(
 }))
 
 summary(dim_RMVar)
-# Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
-#0.00   24.00   37.00   47.17   59.00 5320.00 
 
 # saturation at 200 nucleotides
 dim_RMVar[dim_RMVar>200] <- 200
@@ -785,7 +679,7 @@ p <- ggplot(as.data.frame(dim_RMVar), aes(x=dim_RMVar)) +
   xlab('Binding site dimension')+
   ylab('Number of effectors')
 
-ggsave('/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/RBPs/binding_site_dimension_RMvar.jpeg', plot = p, height = 7, width = 7)
+ggsave('/path/to/RBPs/binding_site_dimension_RMvar.jpeg', plot = p, height = 7, width = 7)
 
 # resize the binding sites reported by RMVar and RMBase3 to a width at most of 50 nucleotides to compute how many binding 
 # sites are confirmed by both
@@ -818,7 +712,6 @@ for (enzyme in unique(grange_all_sites_RMBase3$RBP_name)) {
   tot_confirmed <- tot_confirmed + length(which(countOverlaps(enzyme_RMBase,enzyme_RMvar) != 0))
 }
 print(tot_confirmed)
-# 585,760
 
 # resize each binding site from RMBase3 and RMVar to its midpoint to merge the binding sites from 
 # the two databases
@@ -834,7 +727,6 @@ for (f in RBPs) {
   grange <- resize(grange, 1, fix = 'center')
   grange_all_sites_RMBase3 <- c(grange_all_sites_RMBase3, grange)
 }
-
 
 # report each effector annotated in RMBase3 only once 
 # indicating in the "mod_type" field all the modification types associated with it
@@ -866,9 +758,7 @@ which(grange_all_sites_RMBase_unique$RBP_name=='PTBP1' & start(grange_all_sites_
 grange_all_sites_RMBase_unique <- grange_all_sites_RMBase_unique[-1716511]
 which(grange_all_sites_RMBase_unique$RBP_name=='PTBP1' & start(grange_all_sites_RMBase_unique) == 17309625 & seqnames(grange_all_sites_RMBase_unique) ==19)
 grange_all_sites_RMBase_unique <- grange_all_sites_RMBase_unique[-1716511]
-save(grange_all_sites_RMBase_unique, file ='/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/RBPs/grange_all_sites_RMBase_unique.Rda')
-# 3,158,327 unique binding sites (of 1 nt) considering all the effectors reported by RMBase3. The same effector can be associated with
-# different mods linked to the same binding site
+save(grange_all_sites_RMBase_unique, file ='/path/to/RBPs/grange_all_sites_RMBase_unique.Rda')
 
 # resize each binding site from RMVar to its midpoint
 grange_all_sites_RMvar <- resize(grange_all_sites_RMvar, 1, fix='center')
@@ -877,7 +767,6 @@ grange_all_sites_RMvar <- resize(grange_all_sites_RMvar, 1, fix='center')
 # modification types associated with that effector are reported (using the information from RMBase3)
 mcols(grange_all_sites_RMvar) <- cbind(mcols(grange_all_sites_RMvar), mod_type='Unknown', type_enzyme='Unknown')
 all_enzymes <- unique(union(grange_all_sites_RMBase_unique$RBP_name, grange_all_sites_RMvar$RBP_name))
-# 207
 
 # create a unique GRanges reporting all the binding sites from both databases: the overlap is done on the binding sites of 1 nt 
 all_sites <- GRanges()
@@ -910,7 +799,6 @@ for (enzyme in all_enzymes) {
 }
 
 length(unique(all_sites$RBP_name))
-# 207
 
 # check if there aren't effector-binding site associations that are duplicated after the joining of RMBase3 and RMvar databases
 for (en in unique(all_sites$RBP_name)) {
@@ -919,17 +807,15 @@ for (en in unique(all_sites$RBP_name)) {
     print(en)
   }
 }
-# ok
 
 # resize the resulting binding sites to 50 nucleotides
 all_sites_RMBase_RMvar <- resize(all_sites, 50, fix = 'center')
-save(all_sites_RMBase_RMvar, file ='/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/RBPs/all_sites_RMBase_RMvar.Rda')
+save(all_sites_RMBase_RMvar, file ='/path/to/RBPs/all_sites_RMBase_RMvar.Rda')
 
 # compute how many binding sites, from both databases, are associated with specific effectors associated with m6A
 length(all_sites_RMBase_RMvar[all_sites_RMBase_RMvar$RBP_name %in% specific_effectors_only_m6A])
-#631,280
 
-# overlap (ignoring the strand) between ELIGOS hits and the binding sites of the effectors associated with different RNA mod types 
+# overlap (ignoring the strand) between ELIGOS hits and the binding sites of the effectors associated with RNA mod types 
 # from the two databases
 overlap_binding_sites <- function(hits, n, m, p, q, r, m6A) {
   
@@ -1015,7 +901,7 @@ ELIGOS_hits_DB_effectors <- function(directory_hits) {
   # the percentage of ELIGOS DRACH- hit overlapping at least with one category. For each category of effectors, the number of ELIGOS DRACH- hits 
   # overlapping with that category and shared by all the fractions is computed
   number_hits_per_mod_RBP_non_DRACH <<- matrix(0,nrow=5, ncol=5)
-  rownames(number_hits_per_mod_RBP_non_DRACH) <<- c('Chromatin Associated', 'Nucleoplasmic', 'Cytoplasmic', 'Overlap', 'Number of RBPs annotated')
+  rownames(number_hits_per_mod_RBP_non_DRACH) <<- c('Chromatin', 'Nucleoplasm', 'Cytoplasm', 'Overlap', 'Number of RBPs annotated')
   colnames(number_hits_per_mod_RBP_non_DRACH) <<- c('% of hits overlapping with\nspecific effectors non m6A', 
                                                     '% of hits overlapping with\nspecific effectors m6A',
                                                     '% of hits overlapping with\nspecific effectors',
@@ -1024,7 +910,7 @@ ELIGOS_hits_DB_effectors <- function(directory_hits) {
   
   # the same for ELIGOS DRACH+ hits
   number_hits_per_mod_RBP_DRACH <<- matrix(0,nrow=5, ncol=5)
-  rownames(number_hits_per_mod_RBP_DRACH) <<- c('Chromatin Associated', 'Nucleoplasmic', 'Cytoplasmic','Overlap','Number of RBPs annotated')
+  rownames(number_hits_per_mod_RBP_DRACH) <<- c('Chromatin', 'Nucleoplasm', 'Cytoplasm','Overlap','Number of RBPs annotated')
   colnames(number_hits_per_mod_RBP_DRACH) <<- c('% of hits overlapping with\nspecific effectors non m6A', 
                                                 '% of hits overlapping with\nspecific effectors m6A',
                                                 '% of hits overlapping with\nspecific effectors',
@@ -1047,7 +933,7 @@ ELIGOS_hits_DB_effectors <- function(directory_hits) {
   number_hits_per_mod_RBP_DRACH[5,4] <<-length(unique(enzyme_type_mod_unique[,1]))
   
   # add a metadata column to each GRanges object in which the names of the effectors with which each hit overlaps will 
-  # be reported as well as the function of these effectors (both initiated with Unknown)
+  # be reported as well as the function of these effectors (both initiated with "Unknown")
   mcols(hits_eligos_chr_ass_confirmed_5_without_DRACH) <- cbind(mcols(hits_eligos_chr_ass_confirmed_5_without_DRACH), effector = 'Unknown', type_effector = 'Unknown')
   mcols(hits_eligos_nucleo_confirmed_5_without_DRACH) <- cbind(mcols(hits_eligos_nucleo_confirmed_5_without_DRACH), effector = 'Unknown', type_effector = 'Unknown')
   mcols(hits_eligos_cyto_confirmed_5_without_DRACH) <- cbind(mcols(hits_eligos_cyto_confirmed_5_without_DRACH),effector = 'Unknown', type_effector = 'Unknown')
@@ -1168,11 +1054,11 @@ ELIGOS_hits_DB_effectors <- function(directory_hits) {
   save(hits_eligos_cyto_confirmed_5_with_DRACH_with_bindings, file=paste0(directory_hits,'/hits_ELIGOS/hits_eligos_cyto_confirmed_5_with_DRACH_mod_type_RBP.Rda'))
 }
 
-ELIGOS_hits_DB_effectors(directory_hits = '/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/fractions_eligos_4sU_library_gene_subsampling_min05_min05_mag1/')
+ELIGOS_hits_DB_effectors(directory_hits = '/path/to/fractions_eligos_4sU_library_gene_subsampling_min05_min05_mag1/')
 
-ELIGOS_hits_DB_effectors(directory_hits = '/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/fractions_eligos_4sU_library_gene_subsampling_nascent_min05_min05_mag1/')
+ELIGOS_hits_DB_effectors(directory_hits = '/path/to/fractions_eligos_4sU_library_gene_subsampling_nascent_min05_min05_mag1/')
 
-ELIGOS_hits_DB_effectors(directory_hits = '/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/fractions_eligos_4sU_library_gene_subsampling_total_510645_min05_min05_mag1/')
+ELIGOS_hits_DB_effectors(directory_hits = '/path/to/fractions_eligos_4sU_library_gene_subsampling_total_510645_min05_min05_mag1/')
 
 
 #############
@@ -1192,7 +1078,7 @@ final_summary <- function(all_mods, directory_hits) {
   # to that RNA mod. Report also the number of ELIGOS DRACH- hits annotated at least with one RNA mod and 
   # the number of ELIGOS DRACH- hits annotated to the same RNA mod and shared by all the fractions
   number_hits_non_DRACH <- matrix(0,nrow=4, ncol=length(all_mods)+2)
-  rownames(number_hits_non_DRACH) <- c('Chromatin Associated', 'Nucleoplasmic', 'Cytoplasmic', 'Overlap')
+  rownames(number_hits_non_DRACH) <- c('Chromatin', 'Nucleoplasm', 'Cytoplasm', 'Overlap')
   colnames(number_hits_non_DRACH) <- c(all_mods, 'Tot number of DRACH- annotated hits', 'Tot number of DRACH- hits')
   
   number_hits_non_DRACH[1,'Tot number of DRACH- hits'] <- length(hits_eligos_chr_ass_confirmed_5_without_DRACH_with_bindings)
@@ -1203,7 +1089,7 @@ final_summary <- function(all_mods, directory_hits) {
   # to that RNA mod. Report also the number of ELIGOS DRACH+ hits annotated at least with one RNA mod and 
   # the number of ELIGOS DRACH+ hits annotated to the same RNA mod and shared by all the fractions
   number_hits_DRACH <- matrix(0,nrow=4, ncol=length(all_mods)+2)
-  rownames(number_hits_DRACH) <- c('Chromatin Associated', 'Nucleoplasmic', 'Cytoplasmic', 'Overlap')
+  rownames(number_hits_DRACH) <- c('Chromatin', 'Nucleoplasm', 'Cytoplasm', 'Overlap')
   colnames(number_hits_DRACH) <- c(all_mods, 'Tot number of DRACH+ annotated hits', 'Tot number of DRACH+ hits')
   
   number_hits_DRACH[1,'Tot number of DRACH+ hits'] <- length(hits_eligos_chr_ass_confirmed_5_with_DRACH_with_bindings)
@@ -1310,7 +1196,7 @@ final_summary <- function(all_mods, directory_hits) {
 }
 
 # all the reads
-directory_hits = '/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/fractions_eligos_4sU_library_gene_subsampling_min05_min05_mag1/'
+directory_hits = '/path/to/fractions_eligos_4sU_library_gene_subsampling_min05_min05_mag1/'
 
 load(paste0(directory_hits,'/without_DRACH/hits_eligos_chr_ass_confirmed_5_without_DRACH_mod_type_RBP.Rda'))
 load(paste0(directory_hits,'/without_DRACH/hits_eligos_nucleo_confirmed_5_without_DRACH_mod_type_RBP.Rda'))
@@ -1331,10 +1217,10 @@ all_mods <- unique(all_mods)
 all_mods <- unique(unlist(strsplit(all_mods, split=';')))
 all_mods <- c('m6A', 'Y', 'm1A','m5C', 'm7G', 'A-I','Nm', 'm6Am', 'Ambiguous')
 
-final_summary(all_mods, directory_hits = '/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/fractions_eligos_4sU_library_gene_subsampling_min05_min05_mag1/')
+final_summary(all_mods, directory_hits = '/path/to/fractions_eligos_4sU_library_gene_subsampling_min05_min05_mag1/')
 
 # nascent reads
-directory_hits = '/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/fractions_eligos_4sU_library_gene_subsampling_nascent_min05_min05_mag1/'
+directory_hits = '/path/to/fractions_eligos_4sU_library_gene_subsampling_nascent_min05_min05_mag1/'
 
 load(paste0(directory_hits,'/without_DRACH/hits_eligos_chr_ass_confirmed_5_without_DRACH_mod_type_RBP.Rda'))
 load(paste0(directory_hits,'/without_DRACH/hits_eligos_nucleo_confirmed_5_without_DRACH_mod_type_RBP.Rda'))
@@ -1353,10 +1239,10 @@ all_mods <- unique(all_mods)
 all_mods <- unique(unlist(strsplit(all_mods, split=';')))
 all_mods <- c('m6A', 'Y', 'm1A','m5C', 'm7G', 'A-I','Nm', 'Ambiguous')
 
-final_summary(all_mods,directory_hits = '/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/fractions_eligos_4sU_library_gene_subsampling_nascent_min05_min05_mag1/')
+final_summary(all_mods,directory_hits = '/path/to/fractions_eligos_4sU_library_gene_subsampling_nascent_min05_min05_mag1/')
 
 # all the reads with the same library-level subsampling threshold used for nascent reads
-directory_hits = '/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/fractions_eligos_4sU_library_gene_subsampling_total_510645_min05_min05_mag1/'
+directory_hits = '/path/to/fractions_eligos_4sU_library_gene_subsampling_total_510645_min05_min05_mag1/'
 
 load(paste0(directory_hits,'/without_DRACH/hits_eligos_chr_ass_confirmed_5_without_DRACH_mod_type_RBP.Rda'))
 load(paste0(directory_hits,'/without_DRACH/hits_eligos_nucleo_confirmed_5_without_DRACH_mod_type_RBP.Rda'))
@@ -1375,5 +1261,5 @@ all_mods <- unique(all_mods)
 all_mods <- unique(unlist(strsplit(all_mods, split=';')))
 all_mods <- c('m6A', 'Y', 'm1A','m5C', 'm7G', 'A-I','Nm', 'm6Am', 'Ambiguous')
 
-final_summary(all_mods,directory_hits = '/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/fractions_eligos_4sU_library_gene_subsampling_total_510645_min05_min05_mag1/')
+final_summary(all_mods,directory_hits = '/path/to/fractions_eligos_4sU_library_gene_subsampling_total_510645_min05_min05_mag1/')
 
