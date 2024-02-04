@@ -433,12 +433,12 @@ prob_distribution <- function(path_directory) {
   }, x = hits_eligos_chr_ass_confirmed_5_with_DRACH)
   
   jpeg(paste0(path_directory, '/plot_prob_distribution_m6Anet/median_chr.jpeg'))
-  hist(prob_median_chr, breaks=100, main = 'Median probability of m6Anet hits overlapping\nwith ELIGOS DRACH+ hits - C.Associated',
+  hist(prob_median_chr, breaks=100, main = 'Median probability of m6Anet hits overlapping\nwith ELIGOS DRACH+ hits - Chromatin',
        xlab = 'Median probability')
   dev.off()
   
   jpeg(paste0(path_directory, '/plot_prob_distribution_m6Anet/max_chr.jpeg'))
-  hist(prob_max_chr, breaks=100, main = 'Max probability of m6Anet hits overlapping\nwith ELIGOS DRACH+ hits - C.Associated',
+  hist(prob_max_chr, breaks=100, main = 'Max probability of m6Anet hits overlapping\nwith ELIGOS DRACH+ hits - Chromatin',
        xlab = 'Max probability')
   dev.off()
   
@@ -454,12 +454,12 @@ prob_distribution <- function(path_directory) {
   }, x = hits_eligos_nucleo_confirmed_5_with_DRACH)
   
   jpeg(paste0(path_directory,'/plot_prob_distribution_m6Anet/median_nucleo.jpeg'))
-  hist(prob_median_nucleo, breaks=100, main = 'Median probability of m6Anet hits overlapping\nwith ELIGOS DRACH+ hits - Nucleoplasmic',
+  hist(prob_median_nucleo, breaks=100, main = 'Median probability of m6Anet hits overlapping\nwith ELIGOS DRACH+ hits - Nucleoplasm',
        xlab = 'Median probability')
   dev.off()
   
   jpeg(paste0(path_directory,'/plot_prob_distribution_m6Anet/max_nucleo.jpeg'))
-  hist(prob_max_nucleo, breaks=100, main = 'Max probability of m6Anet hits overlapping\nwith ELIGOS DRACH+ hits - Nucleoplasmic',
+  hist(prob_max_nucleo, breaks=100, main = 'Max probability of m6Anet hits overlapping\nwith ELIGOS DRACH+ hits - Nucleoplasm',
        xlab = 'Max probability')
   dev.off()
   
@@ -475,12 +475,12 @@ prob_distribution <- function(path_directory) {
   }, x = hits_eligos_cyto_confirmed_5_with_DRACH)
   
   jpeg(paste0(path_directory,'/plot_prob_distribution_m6Anet/median_cyto.jpeg'))
-  hist(prob_median_cyto, breaks=100, main = 'Median probability of m6Anet hits overlapping\nwith ELIGOS DRACH+ hits - Cytoplasmic',
+  hist(prob_median_cyto, breaks=100, main = 'Median probability of m6Anet hits overlapping\nwith ELIGOS DRACH+ hits - Cytoplasm',
        xlab = 'Median probability')
   dev.off()
   
   jpeg(paste0(path_directory,'/plot_prob_distribution_m6Anet/max_cyto.jpeg'))
-  hist(prob_max_cyto, breaks=100, main = 'Max probability of m6Anet hits overlapping\nwith ELIGOS DRACH+ hits - Cytoplasmic',
+  hist(prob_max_cyto, breaks=100, main = 'Max probability of m6Anet hits overlapping\nwith ELIGOS DRACH+ hits - Cytoplasm',
        xlab = 'Max probability')
   dev.off()
 }
