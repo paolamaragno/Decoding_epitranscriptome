@@ -47,13 +47,13 @@ count_mods <- function(directory) {
     # identified in each gene part and different gene features
     correlation_read_counts <- matrix(nrow=3, ncol=5)
     colnames(correlation_read_counts) <- c('5UTR', 'coding exon', 'intron', 'stop codon', '3UTR')
-    rownames(correlation_read_counts) <- c('Chromatin Associated', 'Nucleoplasmic', 'Cytoplasmic')
+    rownames(correlation_read_counts) <- c('Chromatin', 'Nucleoplasm', 'Cytoplasm')
     correlation_gene_length <- matrix(nrow=3, ncol=5)
     colnames(correlation_gene_length) <- c('5UTR', 'coding exon', 'intron', 'stop codon', '3UTR')
-    rownames(correlation_gene_length) <- c('Chromatin Associated', 'Nucleoplasmic', 'Cytoplasmic')
+    rownames(correlation_gene_length) <- c('Chromatin', 'Nucleoplasm', 'Cytoplasm')
     correlation_strand <- matrix(nrow=3, ncol=5)
     colnames(correlation_strand) <- c('5UTR', 'coding exon', 'intron', 'stop codon', '3UTR')
-    rownames(correlation_strand) <- c('Chromatin Associated', 'Nucleoplasmic', 'Cytoplasmic')
+    rownames(correlation_strand) <- c('Chromatin', 'Nucleoplasm', 'Cytoplasm')
     
     # iterate on each RData contained in /hits_ELIGOS/ folder
     for (obj in R_objects) {
@@ -156,11 +156,11 @@ count_mods <- function(directory) {
       print(na_annotation)
       
       if ('chr' %in% unlist(strsplit(n, split='_'))) {
-        fraction = c('Chromatin Associated')
+        fraction = c('Chromatin')
       } else if ('nucleo' %in% unlist(strsplit(n, split='_'))) {
-        fraction = c('Nucleoplasmic')
+        fraction = c('Nucleoplasm')
       } else {
-        fraction = c('Cytoplasmic')
+        fraction = c('Cytoplasm')
       }
       
       # compute the Spearman correlation between the number of hits identified in each gene part and 
@@ -291,13 +291,13 @@ count_mods_nascent_only_chr <- function(directory) {
     # identified in each gene part and different gene features
     correlation_read_counts <- matrix(nrow=3, ncol=5)
     colnames(correlation_read_counts) <- c('5UTR', 'coding exon', 'intron', 'stop codon', '3UTR')
-    rownames(correlation_read_counts) <- c('Chromatin Associated', 'Nucleoplasmic', 'Cytoplasmic')
+    rownames(correlation_read_counts) <- c('Chromatin', 'Nucleoplasm', 'Cytoplasm')
     correlation_gene_length <- matrix(nrow=3, ncol=5)
     colnames(correlation_gene_length) <- c('5UTR', 'coding exon', 'intron', 'stop codon', '3UTR')
-    rownames(correlation_gene_length) <- c('Chromatin Associated', 'Nucleoplasmic', 'Cytoplasmic')
+    rownames(correlation_gene_length) <- c('Chromatin', 'Nucleoplasm', 'Cytoplasm')
     correlation_strand <- matrix(nrow=3, ncol=5)
     colnames(correlation_strand) <- c('5UTR', 'coding exon', 'intron', 'stop codon', '3UTR')
-    rownames(correlation_strand) <- c('Chromatin Associated', 'Nucleoplasmic', 'Cytoplasmic')
+    rownames(correlation_strand) <- c('Chromatin', 'Nucleoplasm', 'Cytoplasm')
     
     # iterate on each RData contained in directory
     for (obj in R_objects) {
@@ -400,11 +400,11 @@ count_mods_nascent_only_chr <- function(directory) {
       print(na_annotation)
       
       if ('chr' %in% unlist(strsplit(n, split='_'))) {
-        fraction = c('Chromatin Associated')
+        fraction = c('Chromatin')
       } else if ('nucleo' %in% unlist(strsplit(n, split='_'))) {
-        fraction = c('Nucleoplasmic')
+        fraction = c('Nucleoplasm')
       } else {
-        fraction = c('Cytoplasmic')
+        fraction = c('Cytoplasm')
       }
       
       # compute the Spearman correlation between the number of hits identified in each gene part and 
