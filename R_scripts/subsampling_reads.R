@@ -6,6 +6,7 @@ args = commandArgs(trailingOnly=TRUE)
 # Arguments: path to the fastq file of each fraction, path to the reference genome (optional), path to the gtf file (optional), number
 # of threads for the mapping (optional), minimum number of reads mapping on each gene (optional), number of samplings to do (optional), 
 # path to minimap2, samtools and seqtk tools (optional) and the different conditions with the same order of the corresponding fastq files
+
 for(v in args)
 {
   vTmp <- strsplit(v,"=")[[1]]
@@ -14,13 +15,13 @@ for(v in args)
 
 # default parameters
 if (!exists('path_reference_genome')) {
-  path_reference_genome <- '/work/pmaragno/references/Homo_sapiens.GRCh38.dna.primary_assembly.fa'
+  path_reference_genome <- '/path/to/Homo_sapiens.GRCh38.dna.primary_assembly.fa'
 }
 
 name_ref_genome <- strsplit(strsplit(path_reference_genome,'/')[[1]][length(strsplit(path_reference_genome,'/')[[1]])], '\\.fa')[[1]][1]
 
 if (!exists('path_gtf_file')) {
-  path_gtf_file <- '/work/pmaragno/references/Homo_sapiens.GRCh38.104.gtf'
+  path_gtf_file <- '/path/to/Homo_sapiens.GRCh38.104.gtf'
 }
 
 if (!exists('threads')) {
@@ -35,16 +36,19 @@ if (!exists('num_subsampling')) {
   num_subsampling <- '10'
 }
 
+# minimap2 v2.26
 if (!exists('minimap2')) {
-  minimap2 <- '/home/pmaragno/miniconda3/envs/mapping_env/bin/minimap2'
+  minimap2 <- '/path/to/minimap2'
 }
 
+# samtools v1.17
 if (!exists('samtools')) {
-  samtools <- '/home/pmaragno/miniconda3/envs/mapping_env/bin/samtools'
+  samtools <- '/path/to/samtools'
 }
 
+# seqtk v1.4
 if (!exists('seqtk')) {
-  seqtk <- '/home/pmaragno/miniconda3/bin/seqtk'
+  seqtk <- '/path/to/seqtk'
 }
 
 suppressMessages(library("GenomicAlignments"))
@@ -85,7 +89,7 @@ subsampling <- function(file_fastq) {
   # genes
   genes_txdb <- GenomicFeatures::genes(txdb)
   
-  # remove the reads mapping on multiple genes and return the table with the uniquely mapping reads
+  # remove the reads mapping on multiple genes and return a table with the uniquely mapping reads
   table_filtered_bam_without_multiple_mapping_reads <- lapply(table_filtered_bam, function(x){
     genes_over <- findOverlaps(x,genes_txdb)
     table_bam <- x[queryHits(genes_over)][isUnique(queryHits(genes_over))]
@@ -97,7 +101,7 @@ subsampling <- function(file_fastq) {
   threshold_library <- min(table_filtered_bam_without_multiple_mapping_reads[[1]][[1]], table_filtered_bam_without_multiple_mapping_reads[[2]][[1]], table_filtered_bam_without_multiple_mapping_reads[[3]][[1]])
   print(paste('Minimum number of mapping reads across the three fractions: ', as.character(threshold_library)))
   
-  # for each fraction extract randomly a number of reads mapping only one gene equal to the library level threshold
+  # for each fraction extract randomly a number of reads mapping only on one gene equal to the library level threshold
   table_subsampled_reads <- lapply(table_filtered_bam_without_multiple_mapping_reads, function(x){
     set.seed(1)
     selected_reads <- sample(names(x[[2]]), threshold_library)
@@ -105,7 +109,7 @@ subsampling <- function(file_fastq) {
     return(table_sub_reads)
   }) 
   
-  # identify on which gene each read that maps only on one gene (after the library subsampling) maps
+  # identify on which gene each read (after the library subsampling) maps
   overlapping_reads_gene <- lapply(table_subsampled_reads, function(x){
     genes_over2 <- findOverlaps(x,genes_txdb)
     return(genes_over2)
@@ -155,7 +159,7 @@ subsampling <- function(file_fastq) {
   path_actual_directory <- system(command='realpath .', intern = TRUE)
   
   for (i in 1:length(order_conditions)) {
-    # for each fraction a dataframe is generated with the read ID (reads after library subsampling and only those mapping on one gene) 
+    # for each fraction a dataframe is generated with the read IDs (reads after library level subsampling and only those mapping on one gene) 
     # and the gene on which they map
     read_gene <- data.frame(read_id = names(table_subsampled_reads[[i]][queryHits(overlapping_reads_gene[[i]])]),gene_name =names(genes_txdb[subjectHits(overlapping_reads_gene[[i]])]))
     
