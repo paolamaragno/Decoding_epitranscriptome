@@ -23,3 +23,39 @@ Finally, the combinatorial co-occurrence of various modifications within the tra
 * nanoID: folder containing a bash script to run the nextflow pipeline (nanoID.sh), the nextflow pipeline main script (nanoID.nf) and the nextflow
   pipeline configuration file (nanoID.conf) and a sample.txt.
 * R_scripts: folder containing a set of R scripts for data pre and post-processing.
+
+# Getting started
+* [Nextflow](https://nf-co.re/docs/usage/installation)
+* [Singularity](https://docs.sylabs.io/guides/3.0/user-guide/installation.html)
+
+# Usage
+## Running ELIGOS
+Open nf-eligos.conf configuration file and set the desired options.
+
+```
+nextflow -c nf-eligos.conf run nf-eligos.nf --samples="/path/to/samples.txt" --resultsDir="/path/to/resultsDir" -profile docker
+
+Mandatory argument:
+-profile                                                 Configuration profile to use. Available: docker, singularity
+
+Other mandatory arguments which may be specified in the nf-eligos.conf file
+--samples                                                Path to the tab-separated sample file including sample name, condition and path to fastq file
+--baseline_condition                                     Condition to be considered as the baseline, must match one of the conditions in the samples file
+--min_depth                                              Minimum number of reads
+--max_depth                                              Maximum number of reads
+--spliced_alignment_flag                                 Flag for splice-aware alignment, set to true for genome alignment and to false for transcriptome alignment
+--min_mapq                                               Minimum mapping quality for filtering alignments
+--resultsDir                                             Path to a folder where to store results
+--reference_fasta                                        Path to the reference fasta file
+--bed_file                                               Path to regions of interest bed file
+--pval_thr                                               p-value threshold
+--adjPval_thr                                            adjusted p-value threshold
+--oddR_thr                                               Odds Ratio threshold
+--esb_thr                                                Threshold on %Error of Specific Bases to be considered for de novo motifs discovery
+--sb                                                     Selected basis for filtering modification of interest
+--opt_args                                               Other optional arguments (e.g. "-bcf <file.bcf> -m <model.json>")
+```
+
+
+
+
