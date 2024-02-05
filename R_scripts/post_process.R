@@ -1,15 +1,3 @@
-# generate a violin-plot representing the distribution of the 1,000 percentages values (for each of the 1,000 sets of 
-# random hits the percentage of them overlapping whit each RNA mod/effector category was computed, separately for 
-# DRACH+ and DRACH- sequences). In addition, the plot shows the percentage of ELIGOS DRACH+/DRACH- hits overlapping
-# with the same RNA mod/effector category + two statistics to indicate how much ELIGOS results dist from random results and 
-# if ELIGOS results can be considered significant.
-
-# For each fraction, plot a heatmap reporting, for each RNA modification type significantly enriched in at least DRACH+
-# or DRACH- hits, the number of hits annotated to that RNA mod type that map in each gene part. 
-# Generate a heatmap reporting, for each fraction, the percentage of DRACH-/DRACH+ hits annotated to each RNA mod type and the p-value
-# of the enrichment of that RNA mod with respect to the random result.
-# Identify the combinations of significantly enriched RNA marks co-occurring on the same genes and with which frequency.
-
 library('GenomicRanges')
 library('GenomicFeatures')
 library('ggplot2')
@@ -17,7 +5,6 @@ library('patchwork')
 library('ggnewscale')
 library('cowplot')
 library('pheatmap')
-
 
 # give in input, for each fraction, the 1,000 sets of DRACH- random hits (hits_without) and the 1,000 sets of DRACH+ random hits (hits_DRACH) 
 # (both overlapped with the coordinates of RNA marks from the databases) and the percentage
@@ -36,7 +23,7 @@ post_process_mods <- function(hits_without, hits_DRACH, ELIGOS_results_without, 
   
   # compute the absolute difference between the percentage of ELIGOS DRACH- hits annotated to the different RNA marks/at least 
   # one RNA mark and the median percentage of DRACH- random hits annotated to the same RNA mod type divided by the interquantile 
-  # distance computed on the 1,000 values of percentages of DRACH- random hits annotated to the same RNA mod type
+  # distance computed on the 1,000 values of percentage of DRACH- random hits annotated to the same RNA mod type
   IQR_distance_without <- unlist(lapply(seq_along(1:8), function(x,n,i) {
     if (length(x[[i]]) != 1000) {print('error')}
     IQR <- summary(as.numeric(x[[i]]))[5] - summary(as.numeric(x[[i]]))[2]
@@ -58,7 +45,7 @@ post_process_mods <- function(hits_without, hits_DRACH, ELIGOS_results_without, 
     }
   }, x=hits_DRACH[1:8], n=names(hits_DRACH[1:8])))
   
-  # compute how many of the 1,000 values of percentages of DRACH- random hits annotated to each RNA mod type/at least one RNA mod type
+  # compute how many of the 1,000 values of percentage of DRACH- random hits annotated to each RNA mod type/at least one RNA mod type
   # are higher than the percentage of ELIGOS DRACH- hits annotated to the same RNA mod type divided by 1,000
   p_value_without <- unlist(lapply(seq_along(1:8), function(x,n,i) {
     if (length(x[[i]][x[[i]]>ELIGOS_results_without[names(ELIGOS_results_without) == n[i]]])/1000 == 0) {
@@ -103,7 +90,7 @@ post_process_mods <- function(hits_without, hits_DRACH, ELIGOS_results_without, 
   stats_m6A <- c(stats_without[names(stats_without) %in% c('m6A','Annotated hits')],
                  stats_DRACH[names(stats_DRACH) %in% c('m6A','Annotated hits')])
   
-  # create a data frame reporting for each mod type (not m6A) the 1,000 values of percentage of DRACH+/DRACH- random 
+  # create a data frame reporting, for each mod type (not m6A), the 1,000 values of percentage of DRACH+/DRACH- random 
   # hits overlapping with that RNA mod type
   data_non_m6A <- data.frame(
     RNA_modification = factor(x = rep(rep(c('Y','m1A','m5C','m7G','A-I','Nm'), each=1000),2), 
@@ -157,7 +144,7 @@ post_process_mods <- function(hits_without, hits_DRACH, ELIGOS_results_without, 
           axis.text.y = element_text(size=40), legend.title = element_text(size=50), legend.text =  element_text(size=40))
   
   # generate a violin plot representing the distribution of the 1,000 values of percentage of DRACH+/DRACH- random hits
-  # overlapping with m6A and for the percentage of hits annotated at least with one RNA mod type. 
+  # overlapping with m6A and of the percentage of hits annotated at least with one RNA mod type. 
   # A point is used to report the percentage of ELIGOS DRACH+/DRACH- 
   # hits overlapping with m6A/at least one hit and the relative statistics
   p_m6A <- ggplot(data = data_m6A, mapping = aes(x=RNA_modification, y=value, fill = Class)) + 
@@ -196,7 +183,7 @@ post_process_mods <- function(hits_without, hits_DRACH, ELIGOS_results_without, 
 # fall. Limiting to the RNA mod significantly enriched in ELIGOS DRACH- (mods_significant_without_DRACH) and DRACH+ (mods_significant_with_DRACH) 
 # hits with respect to the random data.
 # This function is executed for each fraction passing the GRanges object with ELIGOS DRACH- (hits_non_DRACH) and DRACH+ hits 
-# (hits_DRACH) that have been overlapped with RNA marks and effectors' binding sites from the external databases.
+# (hits_DRACH) that have been overlapped with RNA marks and effectors' binding sites from the public databases.
 # path_directory is the path to the directory containing the results of ELIGOS analysis. m6A is set to TRUE (plot
 # a heatmap with the distribution of ELIGOS hits annotated to m6A) or FALSE (plot
 # a heatmap with the distribution of ELIGOS hits annotated to all the RNA mod types except m6A)
@@ -239,7 +226,7 @@ generate_heatmap_gene <- function(hits_non_DRACH, hits_DRACH, fraction, path_dir
     })
     names(all_mods_significant) <- mod_sequence
     
-    # initiate a matrix in which for each RNA mod type (row) and gene part (column) the number of ELIGOS hits annotated
+    # initiate a matrix in which, for each RNA mod type (row) and gene part (column), the number of ELIGOS hits annotated
     # to that mod type and falling in that gene part is reported
     m <- matrix(0, ncol = 5, nrow = length(mod_sequence)) 
     colnames(m) <- c('5UTR', 'coding exon', 'intron', 'stop codon', '3UTR')
@@ -329,7 +316,7 @@ generate_heatmap_gene <- function(hits_non_DRACH, hits_DRACH, fraction, path_dir
 } 
 
 # directory_hits is the path to the directory containing the results of ELIGOS analysis.
-# mods_significant_without_DRACH reports, for eacg fraction, the RNA mod significantly enriched in ELIGOS DRACH- hits of that fraction
+# mods_significant_without_DRACH reports, for each fraction, the RNA mods significantly enriched in ELIGOS DRACH- hits of that fraction
 # with respect to the random data, mods_significant_with_DRACH those enriched in ELIGOS DRACH+ hits of each fraction
 print_heatmap <- function(directory_hits, mods_significant_without_DRACH_chr, mods_significant_with_DRACH_chr,
                           mods_significant_without_DRACH_nucleo, mods_significant_with_DRACH_nucleo,
@@ -380,10 +367,12 @@ heatmap_enrichment <- function(directory_hits, percentage_chr, percentage_nucleo
   }
 }
 
-# identify the combinations of RNA modifications (limiting to the RNA mod significantly enriched in ELIGOS DRACH- 
+# identify the combinations of RNA modifications (limiting to the RNA mods significantly enriched in ELIGOS DRACH- 
 # (mods_significant_without_DRACH) and DRACH+ (mods_significant_with_DRACH) hits with respect to the random data)
-# co-occurring on the genes on which ELIGOS DRACH- hits map. Only the information about the modification type to which 
-# each hit has been annotated during the overlapping with the coordinates of RNA marks from RMBase3 and RMVar is considered
+# co-occurring on the genes. Only the information about the modification type to which 
+# each hit has been annotated during the overlapping with the coordinates of RNA marks from RMBase3 and RMVar is considered.
+# if condition = 'both' both ELIGOS DRACH- and DRACH+ hits are considered, if condition = 'DRACH' only ELIGOS DRACH+ hits are evaluated,
+# otherwise only ELIGOS DRACH- hits
 mods_combination_only_significant <- function(directory_hits,condition,mods_significant_without_DRACH_chr, mods_significant_with_DRACH_chr,
                                               mods_significant_without_DRACH_nucleo, mods_significant_with_DRACH_nucleo,
                                               mods_significant_without_DRACH_cyto, mods_significant_with_DRACH_cyto) {
@@ -396,42 +385,42 @@ mods_combination_only_significant <- function(directory_hits,condition,mods_sign
   load(paste0(directory_hits,'/hits_ELIGOS/hits_eligos_cyto_confirmed_5_with_DRACH_mod_type.Rda'))
   
   if (condition == 'both') {
-    # keep only ELIGOS DRACH- hits from chromatin associated RNAs annotated to significant RNA modification
+    # keep only ELIGOS DRACH- hits from chromatin associated RNAs annotated to significant RNA modifications
     lapply(seq_along(hits_eligos_chr_ass_confirmed_5_without_DRACH), function(i) {
       mods <- unlist(strsplit(hits_eligos_chr_ass_confirmed_5_without_DRACH[i]$mod_type, split =';'))
       mods_significant <- mods[mods %in% mods_significant_without_DRACH_chr]
       hits_eligos_chr_ass_confirmed_5_without_DRACH[i]$mod_type <<- paste(mods_significant, collapse = ';')
     })
     
-    # keep only ELIGOS DRACH- hits from nucleoplasmic RNAs annotated to significant RNA modification
+    # keep only ELIGOS DRACH- hits from nucleoplasmic RNAs annotated to significant RNA modifications
     lapply(seq_along(hits_eligos_nucleo_confirmed_5_without_DRACH), function(i) {
       mods <- unlist(strsplit(hits_eligos_nucleo_confirmed_5_without_DRACH[i]$mod_type, split =';'))
       mods_significant <- mods[mods %in% mods_significant_without_DRACH_nucleo]
       hits_eligos_nucleo_confirmed_5_without_DRACH[i]$mod_type <<- paste(mods_significant, collapse = ';')
     })
     
-    # keep only ELIGOS DRACH- hits from cytoplasmic RNAs annotated to significant RNA modification
+    # keep only ELIGOS DRACH- hits from cytoplasmic RNAs annotated to significant RNA modifications
     lapply(seq_along(hits_eligos_cyto_confirmed_5_without_DRACH), function(i) {
       mods <- unlist(strsplit(hits_eligos_cyto_confirmed_5_without_DRACH[i]$mod_type, split =';'))
       mods_significant <- mods[mods %in% mods_significant_without_DRACH_cyto]
       hits_eligos_cyto_confirmed_5_without_DRACH[i]$mod_type <<- paste(mods_significant, collapse = ';')
     })
     
-    # keep only ELIGOS DRACH+ hits from chromatin associated RNAs annotated to significant RNA modification
+    # keep only ELIGOS DRACH+ hits from chromatin associated RNAs annotated to significant RNA modifications
     lapply(seq_along(hits_eligos_chr_ass_confirmed_5_with_DRACH), function(i) {
       mods <- unlist(strsplit(hits_eligos_chr_ass_confirmed_5_with_DRACH[i]$mod_type, split =';'))
       mods_significant <- mods[mods %in% mods_significant_with_DRACH_chr]
       hits_eligos_chr_ass_confirmed_5_with_DRACH[i]$mod_type <<- paste(mods_significant, collapse = ';')
     })
     
-    # keep only ELIGOS DRACH+ hits from nucleoplasmic RNAs annotated to significant RNA modification
+    # keep only ELIGOS DRACH+ hits from nucleoplasmic RNAs annotated to significant RNA modifications
     lapply(seq_along(hits_eligos_nucleo_confirmed_5_with_DRACH), function(i) {
       mods <- unlist(strsplit(hits_eligos_nucleo_confirmed_5_with_DRACH[i]$mod_type, split =';'))
       mods_significant <- mods[mods %in% mods_significant_with_DRACH_nucleo]
       hits_eligos_nucleo_confirmed_5_with_DRACH[i]$mod_type <<- paste(mods_significant, collapse = ';')
     })
     
-    # keep only ELIGOS DRACH+ hits from cytoplasmic RNAs annotated to significant RNA modification
+    # keep only ELIGOS DRACH+ hits from cytoplasmic RNAs annotated to significant RNA modifications
     lapply(seq_along(hits_eligos_cyto_confirmed_5_with_DRACH), function(i) {
       mods <- unlist(strsplit(hits_eligos_cyto_confirmed_5_with_DRACH[i]$mod_type, split =';'))
       mods_significant <- mods[mods %in% mods_significant_with_DRACH_cyto]
@@ -444,21 +433,21 @@ mods_combination_only_significant <- function(directory_hits,condition,mods_sign
     hits_cyto<- c(hits_eligos_cyto_confirmed_5_without_DRACH, hits_eligos_cyto_confirmed_5_with_DRACH)
     
   } else if (condition == 'DRACH') {
-    # keep only ELIGOS DRACH+ hits from chromatin associated RNAs annotated to significant RNA modification
+    # keep only ELIGOS DRACH+ hits from chromatin associated RNAs annotated to significant RNA modifications
     lapply(seq_along(hits_eligos_chr_ass_confirmed_5_with_DRACH), function(i) {
       mods <- unlist(strsplit(hits_eligos_chr_ass_confirmed_5_with_DRACH[i]$mod_type, split =';'))
       mods_significant <- mods[mods %in% mods_significant_with_DRACH_chr]
       hits_eligos_chr_ass_confirmed_5_with_DRACH[i]$mod_type <<- paste(mods_significant, collapse = ';')
     })
     
-    # keep only ELIGOS DRACH+ hits from nucleoplasmic RNAs annotated to significant RNA modification
+    # keep only ELIGOS DRACH+ hits from nucleoplasmic RNAs annotated to significant RNA modifications
     lapply(seq_along(hits_eligos_nucleo_confirmed_5_with_DRACH), function(i) {
       mods <- unlist(strsplit(hits_eligos_nucleo_confirmed_5_with_DRACH[i]$mod_type, split =';'))
       mods_significant <- mods[mods %in% mods_significant_with_DRACH_nucleo]
       hits_eligos_nucleo_confirmed_5_with_DRACH[i]$mod_type <<- paste(mods_significant, collapse = ';')
     })
     
-    # keep only ELIGOS DRACH+ hits from cytoplasmic RNAs annotated to significant RNA modification
+    # keep only ELIGOS DRACH+ hits from cytoplasmic RNAs annotated to significant RNA modifications
     lapply(seq_along(hits_eligos_cyto_confirmed_5_with_DRACH), function(i) {
       mods <- unlist(strsplit(hits_eligos_cyto_confirmed_5_with_DRACH[i]$mod_type, split =';'))
       mods_significant <- mods[mods %in% mods_significant_with_DRACH_cyto]
@@ -469,21 +458,21 @@ mods_combination_only_significant <- function(directory_hits,condition,mods_sign
     hits_nucleo <- hits_eligos_nucleo_confirmed_5_with_DRACH
     hits_cyto<- hits_eligos_cyto_confirmed_5_with_DRACH
   } else {
-    # keep only ELIGOS DRACH- hits from chromatin associated RNAs annotated to significant RNA modification
+    # keep only ELIGOS DRACH- hits from chromatin associated RNAs annotated to significant RNA modifications
     lapply(seq_along(hits_eligos_chr_ass_confirmed_5_without_DRACH), function(i) {
       mods <- unlist(strsplit(hits_eligos_chr_ass_confirmed_5_without_DRACH[i]$mod_type, split =';'))
       mods_significant <- mods[mods %in% mods_significant_without_DRACH_chr]
       hits_eligos_chr_ass_confirmed_5_without_DRACH[i]$mod_type <<- paste(mods_significant, collapse = ';')
     })
     
-    # keep only ELIGOS DRACH- hits from nucleoplasmic RNAs annotated to significant RNA modification
+    # keep only ELIGOS DRACH- hits from nucleoplasmic RNAs annotated to significant RNA modifications
     lapply(seq_along(hits_eligos_nucleo_confirmed_5_without_DRACH), function(i) {
       mods <- unlist(strsplit(hits_eligos_nucleo_confirmed_5_without_DRACH[i]$mod_type, split =';'))
       mods_significant <- mods[mods %in% mods_significant_without_DRACH_nucleo]
       hits_eligos_nucleo_confirmed_5_without_DRACH[i]$mod_type <<- paste(mods_significant, collapse = ';')
     })
     
-    # keep only ELIGOS DRACH- hits from cytoplasmic RNAs annotated to significant RNA modification
+    # keep only ELIGOS DRACH- hits from cytoplasmic RNAs annotated to significant RNA modifications
     lapply(seq_along(hits_eligos_cyto_confirmed_5_without_DRACH), function(i) {
       mods <- unlist(strsplit(hits_eligos_cyto_confirmed_5_without_DRACH[i]$mod_type, split =';'))
       mods_significant <- mods[mods %in% mods_significant_without_DRACH_cyto]
@@ -640,7 +629,7 @@ mods_combination_only_significant <- function(directory_hits,condition,mods_sign
     x_labels <- names(order)
   }
   
-  # plot a barplot reporting, for the 10 combinations of RNA marks occuring in the genes of the different farctions with the highest median
+  # plot a barplot reporting, for the 10 combinations of RNA marks occuring in the genes of the different fractions with the highest median
   # frequency, the frequency of that combination in each fraction
   p <- ggplot(data = df, aes(fill=Fractions, y=number, x=all_mods_comb)) + 
     geom_bar(position="dodge", stat="identity") +
@@ -659,10 +648,12 @@ mods_combination_only_significant <- function(directory_hits,condition,mods_sign
   }
 }
 
-# identify which combinations of RNA marks have a median frequency at least equal to 5 either in the analysis on nascent reads
-# or in the analysis on all the reads with the library level subsampling threshold used for nascent reads.
+# identify which combinations of RNA marks have a median frequency at least equal to 4 either in at least one of the analyses (on nascent reads
+# or on all the reads with the library level subsampling threshold used for nascent reads).
 # generate a scatterplot reporting on the x axis the median frequency across the fractions of the selected combinations of RNA marks in nascent analysis
-# and on the y axis the median frequency across the fractions of the selected combinations of RNA marks in the analysis on all the reads
+# and on the y axis the median frequency across the fractions of the selected combinations of RNA marks in the analysis on all the reads.
+# if condition = 'both' both ELIGOS DRACH- and DRACH+ hits are considered, if condition = 'DRACH' only ELIGOS DRACH+ hits are evaluated,
+# otherwise only ELIGOS DRACH- hits
 comparison_mods_combination_nascent_total_only_significant <- function(directory_hits_nascent, directory_hits_total, condition,
                                                                        mods_significant_without_DRACH_chr_nascent, mods_significant_with_DRACH_chr_nascent,
                                                                        mods_significant_without_DRACH_nucleo_nascent, mods_significant_with_DRACH_nucleo_nascent,
@@ -679,42 +670,42 @@ comparison_mods_combination_nascent_total_only_significant <- function(directory
   load(paste0(directory_hits_nascent,'/hits_ELIGOS/hits_eligos_cyto_confirmed_5_with_DRACH_mod_type.Rda'))
   
   if (condition == 'both') {
-    # keep only ELIGOS DRACH- hits from chromatin associated RNAs annotated to significant RNA modification
+    # keep only ELIGOS DRACH- hits from chromatin associated RNAs annotated to significant RNA modifications
     lapply(seq_along(hits_eligos_chr_ass_confirmed_5_without_DRACH), function(i) {
       mods <- unlist(strsplit(hits_eligos_chr_ass_confirmed_5_without_DRACH[i]$mod_type, split =';'))
       mods_significant <- mods[mods %in% mods_significant_without_DRACH_chr_nascent]
       hits_eligos_chr_ass_confirmed_5_without_DRACH[i]$mod_type <<- paste(mods_significant, collapse = ';')
     })
     
-    # keep only ELIGOS DRACH- hits from nucleoplasmic RNAs annotated to significant RNA modification
+    # keep only ELIGOS DRACH- hits from nucleoplasmic RNAs annotated to significant RNA modifications
     lapply(seq_along(hits_eligos_nucleo_confirmed_5_without_DRACH), function(i) {
       mods <- unlist(strsplit(hits_eligos_nucleo_confirmed_5_without_DRACH[i]$mod_type, split =';'))
       mods_significant <- mods[mods %in% mods_significant_without_DRACH_nucleo_nascent]
       hits_eligos_nucleo_confirmed_5_without_DRACH[i]$mod_type <<- paste(mods_significant, collapse = ';')
     })
     
-    # keep only ELIGOS DRACH- hits from cytoplasmic RNAs annotated to significant RNA modification
+    # keep only ELIGOS DRACH- hits from cytoplasmic RNAs annotated to significant RNA modifications
     lapply(seq_along(hits_eligos_cyto_confirmed_5_without_DRACH), function(i) {
       mods <- unlist(strsplit(hits_eligos_cyto_confirmed_5_without_DRACH[i]$mod_type, split =';'))
       mods_significant <- mods[mods %in% mods_significant_without_DRACH_cyto_nascent]
       hits_eligos_cyto_confirmed_5_without_DRACH[i]$mod_type <<- paste(mods_significant, collapse = ';')
     })
     
-    # keep only ELIGOS DRACH+ hits from chromatin associated RNAs annotated to significant RNA modification
+    # keep only ELIGOS DRACH+ hits from chromatin associated RNAs annotated to significant RNA modifications
     lapply(seq_along(hits_eligos_chr_ass_confirmed_5_with_DRACH), function(i) {
       mods <- unlist(strsplit(hits_eligos_chr_ass_confirmed_5_with_DRACH[i]$mod_type, split =';'))
       mods_significant <- mods[mods %in% mods_significant_with_DRACH_chr_nascent]
       hits_eligos_chr_ass_confirmed_5_with_DRACH[i]$mod_type <<- paste(mods_significant, collapse = ';')
     })
     
-    # keep only ELIGOS DRACH+ hits from nucleoplasmic RNAs annotated to significant RNA modification
+    # keep only ELIGOS DRACH+ hits from nucleoplasmic RNAs annotated to significant RNA modifications
     lapply(seq_along(hits_eligos_nucleo_confirmed_5_with_DRACH), function(i) {
       mods <- unlist(strsplit(hits_eligos_nucleo_confirmed_5_with_DRACH[i]$mod_type, split =';'))
       mods_significant <- mods[mods %in% mods_significant_with_DRACH_nucleo_nascent]
       hits_eligos_nucleo_confirmed_5_with_DRACH[i]$mod_type <<- paste(mods_significant, collapse = ';')
     })
     
-    # keep only ELIGOS DRACH+ hits from cytoplasmic RNAs annotated to significant RNA modification
+    # keep only ELIGOS DRACH+ hits from cytoplasmic RNAs annotated to significant RNA modifications
     lapply(seq_along(hits_eligos_cyto_confirmed_5_with_DRACH), function(i) {
       mods <- unlist(strsplit(hits_eligos_cyto_confirmed_5_with_DRACH[i]$mod_type, split =';'))
       mods_significant <- mods[mods %in% mods_significant_with_DRACH_cyto_nascent]
@@ -727,21 +718,21 @@ comparison_mods_combination_nascent_total_only_significant <- function(directory
     hits_cyto<- c(hits_eligos_cyto_confirmed_5_without_DRACH, hits_eligos_cyto_confirmed_5_with_DRACH)
     
   } else if (condition == 'DRACH') {
-    # keep only ELIGOS DRACH+ hits from chromatin associated RNAs annotated to significant RNA modification
+    # keep only ELIGOS DRACH+ hits from chromatin associated RNAs annotated to significant RNA modifications
     lapply(seq_along(hits_eligos_chr_ass_confirmed_5_with_DRACH), function(i) {
       mods <- unlist(strsplit(hits_eligos_chr_ass_confirmed_5_with_DRACH[i]$mod_type, split =';'))
       mods_significant <- mods[mods %in% mods_significant_with_DRACH_chr_nascent]
       hits_eligos_chr_ass_confirmed_5_with_DRACH[i]$mod_type <<- paste(mods_significant, collapse = ';')
     })
     
-    # keep only ELIGOS DRACH+ hits from nucleoplasmic RNAs annotated to significant RNA modification
+    # keep only ELIGOS DRACH+ hits from nucleoplasmic RNAs annotated to significant RNA modifications
     lapply(seq_along(hits_eligos_nucleo_confirmed_5_with_DRACH), function(i) {
       mods <- unlist(strsplit(hits_eligos_nucleo_confirmed_5_with_DRACH[i]$mod_type, split =';'))
       mods_significant <- mods[mods %in% mods_significant_with_DRACH_nucleo_nascent]
       hits_eligos_nucleo_confirmed_5_with_DRACH[i]$mod_type <<- paste(mods_significant, collapse = ';')
     })
     
-    # keep only ELIGOS DRACH+ hits from cytoplasmic RNAs annotated to significant RNA modification
+    # keep only ELIGOS DRACH+ hits from cytoplasmic RNAs annotated to significant RNA modifications
     lapply(seq_along(hits_eligos_cyto_confirmed_5_with_DRACH), function(i) {
       mods <- unlist(strsplit(hits_eligos_cyto_confirmed_5_with_DRACH[i]$mod_type, split =';'))
       mods_significant <- mods[mods %in% mods_significant_with_DRACH_cyto_nascent]
@@ -753,21 +744,21 @@ comparison_mods_combination_nascent_total_only_significant <- function(directory
     hits_cyto<- hits_eligos_cyto_confirmed_5_with_DRACH
     
   } else {
-    # keep only ELIGOS DRACH- hits from chromatin associated RNAs annotated to significant RNA modification
+    # keep only ELIGOS DRACH- hits from chromatin associated RNAs annotated to significant RNA modifications
     lapply(seq_along(hits_eligos_chr_ass_confirmed_5_without_DRACH), function(i) {
       mods <- unlist(strsplit(hits_eligos_chr_ass_confirmed_5_without_DRACH[i]$mod_type, split =';'))
       mods_significant <- mods[mods %in% mods_significant_without_DRACH_chr_nascent]
       hits_eligos_chr_ass_confirmed_5_without_DRACH[i]$mod_type <<- paste(mods_significant, collapse = ';')
     })
     
-    # keep only ELIGOS DRACH- hits from nucleoplasmic RNAs annotated to significant RNA modification
+    # keep only ELIGOS DRACH- hits from nucleoplasmic RNAs annotated to significant RNA modifications
     lapply(seq_along(hits_eligos_nucleo_confirmed_5_without_DRACH), function(i) {
       mods <- unlist(strsplit(hits_eligos_nucleo_confirmed_5_without_DRACH[i]$mod_type, split =';'))
       mods_significant <- mods[mods %in% mods_significant_without_DRACH_nucleo_nascent]
       hits_eligos_nucleo_confirmed_5_without_DRACH[i]$mod_type <<- paste(mods_significant, collapse = ';')
     })
     
-    # keep only ELIGOS DRACH- hits from cytoplasmic RNAs annotated to significant RNA modification
+    # keep only ELIGOS DRACH- hits from cytoplasmic RNAs annotated to significant RNA modifications
     lapply(seq_along(hits_eligos_cyto_confirmed_5_without_DRACH), function(i) {
       mods <- unlist(strsplit(hits_eligos_cyto_confirmed_5_without_DRACH[i]$mod_type, split =';'))
       mods_significant <- mods[mods %in% mods_significant_without_DRACH_cyto_nascent]
@@ -923,42 +914,42 @@ comparison_mods_combination_nascent_total_only_significant <- function(directory
   load(paste0(directory_hits_total,'/hits_ELIGOS/hits_eligos_cyto_confirmed_5_with_DRACH_mod_type.Rda'))
   
   if (condition == 'both') {
-    # keep only ELIGOS DRACH- hits from chromatin associated RNAs annotated to significant RNA modification
+    # keep only ELIGOS DRACH- hits from chromatin associated RNAs annotated to significant RNA modifications
     lapply(seq_along(hits_eligos_chr_ass_confirmed_5_without_DRACH), function(i) {
       mods <- unlist(strsplit(hits_eligos_chr_ass_confirmed_5_without_DRACH[i]$mod_type, split =';'))
       mods_significant <- mods[mods %in% mods_significant_without_DRACH_chr_nascent]
       hits_eligos_chr_ass_confirmed_5_without_DRACH[i]$mod_type <<- paste(mods_significant, collapse = ';')
     })
     
-    # keep only ELIGOS DRACH- hits from nucleoplasmic RNAs annotated to significant RNA modification
+    # keep only ELIGOS DRACH- hits from nucleoplasmic RNAs annotated to significant RNA modifications
     lapply(seq_along(hits_eligos_nucleo_confirmed_5_without_DRACH), function(i) {
       mods <- unlist(strsplit(hits_eligos_nucleo_confirmed_5_without_DRACH[i]$mod_type, split =';'))
       mods_significant <- mods[mods %in% mods_significant_without_DRACH_nucleo_nascent]
       hits_eligos_nucleo_confirmed_5_without_DRACH[i]$mod_type <<- paste(mods_significant, collapse = ';')
     })
     
-    # keep only ELIGOS DRACH- hits from cytoplasmic RNAs annotated to significant RNA modification
+    # keep only ELIGOS DRACH- hits from cytoplasmic RNAs annotated to significant RNA modifications
     lapply(seq_along(hits_eligos_cyto_confirmed_5_without_DRACH), function(i) {
       mods <- unlist(strsplit(hits_eligos_cyto_confirmed_5_without_DRACH[i]$mod_type, split =';'))
       mods_significant <- mods[mods %in% mods_significant_without_DRACH_cyto_nascent]
       hits_eligos_cyto_confirmed_5_without_DRACH[i]$mod_type <<- paste(mods_significant, collapse = ';')
     })
     
-    # keep only ELIGOS DRACH+ hits from chromatin associated RNAs annotated to significant RNA modification
+    # keep only ELIGOS DRACH+ hits from chromatin associated RNAs annotated to significant RNA modifications
     lapply(seq_along(hits_eligos_chr_ass_confirmed_5_with_DRACH), function(i) {
       mods <- unlist(strsplit(hits_eligos_chr_ass_confirmed_5_with_DRACH[i]$mod_type, split =';'))
       mods_significant <- mods[mods %in% mods_significant_with_DRACH_chr_nascent]
       hits_eligos_chr_ass_confirmed_5_with_DRACH[i]$mod_type <<- paste(mods_significant, collapse = ';')
     })
     
-    # keep only ELIGOS DRACH+ hits from nucleoplasmic RNAs annotated to significant RNA modification
+    # keep only ELIGOS DRACH+ hits from nucleoplasmic RNAs annotated to significant RNA modifications
     lapply(seq_along(hits_eligos_nucleo_confirmed_5_with_DRACH), function(i) {
       mods <- unlist(strsplit(hits_eligos_nucleo_confirmed_5_with_DRACH[i]$mod_type, split =';'))
       mods_significant <- mods[mods %in% mods_significant_with_DRACH_nucleo_nascent]
       hits_eligos_nucleo_confirmed_5_with_DRACH[i]$mod_type <<- paste(mods_significant, collapse = ';')
     })
     
-    # keep only ELIGOS DRACH+ hits from cytoplasmic RNAs annotated to significant RNA modification
+    # keep only ELIGOS DRACH+ hits from cytoplasmic RNAs annotated to significant RNA modifications
     lapply(seq_along(hits_eligos_cyto_confirmed_5_with_DRACH), function(i) {
       mods <- unlist(strsplit(hits_eligos_cyto_confirmed_5_with_DRACH[i]$mod_type, split =';'))
       mods_significant <- mods[mods %in% mods_significant_with_DRACH_cyto_nascent]
@@ -971,21 +962,21 @@ comparison_mods_combination_nascent_total_only_significant <- function(directory
     hits_cyto<- c(hits_eligos_cyto_confirmed_5_without_DRACH, hits_eligos_cyto_confirmed_5_with_DRACH)
     
   } else if (condition == 'DRACH') {
-    # keep only ELIGOS DRACH+ hits from chromatin associated RNAs annotated to significant RNA modification
+    # keep only ELIGOS DRACH+ hits from chromatin associated RNAs annotated to significant RNA modifications
     lapply(seq_along(hits_eligos_chr_ass_confirmed_5_with_DRACH), function(i) {
       mods <- unlist(strsplit(hits_eligos_chr_ass_confirmed_5_with_DRACH[i]$mod_type, split =';'))
       mods_significant <- mods[mods %in% mods_significant_with_DRACH_chr_nascent]
       hits_eligos_chr_ass_confirmed_5_with_DRACH[i]$mod_type <<- paste(mods_significant, collapse = ';')
     })
     
-    # keep only ELIGOS DRACH+ hits from nucleoplasmic RNAs annotated to significant RNA modification
+    # keep only ELIGOS DRACH+ hits from nucleoplasmic RNAs annotated to significant RNA modifications
     lapply(seq_along(hits_eligos_nucleo_confirmed_5_with_DRACH), function(i) {
       mods <- unlist(strsplit(hits_eligos_nucleo_confirmed_5_with_DRACH[i]$mod_type, split =';'))
       mods_significant <- mods[mods %in% mods_significant_with_DRACH_nucleo_nascent]
       hits_eligos_nucleo_confirmed_5_with_DRACH[i]$mod_type <<- paste(mods_significant, collapse = ';')
     })
     
-    # keep only ELIGOS DRACH+ hits from cytoplasmic RNAs annotated to significant RNA modification
+    # keep only ELIGOS DRACH+ hits from cytoplasmic RNAs annotated to significant RNA modifications
     lapply(seq_along(hits_eligos_cyto_confirmed_5_with_DRACH), function(i) {
       mods <- unlist(strsplit(hits_eligos_cyto_confirmed_5_with_DRACH[i]$mod_type, split =';'))
       mods_significant <- mods[mods %in% mods_significant_with_DRACH_cyto_nascent]
@@ -997,21 +988,21 @@ comparison_mods_combination_nascent_total_only_significant <- function(directory
     hits_cyto<- hits_eligos_cyto_confirmed_5_with_DRACH
     
   } else {
-    # keep only ELIGOS DRACH- hits from chromatin associated RNAs annotated to significant RNA modification
+    # keep only ELIGOS DRACH- hits from chromatin associated RNAs annotated to significant RNA modifications
     lapply(seq_along(hits_eligos_chr_ass_confirmed_5_without_DRACH), function(i) {
       mods <- unlist(strsplit(hits_eligos_chr_ass_confirmed_5_without_DRACH[i]$mod_type, split =';'))
       mods_significant <- mods[mods %in% mods_significant_without_DRACH_chr_nascent]
       hits_eligos_chr_ass_confirmed_5_without_DRACH[i]$mod_type <<- paste(mods_significant, collapse = ';')
     })
     
-    # keep only ELIGOS DRACH- hits from nucleoplasmic RNAs annotated to significant RNA modification
+    # keep only ELIGOS DRACH- hits from nucleoplasmic RNAs annotated to significant RNA modifications
     lapply(seq_along(hits_eligos_nucleo_confirmed_5_without_DRACH), function(i) {
       mods <- unlist(strsplit(hits_eligos_nucleo_confirmed_5_without_DRACH[i]$mod_type, split =';'))
       mods_significant <- mods[mods %in% mods_significant_without_DRACH_nucleo_nascent]
       hits_eligos_nucleo_confirmed_5_without_DRACH[i]$mod_type <<- paste(mods_significant, collapse = ';')
     })
     
-    # keep only ELIGOS DRACH- hits from cytoplasmic RNAs annotated to significant RNA modification
+    # keep only ELIGOS DRACH- hits from cytoplasmic RNAs annotated to significant RNA modifications
     lapply(seq_along(hits_eligos_cyto_confirmed_5_without_DRACH), function(i) {
       mods <- unlist(strsplit(hits_eligos_cyto_confirmed_5_without_DRACH[i]$mod_type, split =';'))
       mods_significant <- mods[mods %in% mods_significant_without_DRACH_cyto_nascent]
@@ -1164,7 +1155,7 @@ comparison_mods_combination_nascent_total_only_significant <- function(directory
   colnames(df_tot) <- c('Nascent', 'Total')
   rownames(df_tot) <- all_comb
   
-  # if a combination of RNA marks doesn't have a frequency at least to 4 in the analysis on nascent reads/on total reads
+  # if a combination of RNA marks doesn't have a frequency at least equal to 4 in the analysis on nascent reads/on total reads
   # set the corresponding median frequency to 0
   for (r in rownames(df_tot)) {
     if (r %in% names(order_nascent)) {
@@ -1207,14 +1198,14 @@ comparison_mods_combination_nascent_total_only_significant <- function(directory
   }
 }
 
-load("/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/R_data/protein_coding_genes_5UTR_3UTR_introns_exons_stop.Rda")
+load("/path/to/R_data/protein_coding_genes_5UTR_3UTR_introns_exons_stop.Rda")
 
 
 ####
 # nascent + pre-existent RNAs
 
-load('/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/folder_random_hits_cluster/chr_ass_mod_type_DRACH.Rda')
-load('/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/folder_random_hits_cluster/chr_ass_mod_type_without_DRACH.Rda')
+load('/path/to/folder_random_hits_cluster/chr_ass_mod_type_DRACH.Rda')
+load('/path/to/folder_random_hits_cluster/chr_ass_mod_type_without_DRACH.Rda')
 
 # plot the distribution of the percentages of DRACH+/DRACH- random hits annotated to each RNA mod type and the corresponding percentage 
 # of ELIGOS DRACH+/DRACH- hits
@@ -1222,15 +1213,15 @@ RNA_mods_chr <- post_process_mods(chr_ass_mod_type_without_DRACH[c(1,2,3,4,5,6,7
                                   c(6.28,0.92,2.15,3.07,2.03,0.27,0.69,14.52), c(82.49,0.26,0.98,1.18,1.9,0.26,1.9,84.07),
                                   'violin_hit_per_mod_bothBD_chr.pdf','chromatin',
                                   paste(as.character(unique(lapply(chr_ass_mod_type_DRACH[[12]], length))),'DRACH+ random sequences (10 nt) generated 1,000 times;', as.character(unique(lapply(chr_ass_mod_type_without_DRACH[[12]], length))),'DRACH- random sequences (10 nt) generated 1,000 times'),
-                                  '/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/folder_random_hits_cluster/')
+                                  '/path/to/folder_random_hits_cluster/')
 
 pvalues_without_DRACH_chr <- RNA_mods_chr[[1]]
 pvalues_with_DRACH_chr <- RNA_mods_chr[[2]]
 significant_RNA_mods_without_DRACH_chr <- RNA_mods_chr[[3]]
 significant_RNA_mods_with_DRACH_chr <- RNA_mods_chr[[4]]
 
-load('/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/folder_random_hits_cluster/nucleo_mod_type_DRACH.Rda')
-load('/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/folder_random_hits_cluster/nucleo_mod_type_without_DRACH.Rda')
+load('/path/to/folder_random_hits_cluster/nucleo_mod_type_DRACH.Rda')
+load('/path/to/folder_random_hits_cluster/nucleo_mod_type_without_DRACH.Rda')
 
 # plot the distribution of the percentages of DRACH+/DRACH- random hits annotated to each RNA mod type and the corresponding percentage 
 # of ELIGOS DRACH+/DRACH- hits
@@ -1238,15 +1229,15 @@ RNA_mods_nucleo <- post_process_mods(nucleo_mod_type_without_DRACH[c(1,2,3,4,5,6
                                      c(6.9,0.86,3.06,3.27,2.09,0.36,0.86,16.29), c(82.3,0.26,0.72,1.44,2.36,0.2,1.57,83.87),
                                      'violin_hit_per_mod_bothBD_nucleo.pdf','nucleoplasm',
                                      paste(as.character(unique(lapply(nucleo_mod_type_DRACH[[12]], length))),'DRACH+ random sequences (10 nt) generated 1,000 times;', as.character(unique(lapply(nucleo_mod_type_without_DRACH[[12]], length))),'DRACH- random sequences (10 nt) generated 1,000 times'),
-                                     '/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/folder_random_hits_cluster/')
+                                     '/path/to/folder_random_hits_cluster/')
 
 pvalues_without_DRACH_nucleo <- RNA_mods_nucleo[[1]]
 pvalues_with_DRACH_nucleo <- RNA_mods_nucleo[[2]]
 significant_RNA_mods_without_DRACH_nucleo <- RNA_mods_nucleo[[3]]
 significant_RNA_mods_with_DRACH_nucleo <- RNA_mods_nucleo[[4]]
 
-load('/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/folder_random_hits_cluster/cyto_mod_type_DRACH.Rda')
-load('/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/folder_random_hits_cluster/cyto_mod_type_without_DRACH.Rda')
+load('/path/to/folder_random_hits_cluster/cyto_mod_type_DRACH.Rda')
+load('/path/to/folder_random_hits_cluster/cyto_mod_type_without_DRACH.Rda')
 
 # plot the distribution of the percentages of DRACH+/DRACH- random hits annotated to each RNA mod type and the corresponding percentage 
 # of ELIGOS DRACH+/DRACH- hits
@@ -1254,46 +1245,46 @@ RNA_mods_cyto <- post_process_mods(cyto_mod_type_without_DRACH[c(1,2,3,4,5,6,7,1
                                    c(6.86,0.77,2.67,3.27,2.01,0.35,0.77,15.59), c(80.96,0.46,1.19,1.52,2.04,0.13,1.58,82.48),
                                    'violin_hit_per_mod_bothBD_cyto.pdf','cytoplasm',
                                    paste(as.character(unique(lapply(cyto_mod_type_DRACH[[12]], length))),'DRACH+ random sequences (10 nt) generated 1,000 times;', as.character(unique(lapply(cyto_mod_type_without_DRACH[[12]], length))),'DRACH- random sequences (10 nt) generated 1,000 times'),
-                                   '/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/folder_random_hits_cluster/')
+                                   '/path/to/folder_random_hits_cluster/')
 
 pvalues_without_DRACH_cyto <- RNA_mods_cyto[[1]]
 pvalues_with_DRACH_cyto <- RNA_mods_cyto[[2]]
 significant_RNA_mods_without_DRACH_cyto <- RNA_mods_cyto[[3]]
 significant_RNA_mods_with_DRACH_cyto <- RNA_mods_cyto[[4]]
 
-print_heatmap(directory_hits = '/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/fractions_eligos_4sU_library_gene_subsampling_min05_min05_mag1/', 
+print_heatmap(directory_hits = '/path/to/fractions_eligos_4sU_library_gene_subsampling_min05_min05_mag1/', 
               significant_RNA_mods_without_DRACH_chr, significant_RNA_mods_with_DRACH_chr, significant_RNA_mods_without_DRACH_nucleo, 
               significant_RNA_mods_with_DRACH_nucleo, significant_RNA_mods_without_DRACH_cyto, significant_RNA_mods_with_DRACH_cyto)
 
-heatmap_enrichment(directory_hits = '/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/fractions_eligos_4sU_library_gene_subsampling_min05_min05_mag1/',
+heatmap_enrichment(directory_hits = '/path/to/fractions_eligos_4sU_library_gene_subsampling_min05_min05_mag1/',
                    c(82.49,0.26,0.98,1.18,1.9,0.26,1.9), c(82.3,0.26,0.72,1.44,2.36,0.2,1.57), c(80.96,0.46,1.19,1.52,2.04,0.13,1.58),
                    pvalues_with_DRACH_chr, pvalues_with_DRACH_nucleo, pvalues_with_DRACH_cyto, TRUE)
 
-heatmap_enrichment(directory_hits = '/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/fractions_eligos_4sU_library_gene_subsampling_min05_min05_mag1/',
+heatmap_enrichment(directory_hits = '/path/to/fractions_eligos_4sU_library_gene_subsampling_min05_min05_mag1/',
                    c(6.28,0.92,2.15,3.07,2.03,0.27,0.69),c(6.9,0.86,3.06,3.27,2.09,0.36,0.86),c(6.86,0.77,2.67,3.27,2.01,0.35,0.77),
                    pvalues_without_DRACH_chr, pvalues_without_DRACH_nucleo, pvalues_without_DRACH_cyto, FALSE)
 
 
 # both DRACH+ and DRACH- hits
-mods_combination_only_significant('/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/fractions_eligos_4sU_library_gene_subsampling_min05_min05_mag1/',
+mods_combination_only_significant('/path/to/fractions_eligos_4sU_library_gene_subsampling_min05_min05_mag1/',
                                   'both', significant_RNA_mods_without_DRACH_chr, significant_RNA_mods_with_DRACH_chr, significant_RNA_mods_without_DRACH_nucleo, 
                                   significant_RNA_mods_with_DRACH_nucleo, significant_RNA_mods_without_DRACH_cyto, significant_RNA_mods_with_DRACH_cyto)
 
 # only DRACH+ hits
-mods_combination_only_significant('/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/fractions_eligos_4sU_library_gene_subsampling_min05_min05_mag1/',
+mods_combination_only_significant('/path/to/fractions_eligos_4sU_library_gene_subsampling_min05_min05_mag1/',
                                   'DRACH', significant_RNA_mods_without_DRACH_chr, significant_RNA_mods_with_DRACH_chr, significant_RNA_mods_without_DRACH_nucleo, 
                                   significant_RNA_mods_with_DRACH_nucleo, significant_RNA_mods_without_DRACH_cyto, significant_RNA_mods_with_DRACH_cyto)
 
 # only DRACH- hits
-mods_combination_only_significant('/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/fractions_eligos_4sU_library_gene_subsampling_min05_min05_mag1/',
+mods_combination_only_significant('/path/to/fractions_eligos_4sU_library_gene_subsampling_min05_min05_mag1/',
                                   'non_DRACH', significant_RNA_mods_without_DRACH_chr, significant_RNA_mods_with_DRACH_chr, significant_RNA_mods_without_DRACH_nucleo, 
                                   significant_RNA_mods_with_DRACH_nucleo, significant_RNA_mods_without_DRACH_cyto, significant_RNA_mods_with_DRACH_cyto)
 
 #################
 # nascent RNAs
 
-load('/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/folder_random_nascent_hits_cluster/chr_ass_mod_type_DRACH.Rda')
-load('/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/folder_random_nascent_hits_cluster/chr_ass_mod_type_without_DRACH.Rda')
+load('/path/to/folder_random_nascent_hits_cluster/chr_ass_mod_type_DRACH.Rda')
+load('/path/to/folder_random_nascent_hits_cluster/chr_ass_mod_type_without_DRACH.Rda')
 
 # plot the distribution of the percentages of DRACH+/DRACH- random hits annotated to each RNA mod type and the corresponding percentage 
 # of ELIGOS DRACH+/DRACH- hits
@@ -1301,15 +1292,15 @@ RNA_mods_chr_nascent <- post_process_mods(chr_ass_mod_type_without_DRACH[c(1,2,3
                                           c(8.43,0.37,2.41,4.24,1.78,0.31,1.41,18.02), c(70.34,0.43,1.72,1.72,3.15,0.72,4.3,73.78),
                                           'violin_hit_per_mod_bothBD_chr.pdf','chromatin',
                                           paste(as.character(unique(lapply(chr_ass_mod_type_DRACH[[12]], length))),'DRACH+ random sequences (10 nt) generated 1,000 times;', as.character(unique(lapply(chr_ass_mod_type_without_DRACH[[12]], length))),'DRACH- random sequences (10 nt) generated 1,000 times'),
-                                          '/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/folder_random_nascent_hits_cluster/')
+                                          '/path/to/folder_random_nascent_hits_cluster/')
 
 pvalues_without_DRACH_chr_nascent <- RNA_mods_chr_nascent[[1]]
 pvalues_with_DRACH_chr_nascent <- RNA_mods_chr[[2]]
 significant_RNA_mods_without_DRACH_chr_nascent <- RNA_mods_chr_nascent[[3]]
 significant_RNA_mods_with_DRACH_chr_nascent <- RNA_mods_chr_nascent[[4]]
 
-load('/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/folder_random_nascent_hits_cluster/nucleo_mod_type_DRACH.Rda')
-load('/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/folder_random_nascent_hits_cluster/nucleo_mod_type_without_DRACH.Rda')
+load('/path/to/folder_random_nascent_hits_cluster/nucleo_mod_type_DRACH.Rda')
+load('/path/to/folder_random_nascent_hits_cluster/nucleo_mod_type_without_DRACH.Rda')
 
 # plot the distribution of the percentages of DRACH+/DRACH- random hits annotated to each RNA mod type and the corresponding percentage 
 # of ELIGOS DRACH+/DRACH- hits
@@ -1317,15 +1308,15 @@ RNA_mods_nucleo_nascent <- post_process_mods(nucleo_mod_type_without_DRACH[c(1,2
                                              c(7.78,0.74,3.29,4.49,1.81,0.13,1.81,18.51), c(69.42,0.52,1.89,2.75,3.61,0.69,4.47,73.54),
                                              'violin_hit_per_mod_bothBD_nucleo.pdf','nucleoplasm',
                                              paste(as.character(unique(lapply(nucleo_mod_type_DRACH[[12]], length))),'DRACH+ random sequences (10 nt) generated 1,000 times;', as.character(unique(lapply(nucleo_mod_type_without_DRACH[[12]], length))),'DRACH- random sequences (10 nt) generated 1,000 times'),
-                                             '/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/folder_random_nascent_hits_cluster/')
+                                             '/path/to/folder_random_nascent_hits_cluster/')
 
 pvalues_without_DRACH_nucleo_nascent <- RNA_mods_nucleo_nascent[[1]]
 pvalues_with_DRACH_nucleo_nascent <- RNA_mods_nucleo_nascent[[2]]
 significant_RNA_mods_without_DRACH_nucleo_nascent <- RNA_mods_nucleo_nascent[[3]]
 significant_RNA_mods_with_DRACH_nucleo_nascent <- RNA_mods_nucleo_nascent[[4]]
 
-load('/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/folder_random_nascent_hits_cluster/cyto_mod_type_DRACH.Rda')
-load('/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/folder_random_nascent_hits_cluster/cyto_mod_type_without_DRACH.Rda')
+load('/path/to/folder_random_nascent_hits_cluster/cyto_mod_type_DRACH.Rda')
+load('/path/to/folder_random_nascent_hits_cluster/cyto_mod_type_without_DRACH.Rda')
 
 # plot the distribution of the percentages of DRACH+/DRACH- random hits annotated to each RNA mod type and the corresponding percentage 
 # of ELIGOS DRACH+/DRACH- hits
@@ -1333,43 +1324,43 @@ RNA_mods_cyto_nascent <- post_process_mods(cyto_mod_type_without_DRACH[c(1,2,3,4
                                            c(7.73,0.87,2.97,4.08,2.53,0.25,1.48,18.23), c(67.57,0.54,1.63,1.99,2.54,0.72,4.17,69.57),
                                            'violin_hit_per_mod_bothBD_cyto.pdf','cytoplasm',
                                            paste(as.character(unique(lapply(cyto_mod_type_DRACH[[12]], length))),'DRACH+ random sequences (10 nt) generated 1,000 times;', as.character(unique(lapply(cyto_mod_type_without_DRACH[[12]], length))),'DRACH- random sequences (10 nt) generated 1,000 times'),
-                                           '/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/folder_random_nascent_hits_cluster/')
+                                           '/path/to/folder_random_nascent_hits_cluster/')
 
 pvalues_without_DRACH_cyto_nascent <- RNA_mods_cyto_nascent[[1]]
 pvalues_with_DRACH_cyto_nascent <- RNA_mods_cyto_nascent[[2]]
 significant_RNA_mods_without_DRACH_cyto_nascent <- RNA_mods_cyto_nascent[[3]]
 significant_RNA_mods_with_DRACH_cyto_nascent <- RNA_mods_cyto_nascent[[4]]
 
-print_heatmap(directory_hits = '/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/fractions_eligos_4sU_library_gene_subsampling_nascent_min05_min05_mag1/',
+print_heatmap(directory_hits = '/path/to/fractions_eligos_4sU_library_gene_subsampling_nascent_min05_min05_mag1/',
               significant_RNA_mods_without_DRACH_chr_nascent, significant_RNA_mods_with_DRACH_chr_nascent, significant_RNA_mods_without_DRACH_nucleo_nascent, 
               significant_RNA_mods_with_DRACH_nucleo_nascent, significant_RNA_mods_without_DRACH_cyto_nascent, significant_RNA_mods_with_DRACH_cyto_nascent)
 
-heatmap_enrichment(directory_hits = '/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/fractions_eligos_4sU_library_gene_subsampling_nascent_min05_min05_mag1/',
+heatmap_enrichment(directory_hits = '/path/to/fractions_eligos_4sU_library_gene_subsampling_nascent_min05_min05_mag1/',
                    c(70.34,0.43,1.72,1.72,3.15,0.72,4.3), c(69.42,0.52,1.89,2.75,3.61,0.69,4.47), c(67.57,0.54,1.63,1.99,2.54,0.72,4.17),
                    pvalues_with_DRACH_chr_nascent, pvalues_with_DRACH_nucleo_nascent, pvalues_with_DRACH_cyto_nascent, TRUE)
 
-heatmap_enrichment(directory_hits = '/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/fractions_eligos_4sU_library_gene_subsampling_nascent_min05_min05_mag1/',
+heatmap_enrichment(directory_hits = '/path/to/fractions_eligos_4sU_library_gene_subsampling_nascent_min05_min05_mag1/',
                    c(8.43,0.37,2.41,4.24,1.78,0.31,1.41),c(7.78,0.74,3.29,4.49,1.81,0.13,1.81),c(7.73,0.87,2.97,4.08,2.53,0.25,1.48),
                    pvalues_without_DRACH_chr_nascent, pvalues_without_DRACH_nucleo_nascent, pvalues_without_DRACH_cyto_nascent, FALSE)
 
 # both DRACH+ and DRACH- hits
-mods_combination_only_significant('/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/fractions_eligos_4sU_library_gene_subsampling_nascent_min05_min05_mag1/',
+mods_combination_only_significant('/path/to/fractions_eligos_4sU_library_gene_subsampling_nascent_min05_min05_mag1/',
                                   'both', significant_RNA_mods_without_DRACH_chr_nascent, significant_RNA_mods_with_DRACH_chr_nascent, significant_RNA_mods_without_DRACH_nucleo_nascent, 
                                   significant_RNA_mods_with_DRACH_nucleo_nascent, significant_RNA_mods_without_DRACH_cyto_nascent, significant_RNA_mods_with_DRACH_cyto_nascent)
 # only DRACH+ hits
-mods_combination_only_significant('/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/fractions_eligos_4sU_library_gene_subsampling_nascent_min05_min05_mag1/',
+mods_combination_only_significant('/path/to/fractions_eligos_4sU_library_gene_subsampling_nascent_min05_min05_mag1/',
                                   'DRACH', significant_RNA_mods_without_DRACH_chr_nascent, significant_RNA_mods_with_DRACH_chr_nascent, significant_RNA_mods_without_DRACH_nucleo_nascent, 
                                   significant_RNA_mods_with_DRACH_nucleo_nascent, significant_RNA_mods_without_DRACH_cyto_nascent, significant_RNA_mods_with_DRACH_cyto_nascent)
 # only DRACH- hits
-mods_combination_only_significant('/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/fractions_eligos_4sU_library_gene_subsampling_nascent_min05_min05_mag1/',
+mods_combination_only_significant('/path/to/fractions_eligos_4sU_library_gene_subsampling_nascent_min05_min05_mag1/',
                                   'non_DRACH', significant_RNA_mods_without_DRACH_chr_nascent, significant_RNA_mods_with_DRACH_chr_nascent, significant_RNA_mods_without_DRACH_nucleo_nascent, 
                                   significant_RNA_mods_with_DRACH_nucleo_nascent, significant_RNA_mods_without_DRACH_cyto_nascent, significant_RNA_mods_with_DRACH_cyto_nascent)
 
 #################
 # nascent + pre-existent RNAs with library-level subsampling threshold used for nascent reads
 
-load('/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/folder_random_tot2_hits_cluster/chr_ass_mod_type_DRACH.Rda')
-load('/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/folder_random_tot2_hits_cluster/chr_ass_mod_type_without_DRACH.Rda')
+load('/path/to/folder_random_tot2_hits_cluster/chr_ass_mod_type_DRACH.Rda')
+load('/path/to/folder_random_tot2_hits_cluster/chr_ass_mod_type_without_DRACH.Rda')
 
 # plot the distribution of the percentages of DRACH+/DRACH- random hits annotated to each RNA mod type and the corresponding percentage 
 # of ELIGOS DRACH+/DRACH- hits
@@ -1377,15 +1368,15 @@ RNA_mods_chr_tot2 <- post_process_mods(chr_ass_mod_type_without_DRACH[c(1,2,3,4,
                                        c(8.27,0.94,3.43,3.43,2.42,0.16,1.01,18.49), c(79.18,0.53,1.6,1.96,3.02,0.71,3.2,81.55),
                                        'violin_hit_per_mod_bothBD_chr.pdf','chromatin',
                                        paste(as.character(unique(lapply(chr_ass_mod_type_DRACH[[12]], length))),'DRACH+ random sequences (10 nt) generated 1,000 times;', as.character(unique(lapply(chr_ass_mod_type_without_DRACH[[12]], length))),'DRACH- random sequences (10 nt) generated 1,000 times'),
-                                       '/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/folder_random_tot2_hits_cluster/')
+                                       '/path/to/folder_random_tot2_hits_cluster/')
 
 pvalues_without_DRACH_chr_tot2 <- RNA_mods_chr_tot2[[1]]
 pvalues_with_DRACH_chr_tot2 <- RNA_mods_chr_tot2[[2]]
 significant_RNA_mods_without_DRACH_chr_tot2 <- RNA_mods_chr_tot2[[3]]
 significant_RNA_mods_with_DRACH_chr_tot2 <- RNA_mods_chr_tot2[[4]]
 
-load('/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/folder_random_tot2_hits_cluster/nucleo_mod_type_DRACH.Rda')
-load('/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/folder_random_tot2_hits_cluster/nucleo_mod_type_without_DRACH.Rda')
+load('/path/to/folder_random_tot2_hits_cluster/nucleo_mod_type_DRACH.Rda')
+load('/path/to/folder_random_tot2_hits_cluster/nucleo_mod_type_without_DRACH.Rda')
 
 # plot the distribution of the percentages of DRACH+/DRACH- random hits annotated to each RNA mod type and the corresponding percentage 
 # of ELIGOS DRACH+/DRACH- hits
@@ -1393,15 +1384,15 @@ RNA_mods_nucleo_tot2 <- post_process_mods(nucleo_mod_type_without_DRACH[c(1,2,3,
                                           c(7.54,0.94,3.69,3.92,2.2,0.39,1.1,18.37), c(82.03,0.5,0.83,1.33,3.33,0.67,3.16,84.19),
                                           'violin_hit_per_mod_bothBD_nucleo.pdf','nucleoplasm',
                                           paste(as.character(unique(lapply(nucleo_mod_type_DRACH[[12]], length))),'DRACH+ random sequences (10 nt) generated 1,000 times;', as.character(unique(lapply(nucleo_mod_type_without_DRACH[[12]], length))),'DRACH- random sequences (10 nt) generated 1,000 times'),
-                                          '/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/folder_random_tot2_hits_cluster/')
+                                          '/path/to/folder_random_tot2_hits_cluster/')
 
 pvalues_without_DRACH_nucleo_tot2 <- RNA_mods_nucleo_tot2[[1]]
 pvalues_with_DRACH_nucleo_tot2 <- RNA_mods_nucleo_tot2[[2]]
 significant_RNA_mods_without_DRACH_nucleo_tot2 <- RNA_mods_nucleo_tot2[[3]]
 significant_RNA_mods_with_DRACH_nucleo_tot2 <- RNA_mods_nucleo_tot2[[4]]
 
-load('/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/folder_random_tot2_hits_cluster/cyto_mod_type_DRACH.Rda')
-load('/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/folder_random_tot2_hits_cluster/cyto_mod_type_without_DRACH.Rda')
+load('/path/to/folder_random_tot2_hits_cluster/cyto_mod_type_DRACH.Rda')
+load('/path/to/folder_random_tot2_hits_cluster/cyto_mod_type_without_DRACH.Rda')
 
 # plot the distribution of the percentages of DRACH+/DRACH- random hits annotated to each RNA mod type and the corresponding percentage 
 # of ELIGOS DRACH+/DRACH- hits
@@ -1409,58 +1400,58 @@ RNA_mods_cyto_tot2 <- post_process_mods(cyto_mod_type_without_DRACH[c(1,2,3,4,5,
                                         c(7.03,1.19,3.58,3.87,1.9,0.35,1.05,17.78), c(78.89,0.51,0.84,1.86,3.55,0.68,3.89,81.59),
                                         'violin_hit_per_mod_bothBD_cyto.pdf','cytoplasm',
                                         paste(as.character(unique(lapply(cyto_mod_type_DRACH[[12]], length))),'DRACH+ random sequences (10 nt) generated 1,000 times;', as.character(unique(lapply(cyto_mod_type_without_DRACH[[12]], length))),'DRACH- random sequences (10 nt) generated 1,000 times'),
-                                        '/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/folder_random_tot2_hits_cluster/')
+                                        '/path/to/folder_random_tot2_hits_cluster/')
 
 pvalues_without_DRACH_cyto_tot2 <- RNA_mods_cyto_tot2[[1]]
 pvalues_with_DRACH_cyto_tot2 <- RNA_mods_cyto_tot2[[2]]
 significant_RNA_mods_without_DRACH_cyto_tot2 <- RNA_mods_cyto_tot2[[3]]
 significant_RNA_mods_with_DRACH_cyto_tot2 <- RNA_mods_cyto_tot2[[4]]
 
-print_heatmap(directory_hits = '/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/fractions_eligos_4sU_library_gene_subsampling_total_510645_min05_min05_mag1/',
+print_heatmap(directory_hits = '/path/to/fractions_eligos_4sU_library_gene_subsampling_total_510645_min05_min05_mag1/',
               significant_RNA_mods_without_DRACH_chr_tot2, significant_RNA_mods_with_DRACH_chr_tot2, significant_RNA_mods_without_DRACH_nucleo_tot2, 
               significant_RNA_mods_with_DRACH_nucleo_tot2, significant_RNA_mods_without_DRACH_cyto_tot2, significant_RNA_mods_with_DRACH_cyto_tot2)
 
-heatmap_enrichment(directory_hits = '/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/fractions_eligos_4sU_library_gene_subsampling_total_510645_min05_min05_mag1/',
+heatmap_enrichment(directory_hits = '/path/to/fractions_eligos_4sU_library_gene_subsampling_total_510645_min05_min05_mag1/',
                    c(79.18,0.53,1.6,1.96,3.02,0.71,3.2), c(82.03,0.5,0.83,1.33,3.33,0.67,3.16), c(78.89,0.51,0.84,1.86,3.55,0.68,3.89),
                    pvalues_with_DRACH_chr_tot2, pvalues_with_DRACH_nucleo_tot2, pvalues_with_DRACH_cyto_tot2, TRUE)
 
-heatmap_enrichment(directory_hits = '/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/fractions_eligos_4sU_library_gene_subsampling_total_510645_min05_min05_mag1/',
+heatmap_enrichment(directory_hits = '/path/to/fractions_eligos_4sU_library_gene_subsampling_total_510645_min05_min05_mag1/',
                    c(8.27,0.94,3.43,3.43,2.42,0.16,1.01),c(7.54,0.94,3.69,3.92,2.2,0.39,1.1),c(7.03,1.19,3.58,3.87,1.9,0.35,1.05),
                    pvalues_without_DRACH_chr_tot2, pvalues_without_DRACH_nucleo_tot2, pvalues_without_DRACH_cyto_tot2, FALSE)
 
 # both DRACH+ and DRACH- hits
-mods_combination_only_significant('/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/fractions_eligos_4sU_library_gene_subsampling_total_510645_min05_min05_mag1/',
+mods_combination_only_significant('/path/to/fractions_eligos_4sU_library_gene_subsampling_total_510645_min05_min05_mag1/',
                                   'both',significant_RNA_mods_without_DRACH_chr_tot2, significant_RNA_mods_with_DRACH_chr_tot2, significant_RNA_mods_without_DRACH_nucleo_tot2, 
                                   significant_RNA_mods_with_DRACH_nucleo_tot2, significant_RNA_mods_without_DRACH_cyto_tot2, significant_RNA_mods_with_DRACH_cyto_tot2)
 # only DRACH+ hits
-mods_combination_only_significant('/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/fractions_eligos_4sU_library_gene_subsampling_total_510645_min05_min05_mag1/',
+mods_combination_only_significant('/path/to/fractions_eligos_4sU_library_gene_subsampling_total_510645_min05_min05_mag1/',
                                   'DRACH',significant_RNA_mods_without_DRACH_chr_tot2, significant_RNA_mods_with_DRACH_chr_tot2, significant_RNA_mods_without_DRACH_nucleo_tot2, 
                                   significant_RNA_mods_with_DRACH_nucleo_tot2, significant_RNA_mods_without_DRACH_cyto_tot2, significant_RNA_mods_with_DRACH_cyto_tot2)
 # only DRACH- hits
-mods_combination_only_significant('/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/fractions_eligos_4sU_library_gene_subsampling_total_510645_min05_min05_mag1/',
+mods_combination_only_significant('/path/to/fractions_eligos_4sU_library_gene_subsampling_total_510645_min05_min05_mag1/',
                                   'non_DRACH',significant_RNA_mods_without_DRACH_chr_tot2, significant_RNA_mods_with_DRACH_chr_tot2, significant_RNA_mods_without_DRACH_nucleo_tot2, 
                                   significant_RNA_mods_with_DRACH_nucleo_tot2, significant_RNA_mods_without_DRACH_cyto_tot2, significant_RNA_mods_with_DRACH_cyto_tot2)
 
 
 # both DRACH- and DRACH+ hits
-comparison_mods_combination_nascent_total_only_significant('/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/fractions_eligos_4sU_library_gene_subsampling_nascent_min05_min05_mag1/', 
-                                                           '/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/fractions_eligos_4sU_library_gene_subsampling_total_510645_min05_min05_mag1/', 'both',
+comparison_mods_combination_nascent_total_only_significant('/path/to/fractions_eligos_4sU_library_gene_subsampling_nascent_min05_min05_mag1/', 
+                                                           '/path/to/fractions_eligos_4sU_library_gene_subsampling_total_510645_min05_min05_mag1/', 'both',
                                                            significant_RNA_mods_without_DRACH_chr_nascent, significant_RNA_mods_with_DRACH_chr_nascent, significant_RNA_mods_without_DRACH_nucleo_nascent, 
                                                            significant_RNA_mods_with_DRACH_nucleo_nascent, significant_RNA_mods_without_DRACH_cyto_nascent, significant_RNA_mods_with_DRACH_cyto_nascent,
                                                            significant_RNA_mods_without_DRACH_chr_tot2, significant_RNA_mods_with_DRACH_chr_tot2, significant_RNA_mods_without_DRACH_nucleo_tot2, 
                                                            significant_RNA_mods_with_DRACH_nucleo_tot2, significant_RNA_mods_without_DRACH_cyto_tot2, significant_RNA_mods_with_DRACH_cyto_tot2)
 
 # only DRACH+ hits
-comparison_mods_combination_nascent_total_only_significant('/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/fractions_eligos_4sU_library_gene_subsampling_nascent_min05_min05_mag1/', 
-                                                           '/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/fractions_eligos_4sU_library_gene_subsampling_total_510645_min05_min05_mag1/', 'DRACH',
+comparison_mods_combination_nascent_total_only_significant('/path/to/fractions_eligos_4sU_library_gene_subsampling_nascent_min05_min05_mag1/', 
+                                                           '/path/to/fractions_eligos_4sU_library_gene_subsampling_total_510645_min05_min05_mag1/', 'DRACH',
                                                            significant_RNA_mods_without_DRACH_chr_nascent, significant_RNA_mods_with_DRACH_chr_nascent, significant_RNA_mods_without_DRACH_nucleo_nascent, 
                                                            significant_RNA_mods_with_DRACH_nucleo_nascent, significant_RNA_mods_without_DRACH_cyto_nascent, significant_RNA_mods_with_DRACH_cyto_nascent,
                                                            significant_RNA_mods_without_DRACH_chr_tot2, significant_RNA_mods_with_DRACH_chr_tot2, significant_RNA_mods_without_DRACH_nucleo_tot2, 
                                                            significant_RNA_mods_with_DRACH_nucleo_tot2, significant_RNA_mods_without_DRACH_cyto_tot2, significant_RNA_mods_with_DRACH_cyto_tot2)
 
 # only DRACH- hits
-comparison_mods_combination_nascent_total_only_significant('/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/fractions_eligos_4sU_library_gene_subsampling_nascent_min05_min05_mag1/', 
-                                                           '/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/fractions_eligos_4sU_library_gene_subsampling_total_510645_min05_min05_mag1/', 'non_DRACH',
+comparison_mods_combination_nascent_total_only_significant('/path/to/fractions_eligos_4sU_library_gene_subsampling_nascent_min05_min05_mag1/', 
+                                                           '/path/to/fractions_eligos_4sU_library_gene_subsampling_total_510645_min05_min05_mag1/', 'non_DRACH',
                                                            significant_RNA_mods_without_DRACH_chr_nascent, significant_RNA_mods_with_DRACH_chr_nascent, significant_RNA_mods_without_DRACH_nucleo_nascent, 
                                                            significant_RNA_mods_with_DRACH_nucleo_nascent, significant_RNA_mods_without_DRACH_cyto_nascent, significant_RNA_mods_with_DRACH_cyto_nascent,
                                                            significant_RNA_mods_without_DRACH_chr_tot2, significant_RNA_mods_with_DRACH_chr_tot2, significant_RNA_mods_without_DRACH_nucleo_tot2, 
@@ -1498,7 +1489,7 @@ post_process_effectors <- function(hits_effector_without_DRACH, hits_effector_wi
   
   # for each category of effectors, compute the absolute 
   # difference between the percentage of ELIGOS DRACH- hits overlapping with each category and the median percentage 
-  # of DRACH- random hits overlapping with the same category divided by the interquantile distance computed on the 1,000 values of percentages of 
+  # of DRACH- random hits overlapping with the same category divided by the interquantile distance computed on the 1,000 values of percentage of 
   # DRACH- random hits overlapping with the same category
   IQR_distance_without_DRACH <- unlist(lapply(seq_along(c(1,3,5,7)), function(x,n,i) {
     if (length(x[[i]]) != 1000) {print('error')}
@@ -1514,7 +1505,7 @@ post_process_effectors <- function(hits_effector_without_DRACH, hits_effector_wi
   },  x=hits_effector[c(2,4,6,8)], n=names(hits_effector[c(2,4,6,8)])))
   
   # for each category of effectors, compute how many of the 1,000
-  # values of percentages of DRACH- random hits overlapping with each category are higher than the percentage of ELIGOS DRACH- hits 
+  # values of percentage of DRACH- random hits overlapping with each category are higher than the percentage of ELIGOS DRACH- hits 
   # overlapping with the same category divided by 1,000
   p_value_without_DRACH <- unlist(lapply(seq_along(c(1,3,5,7)), function(x,n,i) {
     if (length(x[[i]][x[[i]]>ELIGOS_results_without_DRACH[names(ELIGOS_results_without_DRACH) == n[i]]])/1000 == 0) {
@@ -1598,99 +1589,99 @@ post_process_effectors <- function(hits_effector_without_DRACH, hits_effector_wi
 ##########
 # ALL READS
 
-load('/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/folder_random_hits_cluster/hits_chr_mod_RBP_DRACH.Rda')
-load('/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/folder_random_hits_cluster/hits_chr_mod_RBP_without_DRACH.Rda')
+load('/path/to/folder_random_hits_cluster/hits_chr_mod_RBP_DRACH.Rda')
+load('/path/to/folder_random_hits_cluster/hits_chr_mod_RBP_without_DRACH.Rda')
 
 # plot the distribution of the percentages of DRACH+/DRACH- random hits annotated to each category of effectors and the corresponding percentage 
 # of ELIGOS DRACH+/DRACH- hits
 post_process_effectors(hits_chr_mod_RBP_without_DRACH,hits_chr_mod_RBP_DRACH, c(18.85,63.72,65.13,88.35), c(27.08,88.72,89.51,97.64), 
                        'violin_hit_effectors_bothBD_chr.pdf', 'chromatin',
                        paste(as.character(unique(lapply(hits_chr_mod_RBP_DRACH[5:length(hits_chr_mod_RBP_DRACH)], length))),'DRACH+ random sequences (10 nt) generated 1,000 times;', as.character(unique(lapply(hits_chr_mod_RBP_without_DRACH[5:length(hits_chr_mod_RBP_without_DRACH)], length))),'DRACH- random sequences (10 nt) generated 1,000 times'),
-                       path = '/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/folder_random_hits_cluster/')
+                       path = '/path/to/folder_random_hits_cluster/')
 
-load('/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/folder_random_hits_cluster/hits_nucleo_mod_RBP_DRACH.Rda')
-load('/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/folder_random_hits_cluster/hits_nucleo_mod_RBP_without_DRACH.Rda')
+load('/path/to/folder_random_hits_cluster/hits_nucleo_mod_RBP_DRACH.Rda')
+load('/path/to/folder_random_hits_cluster/hits_nucleo_mod_RBP_without_DRACH.Rda')
 
 # plot the distribution of the percentages of DRACH+/DRACH- random hits annotated to each category of effectors and the corresponding percentage 
 # of ELIGOS DRACH+/DRACH- hits
 post_process_effectors(hits_nucleo_mod_RBP_without_DRACH,hits_nucleo_mod_RBP_DRACH, c(18.91,64.51,65.8,88.39), c(27.08,87.15,87.87,97.18), 
                        'violin_hit_effectors_bothBD_nucleo.pdf', 'nucleoplasm',
                        paste(as.character(unique(lapply(hits_nucleo_mod_RBP_DRACH[5:length(hits_nucleo_mod_RBP_DRACH)], length))),'DRACH+ random sequences (10 nt) generated 1,000 times;', as.character(unique(lapply(hits_nucleo_mod_RBP_without_DRACH[5:length(hits_nucleo_mod_RBP_without_DRACH)], length))),'DRACH- random sequences (10 nt) generated 1,000 times'),
-                       path = '/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/folder_random_hits_cluster/')
+                       path = '/path/to/folder_random_hits_cluster/')
 
-load('/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/folder_random_hits_cluster/hits_cyto_mod_RBP_DRACH.Rda')
-load('/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/folder_random_hits_cluster/hits_cyto_mod_RBP_without_DRACH.Rda')
+load('/path/to/folder_random_hits_cluster/hits_cyto_mod_RBP_DRACH.Rda')
+load('/path/to/folder_random_hits_cluster/hits_cyto_mod_RBP_without_DRACH.Rda')
 
 # plot the distribution of the percentages of DRACH+/DRACH- random hits annotated to each category of effectors and the corresponding percentage 
 # of ELIGOS DRACH+/DRACH- hits
 post_process_effectors(hits_cyto_mod_RBP_without_DRACH,hits_cyto_mod_RBP_DRACH, c(18.72,64.29,65.59,87.86), c(26.55,87.55,88.41,97.56), 
                        'violin_hit_effectors_bothBD_cyto.pdf', 'cytoplasm',
                        paste(as.character(unique(lapply(hits_cyto_mod_RBP_DRACH[5:length(hits_cyto_mod_RBP_DRACH)], length))),'DRACH+ random sequences (10 nt) generated 1,000 times;', as.character(unique(lapply(hits_cyto_mod_RBP_without_DRACH[5:length(hits_cyto_mod_RBP_without_DRACH)], length))),'DRACH- random sequences (10 nt) generated 1,000 times'),
-                       path = '/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/folder_random_hits_cluster/')
+                       path = '/path/to/folder_random_hits_cluster/')
 
 ######
 # NASCENT READS
 
-load('/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/folder_random_nascent_hits_cluster/hits_chr_mod_RBP_DRACH.Rda')
-load('/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/folder_random_nascent_hits_cluster/hits_chr_mod_RBP_without_DRACH.Rda')
+load('/path/to/folder_random_nascent_hits_cluster/hits_chr_mod_RBP_DRACH.Rda')
+load('/path/to/folder_random_nascent_hits_cluster/hits_chr_mod_RBP_without_DRACH.Rda')
 
 # plot the distribution of the percentages of DRACH+/DRACH- random hits annotated to each category of effectors and the corresponding percentage 
 # of ELIGOS DRACH+/DRACH- hits
 post_process_effectors(hits_chr_mod_RBP_without_DRACH,hits_chr_mod_RBP_DRACH, c(25.67,70.72,72.29,92.35), c(34.67,85.39,86.53,97.42), 
                        'violin_hit_effectors_bothBD_chr.pdf', 'chromatin',
                        paste(as.character(unique(lapply(hits_chr_mod_RBP_DRACH[5:length(hits_chr_mod_RBP_DRACH)], length))),'DRACH+ random sequences (10 nt) generated 1,000 times;', as.character(unique(lapply(hits_chr_mod_RBP_without_DRACH[5:length(hits_chr_mod_RBP_without_DRACH)], length))),'DRACH- random sequences (10 nt) generated 1,000 times'),
-                       path = '/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/folder_random_nascent_hits_cluster/')
+                       path = '/path/to/folder_random_nascent_hits_cluster/')
 
-load('/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/folder_random_nascent_hits_cluster/hits_nucleo_mod_RBP_DRACH.Rda')
-load('/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/folder_random_nascent_hits_cluster/hits_nucleo_mod_RBP_without_DRACH.Rda')
+load('/path/to/folder_random_nascent_hits_cluster/hits_nucleo_mod_RBP_DRACH.Rda')
+load('/path/to/folder_random_nascent_hits_cluster/hits_nucleo_mod_RBP_without_DRACH.Rda')
 
 # plot the distribution of the percentages of DRACH+/DRACH- random hits annotated to each category of effectors and the corresponding percentage 
 # of ELIGOS DRACH+/DRACH- hits
 post_process_effectors(hits_nucleo_mod_RBP_without_DRACH,hits_nucleo_mod_RBP_DRACH, c(27.77,69.82,71.83,92.29), c(38.66,87.97,88.49,97.25), 
                        'violin_hit_effectors_bothBD_nucleo.pdf', 'nucleoplasm',
                        paste(as.character(unique(lapply(hits_nucleo_mod_RBP_DRACH[5:length(hits_nucleo_mod_RBP_DRACH)], length))),'DRACH+ random sequences (10 nt) generated 1,000 times;', as.character(unique(lapply(hits_nucleo_mod_RBP_without_DRACH[5:length(hits_nucleo_mod_RBP_without_DRACH)], length))),'DRACH- random sequences (10 nt) generated 1,000 times'),
-                       path = '/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/folder_random_nascent_hits_cluster/')
+                       path = '/path/to/folder_random_nascent_hits_cluster/')
 
-load('/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/folder_random_nascent_hits_cluster/hits_cyto_mod_RBP_DRACH.Rda')
-load('/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/folder_random_nascent_hits_cluster/hits_cyto_mod_RBP_without_DRACH.Rda')
+load('/path/to/folder_random_nascent_hits_cluster/hits_cyto_mod_RBP_DRACH.Rda')
+load('/path/to/folder_random_nascent_hits_cluster/hits_cyto_mod_RBP_without_DRACH.Rda')
 
 # plot the distribution of the percentages of DRACH+/DRACH- random hits annotated to each category of effectors and the corresponding percentage 
 # of ELIGOS DRACH+/DRACH- hits
 post_process_effectors(hits_cyto_mod_RBP_without_DRACH,hits_cyto_mod_RBP_DRACH, c(26.95,70.27,71.69,92.27), c(34.96,86.96,88.04,96.38), 
                        'violin_hit_effectors_bothBD_cyto.pdf', 'cytoplasm',
                        paste(as.character(unique(lapply(hits_cyto_mod_RBP_DRACH[5:length(hits_cyto_mod_RBP_DRACH)], length))),'DRACH+ random sequences (10 nt) generated 1,000 times;', as.character(unique(lapply(hits_cyto_mod_RBP_without_DRACH[5:length(hits_cyto_mod_RBP_without_DRACH)], length))),'DRACH- random sequences (10 nt) generated 1,000 times'),
-                       path = '/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/folder_random_nascent_hits_cluster/')
+                       path = '/path/to/folder_random_nascent_hits_cluster/')
 
 ######
 # ALL READS with library-level subsampling threshold used for nascent reads
 
-load('/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/folder_random_tot2_hits_cluster/hits_chr_mod_RBP_DRACH.Rda')
-load('/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/folder_random_tot2_hits_cluster/hits_chr_mod_RBP_without_DRACH.Rda')
+load('/path/to/folder_random_tot2_hits_cluster/hits_chr_mod_RBP_DRACH.Rda')
+load('/path/to/folder_random_tot2_hits_cluster/hits_chr_mod_RBP_without_DRACH.Rda')
 
 # plot the distribution of the percentages of DRACH+/DRACH- random hits annotated to each category of effectors and the corresponding percentage 
 # of ELIGOS DRACH+/DRACH- hits
 post_process_effectors(hits_chr_mod_RBP_without_DRACH,hits_chr_mod_RBP_DRACH, c(23.01,70.51,72,91.97), c(31.1,90.39,90.75,97.69), 
                        'violin_hit_effectors_bothBD_chr.pdf', 'chromatin',
                        paste(as.character(unique(lapply(hits_chr_mod_RBP_DRACH[5:length(hits_chr_mod_RBP_DRACH)], length))),'DRACH+ random sequences (10 nt) generated 1,000 times;', as.character(unique(lapply(hits_chr_mod_RBP_without_DRACH[5:length(hits_chr_mod_RBP_without_DRACH)], length))),'DRACH- random sequences (10 nt) generated 1,000 times'),
-                       path = '/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/folder_random_tot2_hits_cluster/')
+                       path = '/path/to/folder_random_tot2_hits_cluster/')
 
-load('/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/folder_random_tot2_hits_cluster/hits_nucleo_mod_RBP_DRACH.Rda')
-load('/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/folder_random_tot2_hits_cluster/hits_nucleo_mod_RBP_without_DRACH.Rda')
+load('/path/to/folder_random_tot2_hits_cluster/hits_nucleo_mod_RBP_DRACH.Rda')
+load('/path/to/folder_random_tot2_hits_cluster/hits_nucleo_mod_RBP_without_DRACH.Rda')
 
 # plot the distribution of the percentages of DRACH+/DRACH- random hits annotated to each category of effectors and the corresponding percentage 
 # of ELIGOS DRACH+/DRACH- hits
 post_process_effectors(hits_nucleo_mod_RBP_without_DRACH,hits_nucleo_mod_RBP_DRACH, c(24.41,69.15,71.11,91.99), c(37.1,89.85,90.52,97.84), 
                        'violin_hit_effectors_bothBD_nucleo.pdf', 'nucleoplasm',
                        paste(as.character(unique(lapply(hits_nucleo_mod_RBP_DRACH[5:length(hits_nucleo_mod_RBP_DRACH)], length))),'DRACH+ random sequences (10 nt) generated 1,000 times;', as.character(unique(lapply(hits_nucleo_mod_RBP_without_DRACH[5:length(hits_nucleo_mod_RBP_without_DRACH)], length))),'DRACH- random sequences (10 nt) generated 1,000 times'),
-                       path = '/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/folder_random_tot2_hits_cluster/')
+                       path = '/path/to/folder_random_tot2_hits_cluster/')
 
-load('/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/folder_random_tot2_hits_cluster/hits_cyto_mod_RBP_DRACH.Rda')
-load('/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/folder_random_tot2_hits_cluster/hits_cyto_mod_RBP_without_DRACH.Rda')
+load('/path/to/folder_random_tot2_hits_cluster/hits_cyto_mod_RBP_DRACH.Rda')
+load('/path/to/folder_random_tot2_hits_cluster/hits_cyto_mod_RBP_without_DRACH.Rda')
 
 # plot the distribution of the percentages of DRACH+/DRACH- random hits annotated to each category of effectors and the corresponding percentage 
 # of ELIGOS DRACH+/DRACH- hits
 post_process_effectors(hits_cyto_mod_RBP_without_DRACH,hits_cyto_mod_RBP_DRACH, c(24.17,67.74,69.57,90.3), c(32.6,91.39,91.89,98.14), 
                        'violin_hit_effectors_bothBD_cyto.pdf', 'cytoplasm',
                        paste(as.character(unique(lapply(hits_cyto_mod_RBP_DRACH[5:length(hits_cyto_mod_RBP_DRACH)], length))),'DRACH+ random sequences (10 nt) generated 1,000 times;', as.character(unique(lapply(hits_cyto_mod_RBP_without_DRACH[5:length(hits_cyto_mod_RBP_without_DRACH)], length))),'DRACH- random sequences (10 nt) generated 1,000 times'),
-                       path = '/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/folder_random_tot2_hits_cluster/')
+                       path = '/path/to/folder_random_tot2_hits_cluster/')
 
