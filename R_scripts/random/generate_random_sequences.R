@@ -1,16 +1,13 @@
-# for each fraction generate 1,000 sets of random hits coming from the same genes on which at least
-# one ELIGOS DRACH+ or DRACH- hit has been identified.
-
 library('GenomicRanges')
 library('GenomicFeatures')
 
-# load, for each fraction, ELIGOS DRACH+ and DRACH- hits from the analysis on all the reads
-load('/home/pmaragno/random/hits_eligos_chr_ass_confirmed_5_without_DRACH.Rda')
-load('/home/pmaragno/random/hits_eligos_cyto_confirmed_5_without_DRACH.Rda')
-load('/home/pmaragno/random/hits_eligos_nucleo_confirmed_5_without_DRACH.Rda')
-load('/home/pmaragno/random/hits_eligos_chr_ass_confirmed_5_with_DRACH.Rda')
-load('/home/pmaragno/random/hits_eligos_nucleo_confirmed_5_with_DRACH.Rda')
-load('/home/pmaragno/random/hits_eligos_cyto_confirmed_5_with_DRACH.Rda')
+# load, for each fraction, ELIGOS DRACH+ and DRACH- hits 
+load('/path/to/hits_eligos_chr_ass_confirmed_5_without_DRACH.Rda')
+load('/path/to/hits_eligos_cyto_confirmed_5_without_DRACH.Rda')
+load('/path/to/hits_eligos_nucleo_confirmed_5_without_DRACH.Rda')
+load('/path/to/hits_eligos_chr_ass_confirmed_5_with_DRACH.Rda')
+load('/path/to/hits_eligos_nucleo_confirmed_5_with_DRACH.Rda')
+load('/path/to/hits_eligos_cyto_confirmed_5_with_DRACH.Rda')
 
 # compute the overall number of ELIGOS hits (both DRACH+ and DRACH-) from each fraction
 tot_hits_chr <- length(hits_eligos_chr_ass_confirmed_5_without_DRACH) +length(hits_eligos_chr_ass_confirmed_5_with_DRACH)
@@ -22,7 +19,7 @@ genes_chr <- unique(c(unique(hits_eligos_chr_ass_confirmed_5_with_DRACH$gene_id)
 genes_nucleo <- unique(c(unique(hits_eligos_nucleo_confirmed_5_with_DRACH$gene_id),unique(hits_eligos_nucleo_confirmed_5_without_DRACH$gene_id)))
 genes_cyto <- unique(c(unique(hits_eligos_cyto_confirmed_5_with_DRACH$gene_id), unique(hits_eligos_cyto_confirmed_5_without_DRACH$gene_id)))
 
-load('/home/pmaragno/random/exon_coord_red.RDa')
+load('/path/to/exon_coord_red.RDa')
 # for each fraction identify the coordinates of the exons of the genes on which at least one ELIGOS hit maps
 coordinates_exons_genes_hits_chr <- exon_coord_red[genes_chr]
 # remove the exons with a width lower than 10 nucleotides
@@ -47,7 +44,7 @@ coordinates_exons_genes_hits_cyto <- lapply(coordinates_exons_genes_hits_cyto, f
 coordinates_exons_genes_hits_cyto <- unlist(as(coordinates_exons_genes_hits_cyto, 'GRangesList'))
 coordinates_exons_genes_vector_cyto <- paste0(seqnames(coordinates_exons_genes_hits_cyto), "_", start(coordinates_exons_genes_hits_cyto), "_", end(coordinates_exons_genes_hits_cyto), '_', strand(coordinates_exons_genes_hits_cyto))
 
-# function to generate, for each fraction, for 1,000 times a number of random hits equal to
+# function to generate, for each fraction, for 1,000 times a number of random sequences equal to
 # the overall number of ELIGOS hits (both DRACH+ and DRACH-) from the same fraction
 generate_random_hits <- function(number_hits, fraction) {
   
@@ -95,24 +92,24 @@ generate_random_hits <- function(number_hits, fraction) {
   
 }
 
-load('/home/pmaragno/random/DRACH_forward_strand.Rda')
+load('/path/to/DRACH_forward_strand.Rda')
 
 # for each fraction generate for 1,000 times a number of random hits equal to
 # the overall number of ELIGOS hits from the same fraction 
 random_hits_chr <- generate_random_hits(tot_hits_chr, 'chr')
 random_hits_chr_DRACH <- random_hits_chr[[1]]
 random_hits_chr_without_DRACH <- random_hits_chr[[2]]
-save(random_hits_chr_DRACH, file='/home/pmaragno/random/random_hits_chr_DRACH.Rda')
-save(random_hits_chr_without_DRACH, file='/home/pmaragno/random/random_hits_chr_without_DRACH.Rda')
+save(random_hits_chr_DRACH, file='/path/to/random_hits_chr_DRACH.Rda')
+save(random_hits_chr_without_DRACH, file='/path/to/random_hits_chr_without_DRACH.Rda')
 
 random_hits_nucleo <- generate_random_hits(tot_hits_nucleo, 'nucleo')
 random_hits_nucleo_DRACH <- random_hits_nucleo[[1]]
 random_hits_nucleo_without_DRACH <- random_hits_nucleo[[2]]
-save(random_hits_nucleo_DRACH, file='/home/pmaragno/random/random_hits_nucleo_DRACH.Rda')
-save(random_hits_nucleo_without_DRACH, file='/home/pmaragno/random/random_hits_nucleo_without_DRACH.Rda')
+save(random_hits_nucleo_DRACH, file='/path/to/random_hits_nucleo_DRACH.Rda')
+save(random_hits_nucleo_without_DRACH, file='/path/to/random_hits_nucleo_without_DRACH.Rda')
 
 random_hits_cyto <- generate_random_hits(tot_hits_cyto, 'cyto')
 random_hits_cyto_DRACH <- random_hits_cyto[[1]]
 random_hits_cyto_without_DRACH <- random_hits_cyto[[2]]
-save(random_hits_cyto_DRACH, file='/home/pmaragno/random/random_hits_cyto_DRACH.Rda')
-save(random_hits_cyto_without_DRACH, file='/home/pmaragno/random/random_hits_cyto_without_DRACH.Rda')
+save(random_hits_cyto_DRACH, file='/path/to/random_hits_cyto_DRACH.Rda')
+save(random_hits_cyto_without_DRACH, file='/path/to/random_hits_cyto_without_DRACH.Rda')
