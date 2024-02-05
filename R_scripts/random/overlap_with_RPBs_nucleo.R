@@ -61,26 +61,26 @@ compute_overlapping_hits_binding_sites <- function(hits) {
   return(hits)
 }
 
-load('/path/to/chr_ass_mod_type_DRACH.Rda')
+load('/path/to/nucleo_mod_type_DRACH.Rda')
 m6A <- c()
 non_m6A <- c()
 specific <- c()
 total<- c()
 # overlap between each of the 1,000 sets of randomly generated DRACH+ sequences and the binding sites of effectors associated with RNA mods
 # from the two databases
-hits_chr_mod_RBP_DRACH <- lapply(chr_ass_mod_type_DRACH[[12]], compute_overlapping_hits_binding_sites)
-hits_chr_mod_RBP_DRACH <- c(list(m6A), list(non_m6A), list(specific), list(total), hits_chr_mod_RBP_DRACH)
-names(hits_chr_mod_RBP_DRACH) <- c('m6A', 'non_m6A', 'specific', 'total', 'hits')
-save(hits_chr_mod_RBP_DRACH, file='/path/to/hits_chr_mod_RBP_DRACH.Rda')
+hits_nucleo_mod_RBP_DRACH <- lapply(nucleo_mod_type_DRACH[[12]], compute_overlapping_hits_binding_sites)
+hits_nucleo_mod_RBP_DRACH <- c(list(m6A), list(non_m6A), list(specific), list(total), hits_nucleo_mod_RBP_DRACH)
+names(hits_nucleo_mod_RBP_DRACH) <- c('m6A', 'non_m6A', 'specific', 'total', 'hits')
+save(hits_nucleo_mod_RBP_DRACH, file='/path/to/hits_nucleo_mod_RBP_DRACH.Rda')
 
-load('/path/to/chr_ass_mod_type_without_DRACH.Rda')
+load('/path/to/nucleo_mod_type_without_DRACH.Rda')
 m6A <- c()
 non_m6A <- c()
 specific <- c()
 total<- c()
 # overlap between each of the 1,000 sets of randomly generated DRACH- sequences and the binding sites of effectors associated with RNA mods
 # from the two databases
-hits_chr_mod_RBP_without_DRACH <- lapply(chr_ass_mod_type_without_DRACH[[12]], compute_overlapping_hits_binding_sites)
-hits_chr_mod_RBP_without_DRACH <- c(list(m6A), list(non_m6A), list(specific), list(total), hits_chr_mod_RBP_without_DRACH)
-names(hits_chr_mod_RBP_without_DRACH) <- c('m6A', 'non_m6A', 'specific', 'total', 'hits')
-save(hits_chr_mod_RBP_without_DRACH, file='/path/to/hits_chr_mod_RBP_without_DRACH.Rda')
+hits_nucleo_mod_RBP_without_DRACH <- lapply(nucleo_mod_type_without_DRACH[[12]], compute_overlapping_hits_binding_sites)
+hits_nucleo_mod_RBP_without_DRACH <- c(list(m6A), list(non_m6A), list(specific), list(total), hits_nucleo_mod_RBP_without_DRACH)
+names(hits_nucleo_mod_RBP_without_DRACH) <- c('m6A', 'non_m6A', 'specific', 'total', 'hits')
+save(hits_nucleo_mod_RBP_without_DRACH, file='/path/to/hits_nucleo_mod_RBP_without_DRACH.Rda')
