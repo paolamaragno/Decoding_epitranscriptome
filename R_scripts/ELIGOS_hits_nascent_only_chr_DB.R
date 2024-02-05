@@ -1,6 +1,3 @@
-# compute the overlap between ELIGOS DRACH+ and DRACH- hits only present in chromatin associated nascent RNAs and the 
-# coordinates of the RNA marks and of the effectors' binding sites reported in RMBase3 and RMVar
-
 library('GenomicRanges')
 library('GenomicFeatures')
 library('xlsx')
@@ -16,7 +13,7 @@ overlap_marks <- function(hits_chr_grange,m6A,directory_hits_only_chr,directory_
   # RNAs containing each RNA mod type and the overall number (and percentage) of ELIGOS hits only present in chromatin associated 
   # nascent RNAs annotated at least with one RNA modification type
   number_hits_per_mod <- matrix(0,nrow=2, ncol=12)
-  rownames(number_hits_per_mod) <- c('Chromatin Associated', 'Number of annotated marks')
+  rownames(number_hits_per_mod) <- c('Chromatin', 'Number of annotated marks')
   if (m6A) {
     colnames(number_hits_per_mod) <- c('m6A','Y','m1A','m5C', 'm7G','A-I', 'Nm', 'm6Am', 'm5U', 'Others', 'DRACH+ hits annotated', 'Tot DRACH+ hits')
   } else {
@@ -34,7 +31,7 @@ overlap_marks <- function(hits_chr_grange,m6A,directory_hits_only_chr,directory_
     
     mod_file <- read.table(f)
     
-    if (f == "/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/mod/other_RNA_mods_total.bed") {
+    if (f == "/path/to/mod/other_RNA_mods_total.bed") {
       mod_grange <- GRanges(seqnames = gsub(pattern = 'M', replacement = 'MT', x = gsub(pattern='chr', replacement = '', x=mod_file[,1])),
                             ranges = IRanges(start = mod_file[,2], end=mod_file[,3]),
                             strand = Rle(mod_file[,6]),
@@ -56,7 +53,7 @@ overlap_marks <- function(hits_chr_grange,m6A,directory_hits_only_chr,directory_
       query_matching_mark_chr <- c(query_matching_mark_chr, unique(queryHits(overlap_chr)))
       hits_chr_with_mod <- hits_chr_grange[unique(queryHits(overlap_chr))]
       # report in the matrix the number (and percentage) of hits that can be annotated with this RNA mod type
-      if (f == "/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/mod/other_RNA_mods_total.bed") {
+      if (f == "/path/to/mod/other_RNA_mods_total.bed") {
         number_hits_per_mod[1,'Others'] <- paste0(as.character(length(unique(queryHits(overlap_chr)))), ' - ', as.character(round(length(unique(queryHits(overlap_chr)))*100/as.numeric(number_hits_per_mod[1,12]),2)),'%')
       } else {
         number_hits_per_mod[1,unique(mod_grange$mod_type)] <- paste0(as.character(length(unique(queryHits(overlap_chr)))), ' - ', as.character(round(length(unique(queryHits(overlap_chr)))*100/as.numeric(number_hits_per_mod[1,12]),2)),'%')
@@ -105,7 +102,7 @@ ELIGOS_hits_DB_marks <- function(directory_mod, directory_hits_only_chr) {
   only_chr_with_DRACH <- only_chr
   
   # add a metadata column to each GRanges object in which the RNA marks with which each hit overlaps will be reported (initiated 
-  # with Unknown)
+  # with "Unknown")
   mcols(only_chr_without_DRACH) <- cbind(mcols(only_chr_without_DRACH), mod_type= 'Unknown')
   mcols(only_chr_with_DRACH) <- cbind(mcols(only_chr_with_DRACH), mod_type= 'Unknown')
   
@@ -116,16 +113,16 @@ ELIGOS_hits_DB_marks <- function(directory_mod, directory_hits_only_chr) {
   save(hits_non_DRACH, file =paste0(directory_hits_only_chr,'/without_DRACH/hits_eligos_only_chr_without_DRACH_mod_type.Rda'))
 }
 
-ELIGOS_hits_DB_marks(directory_mod = '/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/mod', 
-                     directory_hits_only_chr = '/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/fractions_eligos_4sU_library_gene_subsampling_nascent_min05_min05_mag1/only_chr')
+ELIGOS_hits_DB_marks(directory_mod = '/path/to/mod', 
+                     directory_hits_only_chr = '/path/to/fractions_eligos_4sU_library_gene_subsampling_nascent_min05_min05_mag1/only_chr')
 
 ################
 
-load('/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/RBPs/specific_effectors.Rda')
-load('/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/RBPs/specific_effectors_only_m6A.Rda')
-load('/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/RBPs/specific_effectors_non_m6A.Rda')
-load('/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/RBPs/enzyme_type_mod_unique.RDa')
-load('/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/RBPs/all_sites_RMBase_RMvar.Rda')
+load('/path/to/RBPs/specific_effectors.Rda')
+load('/path/to/RBPs/specific_effectors_only_m6A.Rda')
+load('/path/to/RBPs/specific_effectors_non_m6A.Rda')
+load('/path/to/RBPs/enzyme_type_mod_unique.RDa')
+load('/path/to/RBPs/all_sites_RMBase_RMvar.Rda')
 
 # overlap between ELIGOS hits (only in Chromatin Associated nascent RNAs) and effectors' binding sites from the two databases.
 # m6A is TRUE if we are analysing DRACH+ hits, otherwise FALSE
@@ -205,7 +202,7 @@ ELIGOS_hits_DB_effectors <- function(directory_hits_only_chr) {
   # initiate a matrix to report the percentage of ELIGOS DRACH- hits overlapping with each category of effectors and
   # the percentage of ELIGOS DRACH- hits overlapping at least with one category
   number_hits_per_mod_RBP_non_DRACH <<- matrix(0,nrow=2, ncol=5)
-  rownames(number_hits_per_mod_RBP_non_DRACH) <<- c('Chromatin Associated', 'Number of RBPs annotated')
+  rownames(number_hits_per_mod_RBP_non_DRACH) <<- c('Chromatin', 'Number of RBPs annotated')
   colnames(number_hits_per_mod_RBP_non_DRACH) <<- c('% of hits overlapping with\nspecific effectors non m6A', 
                                                     '% of hits overlapping with\nspecific effectors m6A',
                                                     '% of hits overlapping with\nspecific effectors',
@@ -214,7 +211,7 @@ ELIGOS_hits_DB_effectors <- function(directory_hits_only_chr) {
   
   # the same for ELIGOS DRACH+ hits 
   number_hits_per_mod_RBP_DRACH <<- matrix(0,nrow=2, ncol=5)
-  rownames(number_hits_per_mod_RBP_DRACH) <<- c('Chromatin Associated', 'Number of RBPs annotated')
+  rownames(number_hits_per_mod_RBP_DRACH) <<- c('Chromatin', 'Number of RBPs annotated')
   colnames(number_hits_per_mod_RBP_DRACH) <<- c('% of hits overlapping with\nspecific effectors non m6A', 
                                                 '% of hits overlapping with\nspecific effectors m6A',
                                                 '% of hits overlapping with\nspecific effectors',
@@ -233,7 +230,7 @@ ELIGOS_hits_DB_effectors <- function(directory_hits_only_chr) {
   number_hits_per_mod_RBP_DRACH[2,4] <<-length(unique(enzyme_type_mod_unique[,1]))
   
   # add a metadata column to each GRanges object in which the names of the effectors with hit overlaps will be reported as well as the 
-  # function of these effectors (both initiated with Unknown)
+  # function of these effectors (both initiated with "Unknown")
   mcols(hits_non_DRACH) <- cbind(mcols(hits_non_DRACH), effector = 'Unknown', type_effector = 'Unknown')
   mcols(hits_DRACH) <- cbind(mcols(hits_DRACH), effector = 'Unknown', type_effector = 'Unknown')
   
@@ -258,12 +255,12 @@ ELIGOS_hits_DB_effectors <- function(directory_hits_only_chr) {
   save(hits_DRACH_with_bindings, file=paste0(directory_hits_only_chr,'/with_DRACH/hits_eligos_only_chr_with_DRACH_mod_type_RBP.Rda'))
 }
 
-ELIGOS_hits_DB_effectors(directory_hits_only_chr = '/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/fractions_eligos_4sU_library_gene_subsampling_nascent_min05_min05_mag1/only_chr/')
+ELIGOS_hits_DB_effectors(directory_hits_only_chr = '/path/to/fractions_eligos_4sU_library_gene_subsampling_nascent_min05_min05_mag1/only_chr/')
 
 ################
 
 # combine the information from the overlap with the RNA marks and the overlap with the binding sites of the
-# effectors from the external databases.
+# effectors from the public databases.
 # directory_hits_only_chr is the path to the directory containing ELIGOS hits thare only in nascent chromatin associated RNAs
 final_summary <- function(all_mods, directory_hits_only_chr) {
   
@@ -273,14 +270,14 @@ final_summary <- function(all_mods, directory_hits_only_chr) {
   # initiate a matrix reporting, for each RNA mod type, the number (and percentage) of ELIGOS DRACH- hits 
   # annotated to that RNA mod
   number_hits_non_DRACH <- matrix(0,nrow=1, ncol=length(all_mods)+2)
-  rownames(number_hits_non_DRACH) <- c('Chromatin Associated')
+  rownames(number_hits_non_DRACH) <- c('Chromatin')
   colnames(number_hits_non_DRACH) <- c(all_mods, 'Tot number of DRACH- annotated hits', 'Tot number of DRACH- hits')
   number_hits_non_DRACH[1,'Tot number of DRACH- hits'] <- length(hits_non_DRACH_with_bindings)
   
   # initiate a matrix reporting, for each RNA mod type, the number (and percentage) of ELIGOS DRACH+ hits 
   # annotated to that RNA mod
   number_hits_DRACH <- matrix(0,nrow=1, ncol=length(all_mods)+2)
-  rownames(number_hits_DRACH) <- c('Chromatin Associated')
+  rownames(number_hits_DRACH) <- c('Chromatin')
   colnames(number_hits_DRACH) <- c(all_mods, 'Tot number of DRACH+ annotated hits', 'Tot number of DRACH+ hits')
   number_hits_DRACH[1,'Tot number of DRACH+ hits'] <- length(hits_DRACH_with_bindings)
   
@@ -319,7 +316,7 @@ final_summary <- function(all_mods, directory_hits_only_chr) {
   write.xlsx(x = data.frame(number_hits_DRACH),file = paste0(directory_hits_only_chr, '/with_DRACH/hits_with_DRACH_only_chr_summary_DBs.xlsx'),col.names = TRUE, row.names = TRUE)
 }
 
-directory_hits_only_chr = '/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/fractions_eligos_4sU_library_gene_subsampling_nascent_min05_min05_mag1/only_chr/'
+directory_hits_only_chr = '/path/to/fractions_eligos_4sU_library_gene_subsampling_nascent_min05_min05_mag1/only_chr/'
 
 load(paste0(directory_hits_only_chr,'/without_DRACH/hits_eligos_only_chr_without_DRACH_mod_type_RBP.Rda'))
 load(paste0(directory_hits_only_chr,'/with_DRACH/hits_eligos_only_chr_with_DRACH_mod_type_RBP.Rda'))
