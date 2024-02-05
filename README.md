@@ -56,6 +56,68 @@ Other mandatory arguments which may be specified in the nf-eligos.conf file
 --opt_args                                               Other optional arguments (e.g. "-bcf <file.bcf> -m <model.json>")
 ```
 
+Compile the sample.txt file and nf-eligos.sh bash file and execute ELIGOS with the command
+```
+qsub nf-eligos.sh
+```
 
+## Running m6Anet
+Open nf-m6anet.conf configuration file and set the desired options.
 
+```
+nextflow -c nf-m6anet.conf run nf-m6anet.nf --samples="/path/to/samples.txt" --resultsDir="/path/to/resultsDir" -profile docker
 
+Mandatory argument:
+-profile                                                 Configuration profile to use. Available: docker, singularity
+
+Other mandatory arguments which may be specified in the nf-m6anet.conf file
+
+--samples                                                Path to the tab-separated sample file including sample name, condition, path to fast5 folder and path to fastq file
+--resultsDir                                             Path to a folder where to store results
+--transcriptome_fasta                                    Path to the transcriptome fasta file
+--gtf                                                    Path to genome annotation gtf file
+--min_mapq                                               Minimum mapping quality
+--prob_mod_thr                                           Probability modification threshold for calling a site as m6A+
+--postprocessingScript                                   Path to Transcript_to_genome.R script
+--bulkLevelScript                                        Path to Calculate_m6anet_bulk.R script
+```
+
+Compile the sample.txt file and nf-m6anet.sh bash file and execute m6Anet with the command
+```
+qsub nf-m6anet.sh
+```
+
+## Running nano-ID
+Open nanoID.conf configuration file and set the desired options.
+
+```
+nextflow -c nanoID.conf run nanoID.nf --samples="/path/to/samples.txt" --resultsDir="/path/to/resultsDir" -profile docker
+
+Mandatory argument:
+-profile                                                 Configuration profile to use. Available: docker, singularity
+
+Other mandatory arguments which may be specified in the nf-m6anet.conf file
+
+--samples                                                Path to the tab-separated sample file including sample name, condition, path to workspace directory
+--scripts                                                Path to the pipeline scripts folder
+--nanoIDSupplementals                                    Path to nanoID supplemental files
+--unlabeled_time                                         If the training is required, this must match the conditions to use as unlabeled
+--fullylabeled_time                                      If the training is required, this must match the conditions to use as fully labeled
+--nanoIDtrainedModel                                     If the training has been already done this should point to the resulting model
+--resultsDir                                             Path to a folder where to store results
+--fast5_slot                                             FAST5 slot containing the basecalled bases
+--qvalue                                                 Q value for reads filtering
+--alignmentqValue                                        Alignment quality score for reads filtering
+--genome_fasta                                           Path to the reference fasta file
+--genesBed                                               Path to genes bed file
+--CCL                                                    Cell Cycle Length in minutes
+--Nseeds                                                 Number of seeds for training
+--Nsamplings                                             Number of subsamplings; linear between 0 and Max
+--trainingSizes                                          Sizes to add to the training set
+--moveSlot                                               Set to "true" to use the info contained in the Move slot
+```
+
+Compile the sample.txt file and nanoID.sh bash file and execute nano-ID with the command
+```
+qsub nanoID.sh
+```
