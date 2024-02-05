@@ -29,6 +29,28 @@ Finally, the combinatorial co-occurrence of various modifications within the tra
 * [Singularity](https://docs.sylabs.io/guides/3.0/user-guide/installation.html)
 
 # Usage
+## Subsampling 
+First perform the two library-level subsampling and gene-level subsampling from the terminal running the command
+
+```
+Rscript subsampling_reads.R [list of arguments]
+
+--path_fastq_chr_ass                                     Path to the fastq file of chromatin fraction
+--path_fastq_nucleo                                      Path to the fastq file of nucleoplasm fraction
+--path_fastq_cyto                                        Path to the fastq file of cytoplasm fraction
+--path_reference_genome                                  Path to the reference genome (optional)
+--path_gtf_file                                          Path to the gtf file (optional)
+--threads                                                Number of threads for the mapping (optional)
+--num_reads                                              Minimum number of reads mapping on each gene (optional)
+--num_subsampling                                        Number of samplings to do (optional)
+--minimap2                                               Path to minimap2 (optional)
+--samtools                                               Path to samtools (optional)
+--seqtk                                                  Path to seqtk (optional)
+--cond1                                                  Different conditions with the same order of the corresponding fastq files 
+--cond2                                                  Different conditions with the same order of the corresponding fastq files
+--cond3                                                  Different conditions with the same order of the corresponding fastq files
+```
+
 ## Running ELIGOS
 Open nf-eligos.conf configuration file and set the desired options.
 
@@ -120,4 +142,22 @@ Other mandatory arguments which may be specified in the nf-m6anet.conf file
 Compile the sample.txt file and nanoID.sh bash file and execute nano-ID with the command
 ```
 qsub nanoID.sh
+```
+
+## Analysis on random sequences
+To generate random sequences execute
+```
+qsub generate_random_sequences.sh
+```
+
+To perform the overlap between the random sequences and the databases of RNA marks execute
+```
+qsub overlap_with_RNA_marks.R
+```
+
+To perform the overlap between the random sequences and the databases of effectors' binding sites execute
+```
+qsub overlap_with_RBPs_chr.sh
+qsub overlap_with_RBPs_nucleo.sh
+qsub overlap_with_RBPs_cyto.sh
 ```
