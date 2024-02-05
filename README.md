@@ -152,7 +152,7 @@ qsub generate_random_sequences.sh
 
 To perform the overlap between the random sequences and the databases of RNA marks execute
 ```
-qsub overlap_with_RNA_marks.R
+qsub overlap_with_RNA_marks.sh
 ```
 
 To perform the overlap between the random sequences and the databases of effectors' binding sites execute
