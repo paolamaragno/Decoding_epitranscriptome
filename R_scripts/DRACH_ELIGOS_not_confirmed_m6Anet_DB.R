@@ -1,7 +1,3 @@
-# perform the overlap between ELIGOS DRACH+ hits not confirmed by m6Anet and the coordinates of the m6A marks
-# and of the the binding sites of specific effectors associated with m6A from RMBase3 and RMVar. 
-# This allows to compute how many ELIGOS DRACH+ hits non confirmed by m6Anet are m6A sites according to the databases
-
 library('GenomicRanges')
 library('GenomicFeatures')
 library('xlsx')
@@ -13,7 +9,7 @@ overlap_marks <- function(hits_chr_grange,hits_nucleo_grange,hits_cyto_grange,di
   # initiate a matrix that will report, for each fraction, the number (and percentage) of ELIGOS hits overlapping with m6A sites.
   # The matrix will also report the number of ELIGOS hits containing m6A and shared by all the fractions
   number_hits_per_mod <- matrix(0,nrow=4, ncol=2)
-  rownames(number_hits_per_mod) <- c('Chromatin Associated', 'Nucleoplasmic', 'Cytoplasmic', 'Overlap')
+  rownames(number_hits_per_mod) <- c('Chromatin', 'Nucleoplasm', 'Cytoplasm', 'Overlap')
   colnames(number_hits_per_mod) <- c('m6A', 'Tot DRACH+ hits')
   
   number_hits_per_mod[1,2] <- as.character(length(hits_chr_grange))
@@ -29,7 +25,7 @@ overlap_marks <- function(hits_chr_grange,hits_nucleo_grange,hits_cyto_grange,di
   overlap_all <- findOverlaps(overlap2,all_hits[[order[3]]], type = 'any')
   number_hits_per_mod[4,2] <- length(overlap2[unique(queryHits(overlap_all))])
   
-  mod_file <- read.table('/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/mod/m6A_total.bed')
+  mod_file <- read.table('/path/to/mod/m6A_total.bed')
   
   mod_grange <- GRanges(seqnames = mod_file$chr,
                         ranges = IRanges(start = mod_file$start, end=mod_file$end),
@@ -151,7 +147,7 @@ final_summary <- function(directory_hits_not_confirmed) {
   # initiate a matrix reporting the number (and percentage) of ELIGOS DRACH+ hits annotated with m6A.
   # Report also the number of ELIGOS DRACH+ hits annotated to m6A and shared by all the fractions
   number_hits_DRACH <- matrix(0,nrow=4, ncol=2)
-  rownames(number_hits_DRACH) <- c('Chromatin Associated', 'Nucleoplasmic', 'Cytoplasmic','Overlap')
+  rownames(number_hits_DRACH) <- c('Chromatin', 'Nucleoplasm', 'Cytoplasm','Overlap')
   colnames(number_hits_DRACH) <- c('m6A', 'Tot number of DRACH+ hits')
   
   number_hits_DRACH[1,'Tot number of DRACH+ hits'] <- length(eligos_DRACH_chr_non_confirmed_with_bindings)
@@ -186,14 +182,14 @@ final_summary <- function(directory_hits_not_confirmed) {
 }
 
 ############
-# directory_eligos_DRACH is the path to the directory containing ELIGOS DRACH+ hits not confirmed by m6Anet (p>0.75)
-directory_hits_not_confirmed <-  "/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/fractions_m6anet_4sU_library_gene_subsampling_prob0.75/ELIGOS_confirmed_DRACH/not/"
+# directory_hits_not_confirmed is the path to the directory containing ELIGOS DRACH+ hits not confirmed by m6Anet (p>0.75)
+directory_hits_not_confirmed <-  "/path/to/fractions_m6anet_4sU_library_gene_subsampling_prob0.75/ELIGOS_confirmed_DRACH/not/"
 
 load(paste0(directory_hits_not_confirmed,'hits_eligos_DRACH_chr_not_confirmed.Rda'))
 load(paste0(directory_hits_not_confirmed,'hits_eligos_DRACH_nucleo_not_confirmed.Rda'))
 load(paste0(directory_hits_not_confirmed,'hits_eligos_DRACH_cyto_not_confirmed.Rda'))
 
-# add a metadata column to each GRanges object (initiated with Unknown) in which 'm6A' will be 
+# add a metadata column to each GRanges object (initiated with "Unknown") in which "m6A" will be 
 # reported only for the hits overlapping with any m6A mark from the databases
 mcols(eligos_DRACH_chr_non_confirmed) <- cbind(mcols(eligos_DRACH_chr_non_confirmed), mod_type= 'Unknown')
 mcols(eligos_DRACH_nucleo_non_confirmed) <- cbind(mcols(eligos_DRACH_nucleo_non_confirmed), mod_type= 'Unknown')
@@ -212,7 +208,7 @@ save(eligos_DRACH_cyto_non_confirmed, file =paste0(directory_hits_not_confirmed,
 # associated with m6A and the number of ELIGOS DRACH+ hits (not confirmed by m6Anet) overlapping with specific effectors associated with m6A and
 # shared by all the fractions
 number_hits_per_mod_RBP_DRACH <- matrix(0,nrow=4, ncol=2)
-rownames(number_hits_per_mod_RBP_DRACH) <- c('Chromatin Associated', 'Nucleoplasmic', 'Cytoplasmic','Overlap')
+rownames(number_hits_per_mod_RBP_DRACH) <- c('Chromatin', 'Nucleoplasm', 'Cytoplasm','Overlap')
 colnames(number_hits_per_mod_RBP_DRACH) <- c('% of hits overlapping with\nspecific effectors m6A',
                                              'Tot number of DRACH+ hits')
 number_hits_per_mod_RBP_DRACH[1,2] <- length(eligos_DRACH_chr_non_confirmed)
@@ -220,14 +216,14 @@ number_hits_per_mod_RBP_DRACH[2,2] <-length(eligos_DRACH_nucleo_non_confirmed)
 number_hits_per_mod_RBP_DRACH[3,2] <-length(eligos_DRACH_cyto_non_confirmed)
 
 # add a metadata column to each GRanges object in which the names of the specific effectors associated with m6A 
-# with which each hit overlaps will be reported as well as the function of these effectors (both initiated with Unknown)
+# with which each hit overlaps will be reported as well as the function of these effectors (both initiated with "Unknown")
 mcols(eligos_DRACH_chr_non_confirmed) <- cbind(mcols(eligos_DRACH_chr_non_confirmed), effector = 'Unknown', type_effector = 'Unknown')
 mcols(eligos_DRACH_nucleo_non_confirmed) <- cbind(mcols(eligos_DRACH_nucleo_non_confirmed), effector = 'Unknown', type_effector = 'Unknown')
 mcols(eligos_DRACH_cyto_non_confirmed) <- cbind(mcols(eligos_DRACH_cyto_non_confirmed), effector = 'Unknown', type_effector = 'Unknown')
 
-load('/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/RBPs/specific_effectors_only_m6A.Rda')
-load('/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/RBPs/all_sites_RMBase_RMvar.Rda')
-load('/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/RBPs/enzyme_type_mod_unique.RDa')
+load('/path/to/RBPs/specific_effectors_only_m6A.Rda')
+load('/path/to/RBPs/all_sites_RMBase_RMvar.Rda')
+load('/path/to/RBPs/enzyme_type_mod_unique.RDa')
 
 results_chr <- overlap_binding_sites(eligos_DRACH_chr_non_confirmed,1)
 chr_specific_m6A <- eligos_DRACH_chr_non_confirmed[results_chr[[1]]]
@@ -259,14 +255,14 @@ save(eligos_DRACH_cyto_non_confirmed_with_bindings, file =paste0(directory_hits_
 final_summary(directory_hits_not_confirmed)
 
 #############
-# directory_eligos_DRACH is the path to the directory containing ELIGOS DRACH+ hits not confirmed by m6Anet (p>0.9)
-directory_hits_not_confirmed <-  "/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/fractions_m6anet_4sU_library_gene_subsampling_prob0.9/ELIGOS_confirmed_DRACH/not/"
+# directory_hits_not_confirmed is the path to the directory containing ELIGOS DRACH+ hits not confirmed by m6Anet (p>0.9)
+directory_hits_not_confirmed <-  "/path/to/fractions_m6anet_4sU_library_gene_subsampling_prob0.9/ELIGOS_confirmed_DRACH/not/"
 
 load(paste0(directory_hits_not_confirmed,'hits_eligos_DRACH_chr_not_confirmed.Rda'))
 load(paste0(directory_hits_not_confirmed,'hits_eligos_DRACH_nucleo_not_confirmed.Rda'))
 load(paste0(directory_hits_not_confirmed,'hits_eligos_DRACH_cyto_not_confirmed.Rda'))
 
-# add a metadata column to each GRanges object (initiated with Unknown) in which 'm6A' will be 
+# add a metadata column to each GRanges object (initiated with "Unknown") in which "m6A" will be 
 # reported only for the hits overlapping with any m6A mark from the databases
 mcols(eligos_DRACH_chr_non_confirmed) <- cbind(mcols(eligos_DRACH_chr_non_confirmed), mod_type= 'Unknown')
 mcols(eligos_DRACH_nucleo_non_confirmed) <- cbind(mcols(eligos_DRACH_nucleo_non_confirmed), mod_type= 'Unknown')
@@ -285,7 +281,7 @@ save(eligos_DRACH_cyto_non_confirmed, file =paste0(directory_hits_not_confirmed,
 # associated with m6A and the number of ELIGOS DRACH+ hits (not confirmed by m6Anet) overlapping with specific effectors associated with m6A and
 # shared by all the fractions
 number_hits_per_mod_RBP_DRACH <- matrix(0,nrow=4, ncol=2)
-rownames(number_hits_per_mod_RBP_DRACH) <- c('Chromatin Associated', 'Nucleoplasmic', 'Cytoplasmic','Overlap')
+rownames(number_hits_per_mod_RBP_DRACH) <- c('Chromatin', 'Nucleoplasm', 'Cytoplasm','Overlap')
 colnames(number_hits_per_mod_RBP_DRACH) <- c('% of hits overlapping with\nspecific effectors m6A',
                                              'Tot number of DRACH+ hits')
 number_hits_per_mod_RBP_DRACH[1,2] <- length(eligos_DRACH_chr_non_confirmed)
@@ -293,14 +289,14 @@ number_hits_per_mod_RBP_DRACH[2,2] <-length(eligos_DRACH_nucleo_non_confirmed)
 number_hits_per_mod_RBP_DRACH[3,2] <-length(eligos_DRACH_cyto_non_confirmed)
 
 # add a metadata column to each GRanges object in which the names of the specific effectors associated with m6A 
-# with which each hit overlaps will be reported as well as the function of these effectors (both initiated with Unknown)
+# with which each hit overlaps will be reported as well as the function of these effectors (both initiated with "Unknown")
 mcols(eligos_DRACH_chr_non_confirmed) <- cbind(mcols(eligos_DRACH_chr_non_confirmed), effector = 'Unknown', type_effector = 'Unknown')
 mcols(eligos_DRACH_nucleo_non_confirmed) <- cbind(mcols(eligos_DRACH_nucleo_non_confirmed), effector = 'Unknown', type_effector = 'Unknown')
 mcols(eligos_DRACH_cyto_non_confirmed) <- cbind(mcols(eligos_DRACH_cyto_non_confirmed), effector = 'Unknown', type_effector = 'Unknown')
 
-load('/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/RBPs/specific_effectors_only_m6A.Rda')
-load('/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/RBPs/all_sites_RMBase_RMvar.Rda')
-load('/Users/paolamarango/Desktop/fractions_analysis_Paola_SUM159/RBPs/enzyme_type_mod_unique.RDa')
+load('/path/to/RBPs/specific_effectors_only_m6A.Rda')
+load('/path/to/RBPs/all_sites_RMBase_RMvar.Rda')
+load('/path/to/RBPs/enzyme_type_mod_unique.RDa')
 
 results_chr <- overlap_binding_sites(eligos_DRACH_chr_non_confirmed,1)
 chr_specific_m6A <- eligos_DRACH_chr_non_confirmed[results_chr[[1]]]
