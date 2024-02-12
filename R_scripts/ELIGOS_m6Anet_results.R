@@ -266,7 +266,7 @@ ELIGOS_results <- function(path_directory,
   
   mods <- matrix(0,ncol=3,nrow=3)
   colnames(mods) <- c('chr_ass','nucleo','cyto')
-  rownames(mods) <- c('# hits >= 1 samplings','# hits >= 5 samplings', '# hits >= 5 samplings after reduce')
+  rownames(mods) <- c('# hits >= 1 samplings','# hits in 5 samplings', '# hits in 5 samplings after reduce')
   
   mods[1,1] <- length(eligos_chr_ass_all_replicate_10nt)
   mods[2,1] <- confirmed_by_chr[5,2]
@@ -691,7 +691,7 @@ m6Anet_results <- function(path_directory, gr_m6Anet_chr_ass, gr_m6Anet_nucleo, 
   
   mods <- matrix(0,ncol=3,nrow=3)
   colnames(mods) <- c('chr_ass','nucleo','cyto')
-  rownames(mods) <- c('# hits >= 1 samplings','# hits >= 5 samplings', '# hits >= 5 samplings after reduce')
+  rownames(mods) <- c('# hits >= 1 samplings','# hits in 5 samplings', '# hits in 5 samplings after reduce')
   
   mods[1,1] <- length(m6anet_chr_ass_all_replicate_10nt)
   mods[2,1] <- confirmed_by_chr[5,2]
