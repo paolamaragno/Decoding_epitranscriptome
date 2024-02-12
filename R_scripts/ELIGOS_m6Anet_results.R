@@ -564,22 +564,22 @@ m6Anet_results <- function(path_directory, gr_m6Anet_chr_ass, gr_m6Anet_nucleo, 
   overlapOfGRanges(gr_m6anet_cyto,plot = TRUE)
   dev.off()
   
-  m6anet_chr_ass_all_replicate_10nt <- c(gr_m6anet_chr_ass[[1]],gr_m6anet_chr_ass[[2]],gr_m6anet_chr_ass[[3]],gr_m6anet_chr_ass[[4]],gr_m6anet_chr_ass[[5]])
+  m6anet_chr_ass_all_samplings <- c(gr_m6anet_chr_ass[[1]],gr_m6anet_chr_ass[[2]],gr_m6anet_chr_ass[[3]],gr_m6anet_chr_ass[[4]],gr_m6anet_chr_ass[[5]])
   
   confirmed_by_chr <- data.frame(num_samplings=seq(1,5), num_hits=rep(0,5))
   confirmed_by_5_chr <- c()
   
   # identify the hits present in at least 5 samplings (any type of overlap)
-  for (r in 1:length(m6anet_chr_ass_all_replicate_10nt)) {
-    gr_r_rep <- queryHits(findOverlaps(m6anet_chr_ass_all_replicate_10nt, m6anet_chr_ass_all_replicate_10nt[r], type='any')) 
-    confirmed_by_chr[length(unique(m6anet_chr_ass_all_replicate_10nt[gr_r_rep]$rep)),2] <- confirmed_by_chr[length(unique(m6anet_chr_ass_all_replicate_10nt[gr_r_rep]$rep)),2] +1
-    if (length(unique(m6anet_chr_ass_all_replicate_10nt[gr_r_rep]$rep)) == 5) {
+  for (r in 1:length(m6anet_chr_ass_all_samplings)) {
+    gr_r_rep <- queryHits(findOverlaps(m6anet_chr_ass_all_samplings, m6anet_chr_ass_all_samplings[r], type='any')) 
+    confirmed_by_chr[length(unique(m6anet_chr_ass_all_samplings[gr_r_rep]$rep)),2] <- confirmed_by_chr[length(unique(m6anet_chr_ass_all_samplings[gr_r_rep]$rep)),2] +1
+    if (length(unique(m6anet_chr_ass_all_samplings[gr_r_rep]$rep)) == 5) {
       confirmed_by_5_chr <- c(confirmed_by_5_chr, r)
     }
   }
   
   # the hits confirmed in 5 samplings are resized to the original coordinates returned by m6Anet 
-  hits_m6anet_chr_ass_confirmed_5 <- resize(m6anet_chr_ass_all_replicate_10nt[confirmed_by_5_chr], 2, fix = 'center')
+  hits_m6anet_chr_ass_confirmed_5 <- resize(m6anet_chr_ass_all_samplings[confirmed_by_5_chr], 2, fix = 'center')
   hits_m6anet_chr_ass_confirmed_5 <- reduce(hits_m6anet_chr_ass_confirmed_5, ignore.strand = FALSE)
   print(table(width(hits_m6anet_chr_ass_confirmed_5)))
   # resize the merged hits to have a width at least of 10 nucleotides
@@ -598,20 +598,20 @@ m6Anet_results <- function(path_directory, gr_m6Anet_chr_ass, gr_m6Anet_nucleo, 
   }
   mcols(hits_m6anet_chr_ass_confirmed_5) <- cbind(mcols(hits_m6anet_chr_ass_confirmed_5), gene_id = gene_ids)
   
-  m6anet_nucleo_all_replicate_10nt <- c(gr_m6anet_nucleo[[1]],gr_m6anet_nucleo[[2]],gr_m6anet_nucleo[[3]],gr_m6anet_nucleo[[4]],gr_m6anet_nucleo[[5]])
+  m6anet_nucleo_all_samplings <- c(gr_m6anet_nucleo[[1]],gr_m6anet_nucleo[[2]],gr_m6anet_nucleo[[3]],gr_m6anet_nucleo[[4]],gr_m6anet_nucleo[[5]])
   
   confirmed_by_nucleo <- data.frame(num_samplings=seq(1,5), num_hits=rep(0,5))
   confirmed_by_5_nucleo <- c()
   
-  for (r in 1:length(m6anet_nucleo_all_replicate_10nt)) {
-    gr_r_rep <- queryHits(findOverlaps(m6anet_nucleo_all_replicate_10nt, m6anet_nucleo_all_replicate_10nt[r], type='any')) 
-    confirmed_by_nucleo[length(unique(m6anet_nucleo_all_replicate_10nt[gr_r_rep]$rep)),2] <- confirmed_by_nucleo[length(unique(m6anet_nucleo_all_replicate_10nt[gr_r_rep]$rep)),2] +1
-    if (length(unique(m6anet_nucleo_all_replicate_10nt[gr_r_rep]$rep)) == 5) {
+  for (r in 1:length(m6anet_nucleo_all_samplings)) {
+    gr_r_rep <- queryHits(findOverlaps(m6anet_nucleo_all_samplings, m6anet_nucleo_all_samplings[r], type='any')) 
+    confirmed_by_nucleo[length(unique(m6anet_nucleo_all_samplings[gr_r_rep]$rep)),2] <- confirmed_by_nucleo[length(unique(m6anet_nucleo_all_samplings[gr_r_rep]$rep)),2] +1
+    if (length(unique(m6anet_nucleo_all_samplings[gr_r_rep]$rep)) == 5) {
       confirmed_by_5_nucleo <- c(confirmed_by_5_nucleo, r)
     }
   }
   
-  hits_m6anet_nucleo_confirmed_5 <- resize(m6anet_nucleo_all_replicate_10nt[confirmed_by_5_nucleo], 2, fix = 'center')
+  hits_m6anet_nucleo_confirmed_5 <- resize(m6anet_nucleo_all_samplings[confirmed_by_5_nucleo], 2, fix = 'center')
   hits_m6anet_nucleo_confirmed_5 <- reduce(hits_m6anet_nucleo_confirmed_5, ignore.strand = FALSE)
   print(table(width(hits_m6anet_nucleo_confirmed_5)))
   for (i in 1:length(hits_m6anet_nucleo_confirmed_5)) {
@@ -628,20 +628,20 @@ m6Anet_results <- function(path_directory, gr_m6Anet_chr_ass, gr_m6Anet_nucleo, 
   }
   mcols(hits_m6anet_nucleo_confirmed_5) <- cbind(mcols(hits_m6anet_nucleo_confirmed_5), gene_id = gene_ids)
   
-  m6anet_cyto_all_replicate_10nt <- c(gr_m6anet_cyto[[1]],gr_m6anet_cyto[[2]],gr_m6anet_cyto[[3]],gr_m6anet_cyto[[4]],gr_m6anet_cyto[[5]])
+  m6anet_cyto_all_samplings <- c(gr_m6anet_cyto[[1]],gr_m6anet_cyto[[2]],gr_m6anet_cyto[[3]],gr_m6anet_cyto[[4]],gr_m6anet_cyto[[5]])
   
   confirmed_by_cyto <- data.frame(num_samplings=seq(1,5), num_hits=rep(0,5))
   confirmed_by_5_cyto <- c()
   
-  for (r in 1:length(m6anet_cyto_all_replicate_10nt)) {
-    gr_r_rep <- queryHits(findOverlaps(m6anet_cyto_all_replicate_10nt, m6anet_cyto_all_replicate_10nt[r], type='any')) 
-    confirmed_by_cyto[length(unique(m6anet_cyto_all_replicate_10nt[gr_r_rep]$rep)),2] <- confirmed_by_cyto[length(unique(m6anet_cyto_all_replicate_10nt[gr_r_rep]$rep)),2] +1
-    if (length(unique(m6anet_cyto_all_replicate_10nt[gr_r_rep]$rep)) == 5) {
+  for (r in 1:length(m6anet_cyto_all_samplings)) {
+    gr_r_rep <- queryHits(findOverlaps(m6anet_cyto_all_samplings, m6anet_cyto_all_samplings[r], type='any')) 
+    confirmed_by_cyto[length(unique(m6anet_cyto_all_samplings[gr_r_rep]$rep)),2] <- confirmed_by_cyto[length(unique(m6anet_cyto_all_samplings[gr_r_rep]$rep)),2] +1
+    if (length(unique(m6anet_cyto_all_samplings[gr_r_rep]$rep)) == 5) {
       confirmed_by_5_cyto <- c(confirmed_by_5_cyto, r)
     }
   }
   
-  hits_m6anet_cyto_confirmed_5 <- resize(m6anet_cyto_all_replicate_10nt[confirmed_by_5_cyto], 2, fix = 'center')
+  hits_m6anet_cyto_confirmed_5 <- resize(m6anet_cyto_all_samplings[confirmed_by_5_cyto], 2, fix = 'center')
   hits_m6anet_cyto_confirmed_5 <- reduce(hits_m6anet_cyto_confirmed_5, ignore.strand = FALSE)
   print(table(width(hits_m6anet_cyto_confirmed_5)))
   for (i in 1:length(hits_m6anet_cyto_confirmed_5)) {
