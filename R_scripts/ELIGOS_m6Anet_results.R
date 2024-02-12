@@ -15,7 +15,7 @@ genes_txdb <- GenomicFeatures::genes(txdb)
 # path_directory is the path to the directory containing three folders: /chr/, /nucleo/, /cyto/ each with the 10 txt files 
 # produced by ELIGOS for each of the 10 samplings
 # create a folder /hits_ELIGOS/ inside path_directory in which you will save the hits of each fraction 
-# confirmed by at least 5 samplings
+# confirmed by 5 samplings
 ELIGOS_results <- function(path_directory, 
                            name_pdf_overlap_10samplings_chr_ass, name_pdf_overlap_10samplings_nucleo, name_pdf_overlap_10samplings_cyto,
                            name_pdf_histogram_chr_ass, name_pdf_histogram_nucleo, name_pdf_histogram_cyto,
@@ -105,23 +105,22 @@ ELIGOS_results <- function(path_directory,
   overlapOfGRanges(gr_eligos_cyto,plot = TRUE)
   dev.off()
   
-  eligos_chr_ass_all_replicate_10nt <- c(gr_eligos_chr_ass[[1]],gr_eligos_chr_ass[[2]],gr_eligos_chr_ass[[3]],gr_eligos_chr_ass[[4]],gr_eligos_chr_ass[[5]],
-                                         gr_eligos_chr_ass[[6]],gr_eligos_chr_ass[[7]],gr_eligos_chr_ass[[8]],gr_eligos_chr_ass[[9]],gr_eligos_chr_ass[[10]])
+  eligos_chr_ass_all_replicate_10nt <- c(gr_eligos_chr_ass[[1]],gr_eligos_chr_ass[[2]],gr_eligos_chr_ass[[3]],gr_eligos_chr_ass[[4]],gr_eligos_chr_ass[[5]])
   
-  confirmed_by_chr <- data.frame(num_samplings=seq(1,10), num_hits=rep(0,10))
-  confirmed_by_at_least_5_chr <- c()
+  confirmed_by_chr <- data.frame(num_samplings=seq(1,5), num_hits=rep(0,5))
+  confirmed_by_5_chr <- c()
   
-  # identify the hits present in at least 5 samplings (any type of overlap)
+  # identify the hits present in 5 samplings (any type of overlap)
   for (r in 1:length(eligos_chr_ass_all_replicate_10nt)) {
     gr_r_rep <- queryHits(findOverlaps(eligos_chr_ass_all_replicate_10nt, eligos_chr_ass_all_replicate_10nt[r], type='any')) 
     confirmed_by_chr[length(unique(eligos_chr_ass_all_replicate_10nt[gr_r_rep]$rep)),2] <- confirmed_by_chr[length(unique(eligos_chr_ass_all_replicate_10nt[gr_r_rep]$rep)),2] +1
-    if (length(unique(eligos_chr_ass_all_replicate_10nt[gr_r_rep]$rep)) >= 5) {
-      confirmed_by_at_least_5_chr <- c(confirmed_by_at_least_5_chr, r)
+    if (length(unique(eligos_chr_ass_all_replicate_10nt[gr_r_rep]$rep)) == 5) {
+      confirmed_by_5_chr <- c(confirmed_by_5_chr, r)
     }
   }
   
-  # the hits confirmed in at least 5 samplings are resized to the original coordinates returned by ELIGOS 
-  hits_eligos_chr_ass_confirmed_5 <- resize(eligos_chr_ass_all_replicate_10nt[confirmed_by_at_least_5_chr], 2, fix = 'center')
+  # the hits confirmed in 5 samplings are resized to the original coordinates returned by ELIGOS 
+  hits_eligos_chr_ass_confirmed_5 <- resize(eligos_chr_ass_all_replicate_10nt[confirmed_by_5_chr], 2, fix = 'center')
   hits_eligos_chr_ass_confirmed_5 <- reduce(hits_eligos_chr_ass_confirmed_5, ignore.strand = FALSE)
   print(table(width(hits_eligos_chr_ass_confirmed_5)))
   # resize the merged hits to a width at least of 10 nucleotides
@@ -140,21 +139,20 @@ ELIGOS_results <- function(path_directory,
   }
   mcols(hits_eligos_chr_ass_confirmed_5) <- cbind(mcols(hits_eligos_chr_ass_confirmed_5), gene_id = gene_ids)
   
-  eligos_nucleo_all_replicate_10nt <- c(gr_eligos_nucleo[[1]],gr_eligos_nucleo[[2]],gr_eligos_nucleo[[3]],gr_eligos_nucleo[[4]],gr_eligos_nucleo[[5]],
-                                        gr_eligos_nucleo[[6]],gr_eligos_nucleo[[7]],gr_eligos_nucleo[[8]],gr_eligos_nucleo[[9]],gr_eligos_nucleo[[10]])
+  eligos_nucleo_all_replicate_10nt <- c(gr_eligos_nucleo[[1]],gr_eligos_nucleo[[2]],gr_eligos_nucleo[[3]],gr_eligos_nucleo[[4]],gr_eligos_nucleo[[5]])
   
-  confirmed_by_nucleo <- data.frame(num_samplings=seq(1,10), num_hits=rep(0,10))
-  confirmed_by_at_least_5_nucleo <- c()
+  confirmed_by_nucleo <- data.frame(num_samplings=seq(1,5), num_hits=rep(0,5))
+  confirmed_by_5_nucleo <- c()
   
   for (r in 1:length(eligos_nucleo_all_replicate_10nt)) {
     gr_r_rep <- queryHits(findOverlaps(eligos_nucleo_all_replicate_10nt, eligos_nucleo_all_replicate_10nt[r], type='any')) 
     confirmed_by_nucleo[length(unique(eligos_nucleo_all_replicate_10nt[gr_r_rep]$rep)),2] <- confirmed_by_nucleo[length(unique(eligos_nucleo_all_replicate_10nt[gr_r_rep]$rep)),2] +1
-    if (length(unique(eligos_nucleo_all_replicate_10nt[gr_r_rep]$rep)) >= 5) {
-      confirmed_by_at_least_5_nucleo <- c(confirmed_by_at_least_5_nucleo, r)
+    if (length(unique(eligos_nucleo_all_replicate_10nt[gr_r_rep]$rep)) == 5) {
+      confirmed_by_5_nucleo <- c(confirmed_by_5_nucleo, r)
     }
   }
   
-  hits_eligos_nucleo_confirmed_5 <- resize(eligos_nucleo_all_replicate_10nt[confirmed_by_at_least_5_nucleo], 2, fix = 'center')
+  hits_eligos_nucleo_confirmed_5 <- resize(eligos_nucleo_all_replicate_10nt[confirmed_by_5_nucleo], 2, fix = 'center')
   hits_eligos_nucleo_confirmed_5 <- reduce(hits_eligos_nucleo_confirmed_5, ignore.strand = FALSE)
   print(table(width(hits_eligos_nucleo_confirmed_5)))
   for (i in 1:length(hits_eligos_nucleo_confirmed_5)) {
@@ -171,21 +169,20 @@ ELIGOS_results <- function(path_directory,
   }
   mcols(hits_eligos_nucleo_confirmed_5) <- cbind(mcols(hits_eligos_nucleo_confirmed_5), gene_id = gene_ids)
   
-  eligos_cyto_all_replicate_10nt <- c(gr_eligos_cyto[[1]],gr_eligos_cyto[[2]],gr_eligos_cyto[[3]],gr_eligos_cyto[[4]],gr_eligos_cyto[[5]],
-                                      gr_eligos_cyto[[6]],gr_eligos_cyto[[7]],gr_eligos_cyto[[8]],gr_eligos_cyto[[9]],gr_eligos_cyto[[10]])
+  eligos_cyto_all_replicate_10nt <- c(gr_eligos_cyto[[1]],gr_eligos_cyto[[2]],gr_eligos_cyto[[3]],gr_eligos_cyto[[4]],gr_eligos_cyto[[5]])
   
-  confirmed_by_cyto <- data.frame(num_samplings=seq(1,10), num_hits=rep(0,10))
-  confirmed_by_at_least_5_cyto <- c()
+  confirmed_by_cyto <- data.frame(num_samplings=seq(1,5), num_hits=rep(0,5))
+  confirmed_by_5_cyto <- c()
   
   for (r in 1:length(eligos_cyto_all_replicate_10nt)) {
     gr_r_rep <- queryHits(findOverlaps(eligos_cyto_all_replicate_10nt, eligos_cyto_all_replicate_10nt[r], type='any')) 
     confirmed_by_cyto[length(unique(eligos_cyto_all_replicate_10nt[gr_r_rep]$rep)),2] <- confirmed_by_cyto[length(unique(eligos_cyto_all_replicate_10nt[gr_r_rep]$rep)),2] +1
-    if (length(unique(eligos_cyto_all_replicate_10nt[gr_r_rep]$rep)) >= 5) {
-      confirmed_by_at_least_5_cyto <- c(confirmed_by_at_least_5_cyto, r)
+    if (length(unique(eligos_cyto_all_replicate_10nt[gr_r_rep]$rep)) == 5) {
+      confirmed_by_5_cyto <- c(confirmed_by_5_cyto, r)
     }
   }
   
-  hits_eligos_cyto_confirmed_5 <- resize(eligos_cyto_all_replicate_10nt[confirmed_by_at_least_5_cyto], 2, fix = 'center')
+  hits_eligos_cyto_confirmed_5 <- resize(eligos_cyto_all_replicate_10nt[confirmed_by_5_cyto], 2, fix = 'center')
   hits_eligos_cyto_confirmed_5 <- reduce(hits_eligos_cyto_confirmed_5, ignore.strand = FALSE)
   print(table(width(hits_eligos_cyto_confirmed_5)))
   for (i in 1:length(hits_eligos_cyto_confirmed_5)) {
@@ -206,7 +203,7 @@ ELIGOS_results <- function(path_directory,
   p <- ggplot(confirmed_by_chr, aes(x=num_samplings, y = num_hits)) +
     geom_bar(stat="identity") +
     theme_classic(base_size = 16) +
-    scale_x_continuous(breaks=seq(1,10)) +
+    scale_x_continuous(breaks=seq(1,5)) +
     labs(title='Chromatin') +
     xlab('Num samplings with hit')+
     ylab('Number of hits')
@@ -216,7 +213,7 @@ ELIGOS_results <- function(path_directory,
   p <- ggplot(confirmed_by_nucleo, aes(x=num_samplings, y = num_hits)) +
     geom_bar(stat="identity") +
     theme_classic(base_size = 16) +
-    scale_x_continuous(breaks=seq(1,10)) +
+    scale_x_continuous(breaks=seq(1,5)) +
     labs(title='Nucleoplasm') +
     xlab('Num samplings with hit')+
     ylab('Number of hits')
@@ -226,7 +223,7 @@ ELIGOS_results <- function(path_directory,
   p <- ggplot(confirmed_by_cyto, aes(x=num_samplings, y = num_hits)) +
     geom_bar(stat="identity") +
     theme_classic(base_size = 16) +
-    scale_x_continuous(breaks=seq(1,10)) +
+    scale_x_continuous(breaks=seq(1,5)) +
     labs(title='Cytoplasm') +
     xlab('Num samplings with hit')+
     ylab('Number of hits')
@@ -238,13 +235,13 @@ ELIGOS_results <- function(path_directory,
   rownames(mods) <- c('# hits >= 1 samplings','# hits >= 5 samplings', '# hits >= 5 samplings after reduce')
   
   mods[1,1] <- length(eligos_chr_ass_all_replicate_10nt)
-  mods[2,1] <- sum(confirmed_by_chr[5:10,2])
+  mods[2,1] <- confirmed_by_chr[5,2]
   mods[3,1] <- length(hits_eligos_chr_ass_confirmed_5)
   mods[1,2] <- length(eligos_nucleo_all_replicate_10nt)
-  mods[2,2] <- sum(confirmed_by_nucleo[5:10,2])
+  mods[2,2] <- confirmed_by_nucleo[5,2]
   mods[3,2] <- length(hits_eligos_nucleo_confirmed_5)
   mods[1,3] <- length(eligos_cyto_all_replicate_10nt)
-  mods[2,3] <- sum(confirmed_by_cyto[5:10,2])
+  mods[2,3] <- confirmed_by_cyto[5,2]
   mods[3,3] <- length(hits_eligos_cyto_confirmed_5)
   
   write.xlsx(x = data.frame(mods),file = paste0(path_directory, 'number_hit_5_samplings.xlsx'),col.names = TRUE, row.names = TRUE)
@@ -267,7 +264,7 @@ ELIGOS_results <- function(path_directory,
 # path_directory is the path to the directory containing three folders: /chr/, /nucleo/, /cyto/ each with the 10 txt files 
 # produced by ELIGOS for each of the 10 samplings
 # create a folder /without_DRACH/ inside path_directory in which you will save the hits of each fraction 
-# confirmed by at least 5 samplings that are DRACH-
+# confirmed by 5 samplings that are DRACH-
 DRACH_overlap_ELIGOS <- function(path_directory, hits_ELIGOS_chr, hits_ELIGOS_nucleo, hits_ELIGOS_cyto) {
   
   summary_table <- matrix(ncol=3, nrow=4)
@@ -533,23 +530,22 @@ m6Anet_results <- function(path_directory, gr_m6Anet_chr_ass, gr_m6Anet_nucleo, 
   overlapOfGRanges(gr_m6anet_cyto,plot = TRUE)
   dev.off()
   
-  m6anet_chr_ass_all_replicate_10nt <- c(gr_m6anet_chr_ass[[1]],gr_m6anet_chr_ass[[2]],gr_m6anet_chr_ass[[3]],gr_m6anet_chr_ass[[4]],gr_m6anet_chr_ass[[5]],
-                                         gr_m6anet_chr_ass[[6]],gr_m6anet_chr_ass[[7]],gr_m6anet_chr_ass[[8]],gr_m6anet_chr_ass[[9]],gr_m6anet_chr_ass[[10]])
+  m6anet_chr_ass_all_replicate_10nt <- c(gr_m6anet_chr_ass[[1]],gr_m6anet_chr_ass[[2]],gr_m6anet_chr_ass[[3]],gr_m6anet_chr_ass[[4]],gr_m6anet_chr_ass[[5]])
   
-  confirmed_by_chr <- data.frame(num_samplings=seq(1,10), num_hits=rep(0,10))
-  confirmed_by_at_least_5_chr <- c()
+  confirmed_by_chr <- data.frame(num_samplings=seq(1,5), num_hits=rep(0,5))
+  confirmed_by_5_chr <- c()
   
   # identify the hits present in at least 5 samplings (any type of overlap)
   for (r in 1:length(m6anet_chr_ass_all_replicate_10nt)) {
     gr_r_rep <- queryHits(findOverlaps(m6anet_chr_ass_all_replicate_10nt, m6anet_chr_ass_all_replicate_10nt[r], type='any')) 
     confirmed_by_chr[length(unique(m6anet_chr_ass_all_replicate_10nt[gr_r_rep]$rep)),2] <- confirmed_by_chr[length(unique(m6anet_chr_ass_all_replicate_10nt[gr_r_rep]$rep)),2] +1
-    if (length(unique(m6anet_chr_ass_all_replicate_10nt[gr_r_rep]$rep)) >= 5) {
-      confirmed_by_at_least_5_chr <- c(confirmed_by_at_least_5_chr, r)
+    if (length(unique(m6anet_chr_ass_all_replicate_10nt[gr_r_rep]$rep)) == 5) {
+      confirmed_by_5_chr <- c(confirmed_by_5_chr, r)
     }
   }
   
-  # the hits confirmed in at least 5 samplings are resized to the original coordinates returned by m6Anet 
-  hits_m6anet_chr_ass_confirmed_5 <- resize(m6anet_chr_ass_all_replicate_10nt[confirmed_by_at_least_5_chr], 2, fix = 'center')
+  # the hits confirmed in 5 samplings are resized to the original coordinates returned by m6Anet 
+  hits_m6anet_chr_ass_confirmed_5 <- resize(m6anet_chr_ass_all_replicate_10nt[confirmed_by_5_chr], 2, fix = 'center')
   hits_m6anet_chr_ass_confirmed_5 <- reduce(hits_m6anet_chr_ass_confirmed_5, ignore.strand = FALSE)
   print(table(width(hits_m6anet_chr_ass_confirmed_5)))
   # resize the merged hits to have a width at least of 10 nucleotides
@@ -568,21 +564,20 @@ m6Anet_results <- function(path_directory, gr_m6Anet_chr_ass, gr_m6Anet_nucleo, 
   }
   mcols(hits_m6anet_chr_ass_confirmed_5) <- cbind(mcols(hits_m6anet_chr_ass_confirmed_5), gene_id = gene_ids)
   
-  m6anet_nucleo_all_replicate_10nt <- c(gr_m6anet_nucleo[[1]],gr_m6anet_nucleo[[2]],gr_m6anet_nucleo[[3]],gr_m6anet_nucleo[[4]],gr_m6anet_nucleo[[5]],
-                                        gr_m6anet_nucleo[[6]],gr_m6anet_nucleo[[7]],gr_m6anet_nucleo[[8]],gr_m6anet_nucleo[[9]],gr_m6anet_nucleo[[10]])
+  m6anet_nucleo_all_replicate_10nt <- c(gr_m6anet_nucleo[[1]],gr_m6anet_nucleo[[2]],gr_m6anet_nucleo[[3]],gr_m6anet_nucleo[[4]],gr_m6anet_nucleo[[5]])
   
-  confirmed_by_nucleo <- data.frame(num_samplings=seq(1,10), num_hits=rep(0,10))
-  confirmed_by_at_least_5_nucleo <- c()
+  confirmed_by_nucleo <- data.frame(num_samplings=seq(1,5), num_hits=rep(0,5))
+  confirmed_by_5_nucleo <- c()
   
   for (r in 1:length(m6anet_nucleo_all_replicate_10nt)) {
     gr_r_rep <- queryHits(findOverlaps(m6anet_nucleo_all_replicate_10nt, m6anet_nucleo_all_replicate_10nt[r], type='any')) 
     confirmed_by_nucleo[length(unique(m6anet_nucleo_all_replicate_10nt[gr_r_rep]$rep)),2] <- confirmed_by_nucleo[length(unique(m6anet_nucleo_all_replicate_10nt[gr_r_rep]$rep)),2] +1
-    if (length(unique(m6anet_nucleo_all_replicate_10nt[gr_r_rep]$rep)) >= 5) {
-      confirmed_by_at_least_5_nucleo <- c(confirmed_by_at_least_5_nucleo, r)
+    if (length(unique(m6anet_nucleo_all_replicate_10nt[gr_r_rep]$rep)) == 5) {
+      confirmed_by_5_nucleo <- c(confirmed_by_5_nucleo, r)
     }
   }
   
-  hits_m6anet_nucleo_confirmed_5 <- resize(m6anet_nucleo_all_replicate_10nt[confirmed_by_at_least_5_nucleo], 2, fix = 'center')
+  hits_m6anet_nucleo_confirmed_5 <- resize(m6anet_nucleo_all_replicate_10nt[confirmed_by_5_nucleo], 2, fix = 'center')
   hits_m6anet_nucleo_confirmed_5 <- reduce(hits_m6anet_nucleo_confirmed_5, ignore.strand = FALSE)
   print(table(width(hits_m6anet_nucleo_confirmed_5)))
   for (i in 1:length(hits_m6anet_nucleo_confirmed_5)) {
@@ -599,21 +594,20 @@ m6Anet_results <- function(path_directory, gr_m6Anet_chr_ass, gr_m6Anet_nucleo, 
   }
   mcols(hits_m6anet_nucleo_confirmed_5) <- cbind(mcols(hits_m6anet_nucleo_confirmed_5), gene_id = gene_ids)
   
-  m6anet_cyto_all_replicate_10nt <- c(gr_m6anet_cyto[[1]],gr_m6anet_cyto[[2]],gr_m6anet_cyto[[3]],gr_m6anet_cyto[[4]],gr_m6anet_cyto[[5]],
-                                      gr_m6anet_cyto[[6]],gr_m6anet_cyto[[7]],gr_m6anet_cyto[[8]],gr_m6anet_cyto[[9]],gr_m6anet_cyto[[10]])
+  m6anet_cyto_all_replicate_10nt <- c(gr_m6anet_cyto[[1]],gr_m6anet_cyto[[2]],gr_m6anet_cyto[[3]],gr_m6anet_cyto[[4]],gr_m6anet_cyto[[5]])
   
-  confirmed_by_cyto <- data.frame(num_samplings=seq(1,10), num_hits=rep(0,10))
-  confirmed_by_at_least_5_cyto <- c()
+  confirmed_by_cyto <- data.frame(num_samplings=seq(1,5), num_hits=rep(0,5))
+  confirmed_by_5_cyto <- c()
   
   for (r in 1:length(m6anet_cyto_all_replicate_10nt)) {
     gr_r_rep <- queryHits(findOverlaps(m6anet_cyto_all_replicate_10nt, m6anet_cyto_all_replicate_10nt[r], type='any')) 
     confirmed_by_cyto[length(unique(m6anet_cyto_all_replicate_10nt[gr_r_rep]$rep)),2] <- confirmed_by_cyto[length(unique(m6anet_cyto_all_replicate_10nt[gr_r_rep]$rep)),2] +1
-    if (length(unique(m6anet_cyto_all_replicate_10nt[gr_r_rep]$rep)) >= 5) {
-      confirmed_by_at_least_5_cyto <- c(confirmed_by_at_least_5_cyto, r)
+    if (length(unique(m6anet_cyto_all_replicate_10nt[gr_r_rep]$rep)) == 5) {
+      confirmed_by_5_cyto <- c(confirmed_by_5_cyto, r)
     }
   }
   
-  hits_m6anet_cyto_confirmed_5 <- resize(m6anet_cyto_all_replicate_10nt[confirmed_by_at_least_5_cyto], 2, fix = 'center')
+  hits_m6anet_cyto_confirmed_5 <- resize(m6anet_cyto_all_replicate_10nt[confirmed_by_5_cyto], 2, fix = 'center')
   hits_m6anet_cyto_confirmed_5 <- reduce(hits_m6anet_cyto_confirmed_5, ignore.strand = FALSE)
   print(table(width(hits_m6anet_cyto_confirmed_5)))
   for (i in 1:length(hits_m6anet_cyto_confirmed_5)) {
@@ -634,7 +628,7 @@ m6Anet_results <- function(path_directory, gr_m6Anet_chr_ass, gr_m6Anet_nucleo, 
   p <- ggplot(confirmed_by_chr, aes(x=num_samplings, y = num_hits)) +
     geom_bar(stat="identity") +
     theme_classic(base_size = 16) +
-    scale_x_continuous(breaks=seq(1,10)) +
+    scale_x_continuous(breaks=seq(1,5)) +
     labs(title='Chromatin') +
     xlab('Num samplings with hit')+
     ylab('Number of hits')
@@ -644,7 +638,7 @@ m6Anet_results <- function(path_directory, gr_m6Anet_chr_ass, gr_m6Anet_nucleo, 
   p <- ggplot(confirmed_by_nucleo, aes(x=num_samplings, y = num_hits)) +
     geom_bar(stat="identity") +
     theme_classic(base_size = 16) +
-    scale_x_continuous(breaks=seq(1,10)) +
+    scale_x_continuous(breaks=seq(1,5)) +
     labs(title='Nucleoplasm') +
     xlab('Num samplings with hit')+
     ylab('Number of hits')
@@ -654,7 +648,7 @@ m6Anet_results <- function(path_directory, gr_m6Anet_chr_ass, gr_m6Anet_nucleo, 
   p <- ggplot(confirmed_by_cyto, aes(x=num_samplings, y = num_hits)) +
     geom_bar(stat="identity") +
     theme_classic(base_size = 16) +
-    scale_x_continuous(breaks=seq(1,10)) +
+    scale_x_continuous(breaks=seq(1,5)) +
     labs(title='Cytoplasm') +
     xlab('Num samplings with hit')+
     ylab('Number of hits')
@@ -666,13 +660,13 @@ m6Anet_results <- function(path_directory, gr_m6Anet_chr_ass, gr_m6Anet_nucleo, 
   rownames(mods) <- c('# hits >= 1 samplings','# hits >= 5 samplings', '# hits >= 5 samplings after reduce')
   
   mods[1,1] <- length(m6anet_chr_ass_all_replicate_10nt)
-  mods[2,1] <- sum(confirmed_by_chr[5:10,2])
+  mods[2,1] <- confirmed_by_chr[5,2]
   mods[3,1] <- length(hits_m6anet_chr_ass_confirmed_5)
   mods[1,2] <- length(m6anet_nucleo_all_replicate_10nt)
-  mods[2,2] <- sum(confirmed_by_nucleo[5:10,2])
+  mods[2,2] <- confirmed_by_nucleo[5,2]
   mods[3,2] <- length(hits_m6anet_nucleo_confirmed_5)
   mods[1,3] <- length(m6anet_cyto_all_replicate_10nt)
-  mods[2,3] <- sum(confirmed_by_cyto[5:10,2])
+  mods[2,3] <- confirmed_by_cyto[5,2]
   mods[3,3] <- length(hits_m6anet_cyto_confirmed_5)
   
   write.xlsx(x = data.frame(mods),file = paste0(path_directory, 'number_hit_5_samplings.xlsx'),col.names = TRUE, row.names = TRUE)
@@ -776,8 +770,8 @@ comparison_ELIGOS_m6Anet <- function(path_directory, hits_ELIGOS_chr, hits_ELIGO
                                      hits_m6Anet_chr_DRACH, hits_m6Anet_nucleo_DRACH, hits_m6Anet_cyto_DRACH, 
                                      path_pdf_overlap_ELIGOS_m6Anet_DRACH_chr, path_pdf_overlap_ELIGOS_m6Anet_DRACH_nucleo, path_pdf_overlap_ELIGOS_m6Anet_DRACH_cyto) {
   
-  # represent in a heatmap, for each fraction, the overlap between ELIGOS hits confirmed by at least 5 samplings, m6Anet hits 
-  # confirmed by at least 5 samplings and ELIGOS DRACH+ hits 
+  # represent in a heatmap, for each fraction, the overlap between ELIGOS hits confirmed by 5 samplings, m6Anet hits 
+  # confirmed by 5 samplings and ELIGOS DRACH+ hits 
   overlap_eligos_all_eligos_DRACH_m6anet_all_chr_ass <- list(hits_ELIGOS_chr, hits_ELIGOS_chr_DRACH,hits_m6Anet_chr)
   names(overlap_eligos_all_eligos_DRACH_m6anet_all_chr_ass) <- c('All hits\nELIGOS','DRACH+\nELIGOS hits','All hits\nm6Anet')
   
@@ -799,7 +793,7 @@ comparison_ELIGOS_m6Anet <- function(path_directory, hits_ELIGOS_chr, hits_ELIGO
   overlapOfGRanges(overlap_eligos_all_eligos_DRACH_m6anet_all_cyto,plot = TRUE)
   dev.off()
   
-  # compute the overlap between ELIGOS hits confirmed by at least 5 samplings and m6Anet hits confirmed by at least 5 samplings
+  # compute the overlap between ELIGOS hits confirmed by 5 samplings and m6Anet hits confirmed by 5 samplings
   summary_table <- matrix(ncol=3, nrow=3)
   colnames(summary_table) <- c('Total number of ELIGOS hits', 'Total number of m6Anet hits', 'Overlap')
   rownames(summary_table) <- c('Chromatin', 'Nucleoplasm', 'Cytoplasm')
@@ -841,8 +835,8 @@ comparison_ELIGOS_m6Anet <- function(path_directory, hits_ELIGOS_chr, hits_ELIGO
   
   write.xlsx(x = data.frame(summary_table),file = paste0(path_directory, 'summary_table_eligos_m6anet_all.xlsx'),col.names = TRUE, row.names = TRUE)
   
-  # compute the overlap between ELIGOS DRACH+ hits confirmed by at least 5 samplings and m6Anet DRACH+ hits 
-  # confirmed by at least 5 samplings
+  # compute the overlap between ELIGOS DRACH+ hits confirmed by 5 samplings and m6Anet DRACH+ hits 
+  # confirmed by 5 samplings
   summary_table <- matrix(ncol=3, nrow=3)
   colnames(summary_table) <- c('DRACH+ ELIGOS hits', 'DRACH+ m6Anet hits', 'Overlap')
   rownames(summary_table) <- c('Chromatin', 'Nucleoplasm', 'Cytoplasm')
