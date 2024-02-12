@@ -40,6 +40,7 @@ rm_SNPs <- function(path_SNPs_SUM, path_SNPs_k562, hits) {
     hits_without_SNPs_SUM_k562 <- hits_without_SNPs_SUM[-unique(queryHits(over_hits_eligos_vcf_k562))]
     
     length(hits_without_SNPs_SUM_k562)
+    return(hits_without_SNPs_SUM_k562)
 }
 
 # path_directory is the path to the directory containing three folders: /chr/, /nucleo/, /cyto/ each with the 10 txt files 
