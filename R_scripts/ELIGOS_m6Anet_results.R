@@ -266,13 +266,13 @@ ELIGOS_results <- function(path_directory,
   colnames(mods) <- c('chr_ass','nucleo','cyto')
   rownames(mods) <- c('# hits >= 1 samplings','# hits in 5 samplings', '# hits in 5 samplings after reduce')
   
-  mods[1,1] <- length(eligos_chr_ass_all_replicate_10nt)
+  mods[1,1] <- length(eligos_chr_ass_all_samplings)
   mods[2,1] <- confirmed_by_chr[5,2]
   mods[3,1] <- length(hits_eligos_chr_ass_confirmed_5)
-  mods[1,2] <- length(eligos_nucleo_all_replicate_10nt)
+  mods[1,2] <- length(eligos_nucleo_all_samplings)
   mods[2,2] <- confirmed_by_nucleo[5,2]
   mods[3,2] <- length(hits_eligos_nucleo_confirmed_5)
-  mods[1,3] <- length(eligos_cyto_all_replicate_10nt)
+  mods[1,3] <- length(eligos_cyto_all_samplings)
   mods[2,3] <- confirmed_by_cyto[5,2]
   mods[3,3] <- length(hits_eligos_cyto_confirmed_5)
   
@@ -691,13 +691,13 @@ m6Anet_results <- function(path_directory, gr_m6Anet_chr_ass, gr_m6Anet_nucleo, 
   colnames(mods) <- c('chr_ass','nucleo','cyto')
   rownames(mods) <- c('# hits >= 1 samplings','# hits in 5 samplings', '# hits in 5 samplings after reduce')
   
-  mods[1,1] <- length(m6anet_chr_ass_all_replicate_10nt)
+  mods[1,1] <- length(m6anet_chr_ass_all_samplings)
   mods[2,1] <- confirmed_by_chr[5,2]
   mods[3,1] <- length(hits_m6anet_chr_ass_confirmed_5)
-  mods[1,2] <- length(m6anet_nucleo_all_replicate_10nt)
+  mods[1,2] <- length(m6anet_nucleo_all_samplings)
   mods[2,2] <- confirmed_by_nucleo[5,2]
   mods[3,2] <- length(hits_m6anet_nucleo_confirmed_5)
-  mods[1,3] <- length(m6anet_cyto_all_replicate_10nt)
+  mods[1,3] <- length(m6anet_cyto_all_samplings)
   mods[2,3] <- confirmed_by_cyto[5,2]
   mods[3,3] <- length(hits_m6anet_cyto_confirmed_5)
   
