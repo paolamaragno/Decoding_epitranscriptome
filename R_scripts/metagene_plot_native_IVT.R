@@ -43,8 +43,7 @@ metagene_plot_of_coverage <- GuitarPlot(stGRangeLists = granges_list,
                                         pltTxType = "mrna",
                                         #Change to TRUE if plotting "ncrna"
                                         headOrtail = TRUE,
-                                        enableCI = FALSE,
-                                        legend()) 
+                                        enableCI = FALSE) 
 
 
 pdf("/path/to/coverage_native_IVT.pdf")
