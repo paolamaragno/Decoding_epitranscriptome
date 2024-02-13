@@ -24,7 +24,7 @@ rm_SNPs <- function(path_SNPs_SUM, path_SNPs_k562, hits) {
     
     length(hits)
     
-    over_hits_eligos_vcf_SUM <- suppressWarnings(findOverlaps(hits,grange_vcf_SUM, type = 'any'))
+    over_hits_eligos_vcf_SUM <- suppressWarnings(findOverlaps(hits,grange_vcf_SUM, type = 'any', ignore.strand=TRUE))
     hits_without_SNPs_SUM <- hits[-unique(queryHits(over_hits_eligos_vcf_SUM))]
     
     # SNPs k562 on hg38
@@ -34,7 +34,7 @@ rm_SNPs <- function(path_SNPs_SUM, path_SNPs_k562, hits) {
                                ranges = IRanges(start = vcf_k562$V2, end=vcf_k562$V2))
     grange_vcf_k562 <- resize(grange_vcf_k562, 5, 'center')
     
-    over_hits_eligos_vcf_k562 <- suppressWarnings(findOverlaps(hits_without_SNPs_SUM,grange_vcf_k562, type = 'any'))
+    over_hits_eligos_vcf_k562 <- suppressWarnings(findOverlaps(hits_without_SNPs_SUM,grange_vcf_k562, type = 'any', ignore.strand=TRUE))
     length(unique(queryHits(over_hits_eligos_vcf_k562)))
     hits_without_SNPs_SUM_k562 <- hits_without_SNPs_SUM[-unique(queryHits(over_hits_eligos_vcf_k562))]
     
