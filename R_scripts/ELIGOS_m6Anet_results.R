@@ -41,8 +41,8 @@ rm_SNPs <- function(path_SNPs_SUM, path_SNPs_k562, hits) {
     return(hits_without_SNPs_SUM_k562)
 }
 
-# path_directory is the path to the directory containing three folders: /chr/, /nucleo/, /cyto/ each with the 10 txt files 
-# produced by ELIGOS for each of the 10 samplings
+# path_directory is the path to the directory containing three folders: /chr/, /nucleo/, /cyto/ each with the 5 txt files 
+# produced by ELIGOS for each of the 5 samplings
 # create a folder /hits_ELIGOS/ inside path_directory in which you will save the hits of each fraction 
 # confirmed by 5 samplings
 ELIGOS_results <- function(path_directory, 
@@ -50,7 +50,7 @@ ELIGOS_results <- function(path_directory,
                            name_pdf_histogram_chr_ass, name_pdf_histogram_nucleo, name_pdf_histogram_cyto,
                            name_pdf_overlap_3fractions, p, ap, OR) {
   
-  # load the txt files with ELIGOS output for all the 10 samplings of each fraction
+  # load the txt files with ELIGOS output for all the 5 samplings of each fraction
   eligos_chr_ass <- list.files(path = paste0(path_directory,'chr'), pattern = "txt", full.names = TRUE)
   eligos_nucleo <- list.files(path = paste0(path_directory,'nucleo'), pattern = "txt", full.names = TRUE)
   eligos_cyto <- list.files(path = paste0(path_directory,'cyto'), pattern = "txt", full.names = TRUE)
@@ -293,8 +293,8 @@ ELIGOS_results <- function(path_directory,
   return(overlap_hits_eligos_confirmed_5)
 }
 
-# path_directory is the path to the directory containing three folders: /chr/, /nucleo/, /cyto/ each with the 10 txt files 
-# produced by ELIGOS for each of the 10 samplings
+# path_directory is the path to the directory containing three folders: /chr/, /nucleo/, /cyto/ each with the 5 txt files 
+# produced by ELIGOS for each of the 5 samplings
 # create a folder /without_DRACH/ inside path_directory in which you will save the hits of each fraction 
 # confirmed by 5 samplings that are DRACH-
 DRACH_overlap_ELIGOS <- function(path_directory, hits_ELIGOS_chr, hits_ELIGOS_nucleo, hits_ELIGOS_cyto) {
@@ -525,8 +525,8 @@ DRACH_overlap_ELIGOS <- function(path_directory, hits_ELIGOS_chr, hits_ELIGOS_nu
   return(confirmed_hits_DRACH)
 }
 
-# path_directory is the path to the directory containing three folders: /chr/, /nucleo/, /cyto/ each with the 10 tsv files 
-# produced by m6Anet for each of the 10 samplings
+# path_directory is the path to the directory containing three folders: /chr/, /nucleo/, /cyto/ each with the 5 tsv files 
+# produced by m6Anet for each of the 5 samplings
 m6Anet_results <- function(path_directory, gr_m6Anet_chr_ass, gr_m6Anet_nucleo, gr_m6Anet_cyto,
                            name_pdf_overlap_10samplings_chr_ass, name_pdf_overlap_10samplings_nucleo, name_pdf_overlap_10samplings_cyto,
                            name_pdf_histogram_chr_ass, name_pdf_histogram_nucleo, name_pdf_histogram_cyto,
@@ -718,8 +718,8 @@ m6Anet_results <- function(path_directory, gr_m6Anet_chr_ass, gr_m6Anet_nucleo, 
   return(overlap_hits_m6anet_confirmed_5)
 }
 
-# path_directory is the path to the directory containing three folders: /chr/, /nucleo/, /cyto/ each with the 10 tsv files 
-# produced by m6Anet for each of the 10 samplings
+# path_directory is the path to the directory containing three folders: /chr/, /nucleo/, /cyto/ each with the 5 tsv files 
+# produced by m6Anet for each of the 5 samplings
 DRACH_overlap_m6Anet <- function(path_directory, hits_m6Anet_chr, hits_m6Anet_nucleo, hits_m6Anet_cyto) {
   
   summary_table <- matrix(ncol=3, nrow=4)
@@ -791,8 +791,8 @@ DRACH_overlap_m6Anet <- function(path_directory, hits_m6Anet_chr, hits_m6Anet_nu
   return(confirmed_hits_DRACH)
 }
 
-# path_directory is the path to directory containing three folders: /chr/, /nucleo/, /cyto/ each with the 10 tsv files 
-# produced by m6Anet for each of the 10 samplings.
+# path_directory is the path to directory containing three folders: /chr/, /nucleo/, /cyto/ each with the 5 tsv files 
+# produced by m6Anet for each of the 5 samplings.
 # create a folder /ELIGOS_confirmed_DRACH/ inside path_directory where you will save 
 # ELIGOS DRACH+ hits confirmed by m6Anet. Create a folder /not/ inside /ELIGOS_confirmed_DRACH/ where you will save  
 # ELIGOS DRACH+ hits not confirmed by m6Anet
@@ -931,7 +931,7 @@ confirmed_hits_DRACH_ELIGOS_min05_min05_mag1 <- DRACH_overlap_ELIGOS(path_direct
                                                                      hits_ELIGOS_chr = confirmed_hits_ELIGOS_min05_min05_mag1[[1]], hits_ELIGOS_nucleo = confirmed_hits_ELIGOS_min05_min05_mag1[[2]], hits_ELIGOS_cyto = confirmed_hits_ELIGOS_min05_min05_mag1[[3]])
 
 # m6Anet ANALYSIS ON NASCENT+PRE-EXISTING READS (prob.modification>0.75)
-# load the tsv file with the output of m6Anet for the three fractions for all the 10 samplings
+# load the tsv file with the output of m6Anet for the three fractions for all the 5 samplings
 m6Anet_fractions_4sU_chr_ass <- list.files(path = '/path/to/fractions_m6anet_4sU_library_gene_subsampling_prob0.75/chr', pattern = 'tsv', full.names = TRUE)
 m6Anet_fractions_4sU_nucleo <- list.files(path = '/path/to/fractions_m6anet_4sU_library_gene_subsampling_prob0.75/nucleo', pattern = 'tsv', full.names = TRUE)
 m6Anet_fractions_4sU_cyto <- list.files(path = '/path/to/fractions_m6anet_4sU_library_gene_subsampling_prob0.75/cyto', pattern = 'tsv', full.names = TRUE)
@@ -1037,7 +1037,7 @@ ELIGOS_vs_m6Anet <- comparison_ELIGOS_m6Anet(path_directory = '/path/to/fraction
 
 ######################
 # m6Anet ANALYSIS ON NASCENT+PRE-EXISTING READS (prob.modification>0.9)
-# load the tsv file with the output of m6Anet for the three fractions for all the 10 samplings
+# load the tsv file with the output of m6Anet for the three fractions for all the 5 samplings
 m6Anet_fractions_4sU_chr_ass <- list.files(path = '/path/to/fractions_m6anet_4sU_library_gene_subsampling_prob0.9/chr', pattern = 'tsv', full.names = TRUE)
 m6Anet_fractions_4sU_nucleo <- list.files(path = '/path/to/fractions_m6anet_4sU_library_gene_subsampling_prob0.9/nucleo', pattern = 'tsv', full.names = TRUE)
 m6Anet_fractions_4sU_cyto <- list.files(path = '/path/to/fractions_m6anet_4sU_library_gene_subsampling_prob0.9/cyto', pattern = 'tsv', full.names = TRUE)
