@@ -178,7 +178,7 @@ rm_SNPs <- function(path_SNPs_SUM, path_SNPs_k562, hits) {
 }
 
 # create a folder /hits_ELIGOS/ inside path_directory in which you will save the hits of each fraction 
-# confirmed by at least 5 samplings
+# confirmed by 5 samplings
 ELIGOS_results <- function(path_directory, gr) {
   
   gr_eligos_chr_ass <- gr[[1]]
