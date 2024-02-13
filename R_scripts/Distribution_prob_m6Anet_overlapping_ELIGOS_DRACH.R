@@ -5,11 +5,11 @@ gtf_file <- "/path/to/Homo_sapiens.GRCh38.104.gtf"
 txdb <- makeTxDbFromGFF(gtf_file)
 genes_txdb <- GenomicFeatures::genes(txdb)
 
-# path_directory is the directory containing three folders: /chr/, /nucleo/, /cyto/ each with the 10 txt files 
-# produced by ELIGOS for each of the 10 samplings
+# path_directory is the directory containing three folders: /chr/, /nucleo/, /cyto/ each with the 5 txt files 
+# produced by ELIGOS for each of the 5 samplings
 ELIGOS_results_min05_min_05_min1 <- function(path_directory, p, ap, OR) {
   
-  # load the txt files with ELIGOS output for all the 10 samplings of each fraction
+  # load the txt files with ELIGOS output for all the 5 samplings of each fraction
   eligos_chr_ass <- list.files(path = paste0(path_directory,'chr'), pattern = "txt", full.names = TRUE)
   eligos_nucleo <- list.files(path = paste0(path_directory,'nucleo'), pattern = "txt", full.names = TRUE)
   eligos_cyto <- list.files(path = paste0(path_directory,'cyto'), pattern = "txt", full.names = TRUE)
@@ -53,11 +53,11 @@ ELIGOS_results_min05_min_05_min1 <- function(path_directory, p, ap, OR) {
   return(gr)
 }
 
-# path_directory is the directory containing three folders: /chr/, /nucleo/, /cyto/ each with the 10 txt files 
-# produced by ELIGOS for each of the 10 samplings
+# path_directory is the directory containing three folders: /chr/, /nucleo/, /cyto/ each with the 5 txt files 
+# produced by ELIGOS for each of the 5 samplings
 ELIGOS_results_min05_mag05_mag1 <- function(path_directory, p, ap, OR) {
   
-  # load the txt files with ELIGOS output for all the 10 samplings of each fraction
+  # load the txt files with ELIGOS output for all the 5 samplings of each fraction
   eligos_chr_ass <- list.files(path = paste0(path_directory,'chr'), pattern = "txt", full.names = TRUE)
   eligos_nucleo <- list.files(path = paste0(path_directory,'nucleo'), pattern = "txt", full.names = TRUE)
   eligos_cyto <- list.files(path = paste0(path_directory,'cyto'), pattern = "txt", full.names = TRUE)
@@ -100,11 +100,11 @@ ELIGOS_results_min05_mag05_mag1 <- function(path_directory, p, ap, OR) {
   return(gr)
 }
 
-# path_directory is the directory containing three folders: /chr/, /nucleo/, /cyto/ each with the 10 txt files 
-# produced by ELIGOS for each of the 10 samplings
+# path_directory is the directory containing three folders: /chr/, /nucleo/, /cyto/ each with the 5 txt files 
+# produced by ELIGOS for each of the 5 samplings
 ELIGOS_results_min05_mag05_min1 <- function(path_directory, p, ap, OR) {
   
-  # load the txt files with ELIGOS output for all the 10 samplings of each fraction
+  # load the txt files with ELIGOS output for all the 5 samplings of each fraction
   eligos_chr_ass <- list.files(path = paste0(path_directory,'chr'), pattern = "txt", full.names = TRUE)
   eligos_nucleo <- list.files(path = paste0(path_directory,'nucleo'), pattern = "txt", full.names = TRUE)
   eligos_cyto <- list.files(path = paste0(path_directory,'cyto'), pattern = "txt", full.names = TRUE)
@@ -235,7 +235,7 @@ ELIGOS_results <- function(path_directory, gr) {
   hits_eligos_chr_ass_confirmed_5 <- resize(eligos_chr_ass_all_samplings_without_SNPs[confirmed_by_5_chr], 2, fix = 'center')
   hits_eligos_chr_ass_confirmed_5 <- reduce(hits_eligos_chr_ass_confirmed_5, ignore.strand = FALSE)
   print(table(width(hits_eligos_chr_ass_confirmed_5)))
-  # resize the merged hits to have a width at least of 10 nucleotides
+  # resize the merged hits to have a width at least of 5 nucleotides
   for (i in 1:length(hits_eligos_chr_ass_confirmed_5)) {
     if (width(hits_eligos_chr_ass_confirmed_5[i])<10) {
       hits_eligos_chr_ass_confirmed_5[i] <- resize(hits_eligos_chr_ass_confirmed_5[i], 10, fix='center')
@@ -356,7 +356,7 @@ confirmed_hits_DRACH_ELIGOS_min05_mag05_min1 <- DRACH_overlap_ELIGOS(path_direct
 
 ##############
 
-# load the tsv file with the output of m6Anet for the three fractions for all the 10 samplings
+# load the tsv file with the output of m6Anet for the three fractions for all the 5 samplings
 m6Anet_fractions_4sU_chr_ass <- list.files(path = '/path/to/fractions_m6anet_4sU_library_gene_subsampling_prob0.9/chr', pattern = 'tsv', full.names = TRUE)
 m6Anet_fractions_4sU_nucleo <- list.files(path = '/path/to/fractions_m6anet_4sU_library_gene_subsampling_prob0.9/nucleo', pattern = 'tsv', full.names = TRUE)
 m6Anet_fractions_4sU_cyto <- list.files(path = '/path/to/fractions_m6anet_4sU_library_gene_subsampling_prob0.9/cyto', pattern = 'tsv', full.names = TRUE)
@@ -438,8 +438,8 @@ gr_m6Anet_chr_ass_4sU <- gr_unique(gr_m6Anet_chr_ass_4sU)
 gr_m6Anet_nucleo_4sU <- gr_unique(gr_m6Anet_nucleo_4sU)
 gr_m6Anet_cyto_4sU <- gr_unique(gr_m6Anet_cyto_4sU)
 
-# path_directory is the directory containing three folders: /chr/, /nucleo/, /cyto/ each with the 10 txt files 
-# produced by ELIGOS for each of the 10 samplings
+# path_directory is the directory containing three folders: /chr/, /nucleo/, /cyto/ each with the 5 txt files 
+# produced by ELIGOS for each of the 5 samplings
 # create a folder /plot_prob_distribution_m6Anet/ inside path_directory where you will save the histrograms
 # with the distribution of the median and maximum probability of modification of m6Anet analysed sites 
 # overlapping with each ELIGOS DRACH+ hit
