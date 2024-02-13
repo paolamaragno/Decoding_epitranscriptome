@@ -235,7 +235,7 @@ ELIGOS_results <- function(path_directory, gr) {
   hits_eligos_chr_ass_confirmed_5 <- resize(eligos_chr_ass_all_samplings_without_SNPs[confirmed_by_5_chr], 2, fix = 'center')
   hits_eligos_chr_ass_confirmed_5 <- reduce(hits_eligos_chr_ass_confirmed_5, ignore.strand = FALSE)
   print(table(width(hits_eligos_chr_ass_confirmed_5)))
-  # resize the merged hits to have a width at least of 5 nucleotides
+  # resize the merged hits to have a width at least of 10 nucleotides
   for (i in 1:length(hits_eligos_chr_ass_confirmed_5)) {
     if (width(hits_eligos_chr_ass_confirmed_5[i])<10) {
       hits_eligos_chr_ass_confirmed_5[i] <- resize(hits_eligos_chr_ass_confirmed_5[i], 10, fix='center')
