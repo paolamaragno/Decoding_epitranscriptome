@@ -36,7 +36,8 @@ txdb <- makeTxDbFromGFF(gtf_file)
 genes_txdb <- GenomicFeatures::genes(txdb)
 
 # directory contains /hits_ELIGOS/ folder in which there are the RData objects with all ELIGOS hits or ELIGOS DRACH+ hits, 
-# separately for each fraction
+# separately for each fraction, and /without_DRACH/ folder in which there are the RData objects with all ELIGOS hits in DRACH negative context, 
+# separately for each fraction.
 # create a folder in "directory" called /gene_counts/ where you save genes_counts_over_threshold_min.Rda object generated
 # by subsampling_reads.R script during the library-level and gene-level subsamplings
 count_mods <- function(directory) { 
@@ -228,42 +229,62 @@ count_mods <- function(directory) {
         sum(width(x[x$feature == '3UTR']))
       }))
       
-      pdf(paste0(directory, '/hits_ELIGOS/', n, '_hist.pdf'), width = 13, height = 7)
-      par(mfrow=c(1,2))
-      hist(length_coding_exons, main = as.character(cor(length_coding_exons,length_3UTR, method = 'spearman')))
-      hist(length_3UTR)
-      dev.off()
+      if ('without' %in% unlist(strsplit(n, split='_'))) { 
+        pdf(paste0(directory, '/without_DRACH/', n, '_hist.pdf'), width = 13, height = 7)
+        par(mfrow=c(1,2))
+        hist(length_coding_exons, main = as.character(cor(length_coding_exons,length_3UTR, method = 'spearman')))
+        hist(length_3UTR)
+        dev.off()
+      } else {
+        pdf(paste0(directory, '/hits_ELIGOS/', n, '_hist.pdf'), width = 13, height = 7)
+        par(mfrow=c(1,2))
+        hist(length_coding_exons, main = as.character(cor(length_coding_exons,length_3UTR, method = 'spearman')))
+        hist(length_3UTR)
+        dev.off()
+      }
       
       ann <- data.frame(log10_gene_length = log10(length_genes)[rownames(m)], gene_strand = strand_genes[rownames(m)], log10_read_counts = log10(read_counts)[rownames(m)])
       rownames(ann) <- rownames(m)
       
       # plot the matrix m as heatmap
-      pdf(paste0(directory, '/hits_ELIGOS/', n, '.pdf'), height = 7, width = 6.5)
-      if ('DRACH' %in% unlist(strsplit(n, split='_'))) {
+      if (!'DRACH' %in% unlist(strsplit(n, split='_'))) { 
+        pdf(paste0(directory, '/hits_ELIGOS/', n, '.pdf'), height = 7, width = 6.5)
+        pheatmap(m, cluster_rows = TRUE, cluster_cols = FALSE, show_rownames = FALSE, na_col = 'white',
+                 annotation_row = ann, treeheight_row = 0, main = fraction, fontsize = 10, color = carto.pal(pal1 = 'red.pal',n1 = 11), 
+                 legend_breaks = 0:10, legend_labels = c(as.character(0:9), '≥10'), fontsize_row = 10, fontsize_col = 10)
+        grid.text('Transcriptional units', x=0.68, y=0.52, rot=270)
+        dev.off()
+      } else if (('DRACH' %in% unlist(strsplit(n, split='_'))) & (!'without' %in% unlist(strsplit(n, split='_')))) {
+        pdf(paste0(directory, '/hits_ELIGOS/', n, '.pdf'), height = 7, width = 6.5)
         pheatmap(m, cluster_rows = TRUE, cluster_cols = FALSE, show_rownames = FALSE, na_col = 'white',
                  annotation_row = ann, treeheight_row = 0, main = fraction, fontsize = 10, color = brewer.pal(6, 'Reds'), 
                  legend_breaks = 0:5, legend_labels = c(as.character(0:4), '≥5'), fontsize_row = 10, fontsize_col = 10)
         grid.text('Transcriptional units', x=0.7, y=0.52, rot=270)
         dev.off()
       } else {
+        pdf(paste0(directory, '/without_DRACH/', n, '.pdf'), height = 7, width = 6.5)
         pheatmap(m, cluster_rows = TRUE, cluster_cols = FALSE, show_rownames = FALSE, na_col = 'white',
-                 annotation_row = ann, treeheight_row = 0, main = fraction, fontsize = 10, color = carto.pal(pal1 = 'red.pal',n1 = 11), 
-                 legend_breaks = 0:10, legend_labels = c(as.character(0:9), '≥10'), fontsize_row = 10, fontsize_col = 10)
-        grid.text('Transcriptional units', x=0.68, y=0.52, rot=270)
+                 annotation_row = ann, treeheight_row = 0, main = fraction, fontsize = 10, color = brewer.pal(6, 'Reds'), 
+                 legend_breaks = 0:5, legend_labels = c(as.character(0:4), '≥5'), fontsize_row = 10, fontsize_col = 10)
+        grid.text('Transcriptional units', x=0.7, y=0.52, rot=270)
         dev.off()
       }
     }
-    
+
     if (!'DRACH' %in% unlist(strsplit(n, split='_'))) {
       write.xlsx(x = data.frame(correlation_read_counts),file = paste0(directory, '/hits_ELIGOS/correlation_read_counts.xlsx'),col.names = TRUE, row.names = TRUE)
       write.xlsx(x = data.frame(correlation_gene_length), file=paste0(directory, '/hits_ELIGOS/correlation_gene_length.xlsx'),col.names = TRUE, row.names = TRUE)
       write.xlsx(x = data.frame(correlation_strand),file=paste0(directory, '/hits_ELIGOS/correlation_strand.xlsx'),col.names = TRUE, row.names = TRUE)
-    }  else {
+    }  else if (('DRACH' %in% unlist(strsplit(n, split='_'))) & (!'without' %in% unlist(strsplit(n, split='_')))) {
       write.xlsx(x = data.frame(correlation_read_counts),file = paste0(directory, '/hits_ELIGOS/correlation_read_counts_DRACH.xlsx'),col.names = TRUE, row.names = TRUE)
       write.xlsx(x = data.frame(correlation_gene_length),file=paste0(directory, '/hits_ELIGOS/correlation_gene_length_DRACH.xlsx'),col.names = TRUE, row.names = TRUE)
       write.xlsx(x = data.frame(correlation_strand),file=paste0(directory, '/hits_ELIGOS/correlation_strand_DRACH.xlsx'),col.names = TRUE, row.names = TRUE)
+    } else {
+      write.xlsx(x = data.frame(correlation_read_counts),file = paste0(directory, '/without_DRACH/correlation_read_counts_without_DRACH.xlsx'),col.names = TRUE, row.names = TRUE)
+      write.xlsx(x = data.frame(correlation_gene_length),file=paste0(directory, '/without_DRACH/correlation_gene_length_without_DRACH.xlsx'),col.names = TRUE, row.names = TRUE)
+      write.xlsx(x = data.frame(correlation_strand),file=paste0(directory, '/without_DRACH/correlation_strand_without_DRACH.xlsx'),col.names = TRUE, row.names = TRUE)
     }
-  }
+    }
   
   R_objects <- list.files(path = paste0(directory, '/hits_ELIGOS/'), pattern = 'Rda', full.names = TRUE)
   R_objects_all <- R_objects[unlist(lapply(strsplit(R_objects,'_'), function(x) {!'DRACH.Rda' %in% x}))]
