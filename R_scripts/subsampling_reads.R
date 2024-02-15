@@ -33,7 +33,7 @@ if (!exists('num_reads')) {
 }
 
 if (!exists('num_subsampling')) {
-  num_subsampling <- '10'
+  num_subsampling <- '5'
 }
 
 # minimap2 v2.26
