@@ -161,3 +161,9 @@ qsub overlap_with_RBPs_chr.sh
 qsub overlap_with_RBPs_nucleo.sh
 qsub overlap_with_RBPs_cyto.sh
 ```
+## Subsampling reads obtained through Nanopore dRNA sequencing 
+To perform library-level and gene-level subsampling on the reads obtained through Nanopore dRNA sequencing of the RNAs from chromatin, nucleoplasm and cytoplasm fractions, create an environment with the installation of minimap2 (v2.26-r1175), samtools (v1.17) and seqtk (v1.4-r122).
+Then, activate R environment and run the following command:
+```
+Rscript subsampling_reads.R path_fastq_chr_ass='/path/to/chromatin_associated_PASS_reads.fastq' path_fastq_nucleo='/path/to/nucleoplasmic_PASS_reads.fastq' path_fastq_cyto='/path/to/cytoplasmic_PASS_reads.fastq' cond1='chr' cond2='nucleo' cond3='cyto'
+```
