@@ -22,8 +22,6 @@ rm_SNPs <- function(path_SNPs_SUM, path_SNPs_k562, hits) {
                               ranges = IRanges(start = vcf_SUM$V2, end=vcf_SUM$V2))
     grange_vcf_SUM <- resize(grange_vcf_SUM, 5, 'center')
     
-    length(hits)
-    
     over_hits_eligos_vcf_SUM <- suppressWarnings(findOverlaps(hits,grange_vcf_SUM, type = 'any', ignore.strand=TRUE))
     hits_without_SNPs_SUM <- hits[-unique(queryHits(over_hits_eligos_vcf_SUM))]
     
