@@ -18,7 +18,7 @@ save(DRACH, file='/path/to/R_data/DRACH_forward_strand.Rda')
 
 ##########
 
-# load the tsv file with the output of m6Anet for the three fractions for all the 10 samplings
+# load the tsv file with the output of m6Anet for the three fractions for all the 5 samplings
 m6Anet_fractions_4sU_chr_ass <- list.files(path = '/path/to/fractions_m6anet_4sU_library_gene_subsampling_prob0.9/chr', pattern = 'tsv', full.names = TRUE)
 m6Anet_fractions_4sU_nucleo <- list.files(path = '/path/to/fractions_analysis_Paola_SUM159/fractions_m6anet_4sU_library_gene_subsampling_prob0.9/nucleo', pattern = 'tsv', full.names = TRUE)
 m6Anet_fractions_4sU_cyto <- list.files(path = '/path/to/fractions_analysis_Paola_SUM159/fractions_m6anet_4sU_library_gene_subsampling_prob0.9/cyto', pattern = 'tsv', full.names = TRUE)
