@@ -76,7 +76,7 @@ five_UTR_coord <- fiveUTRsByTranscript(txdb)
 # create a vector with the names of the gene to which each 5'UTR belongs, 
 # keeping also the repeated genes in case more consecutive 5'UTRs belong to the same gene
 five_UTR_coord_genes_names <- lapply(five_UTR_coord, function(x) exon_gene[mcols(x)$exon_name])
-# split the vector of 5'UTR names on the base of the the vector of gene names
+# split the vector of 5'UTR names on the base of the vector of gene names
 five_UTR_coord_bygene <- split(unlist(five_UTR_coord), unname(unlist(five_UTR_coord_genes_names)))
 # merge the overlapping ranges
 five_UTR_coord_bygene_red <- lapply(five_UTR_coord_bygene, reduce)
@@ -91,7 +91,7 @@ three_UTR_coord <- threeUTRsByTranscript(txdb)
 # create a vector with the names of the gene to which each 3'UTR belongs, 
 # keeping also the repeated genes in case more consecutive 3'UTRs belong to the same gene
 three_UTR_coord_genes_names <- lapply(three_UTR_coord, function(x) exon_gene[mcols(x)$exon_name])
-# split the vector of 3'UTR names on the base of the the vector of gene names
+# split the vector of 3'UTR names on the base of the vector of gene names
 three_UTR_coord_bygene <- split(unlist(three_UTR_coord), unname(unlist(three_UTR_coord_genes_names)))
 # merge the overlapping ranges
 three_UTR_coord_bygene_red <- lapply(three_UTR_coord_bygene, reduce)
@@ -138,7 +138,7 @@ tmp <- lapply(seq_along(cds_coord), function(y, n, i) {
 }, y = cds_coord, n = names(cds_coord))
 gene_name_for_split <- unlist(tmp)
 
-# split the vector of coding regions' names on the base of the the vector of gene names
+# split the vector of coding regions' names on the base of the vector of gene names
 cds_coord_bygene <- split(unlist(cds_coord), unname(gene_name_for_split))
 # extract for each transcript annotated to each gene the most 3' coding region
 cds_coord_bygene_last_cds_per_tx <- lapply(cds_coord_bygene, f)
