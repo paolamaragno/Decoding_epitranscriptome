@@ -44,7 +44,7 @@ rm_SNPs <- function(path_SNPs_SUM, path_SNPs_k562, hits) {
 # create a folder /hits_ELIGOS/ inside path_directory in which you will save the hits of each fraction 
 # confirmed by 5 samplings
 ELIGOS_results <- function(path_directory, 
-                           name_pdf_overlap_10samplings_chr_ass, name_pdf_overlap_10samplings_nucleo, name_pdf_overlap_10samplings_cyto,
+                           name_pdf_overlap_5samplings_chr_ass, name_pdf_overlap_5samplings_nucleo, name_pdf_overlap_5samplings_cyto,
                            name_pdf_histogram_chr_ass, name_pdf_histogram_nucleo, name_pdf_histogram_cyto,
                            name_pdf_overlap_3fractions, p, ap, OR) {
   
@@ -118,22 +118,22 @@ ELIGOS_results <- function(path_directory,
   # create a heatmap that reports the overlap between the hits identified in one sampling vs the hits identified 
   # in each other sampling
   gr_eligos_chr_ass <- unlist(gr_eligos_chr_ass)
-  pdf(file = paste0(path_directory, 'chr/', name_pdf_overlap_10samplings_chr_ass), width = 5, height = 7)
+  pdf(file = paste0(path_directory, 'chr/', name_pdf_overlap_5samplings_chr_ass), width = 5, height = 7)
   overlapOfGRanges(gr_eligos_chr_ass,plot = TRUE)
   dev.off()
   
   gr_eligos_nucleo <- unlist(gr_eligos_nucleo)
-  pdf(file = paste0(path_directory, 'nucleo/', name_pdf_overlap_10samplings_nucleo), width = 5, height = 7)
+  pdf(file = paste0(path_directory, 'nucleo/', name_pdf_overlap_5samplings_nucleo), width = 5, height = 7)
   overlapOfGRanges(gr_eligos_nucleo,plot = TRUE)
   dev.off()
   
   gr_eligos_cyto <- unlist(gr_eligos_cyto)
-  pdf(file = paste0(path_directory, 'cyto/', name_pdf_overlap_10samplings_cyto), width = 5, height = 7)
+  pdf(file = paste0(path_directory, 'cyto/', name_pdf_overlap_5samplings_cyto), width = 5, height = 7)
   overlapOfGRanges(gr_eligos_cyto,plot = TRUE)
   dev.off()
   
   eligos_chr_ass_all_samplings <- c(gr_eligos_chr_ass[[1]],gr_eligos_chr_ass[[2]],gr_eligos_chr_ass[[3]],gr_eligos_chr_ass[[4]],gr_eligos_chr_ass[[5]])
-  eligos_chr_ass_all_samplings_without_SNPs <- rm_SNPs("/path/to/SNPs_SUM159_hg38.bed","/path/to/SNPs_k562_hg38.bed",eligos_chr_ass_all_samplings)
+  eligos_chr_ass_all_samplings_without_SNPs <- rm_SNPs("/path/to/SNPs_SUM159_hg38.bed","/path/to/SNPs_k562_hg38.vcf",eligos_chr_ass_all_samplings)
   
   confirmed_by_chr <- data.frame(num_samplings=seq(1,5), num_hits=rep(0,5))
   confirmed_by_5_chr <- c()
@@ -168,7 +168,7 @@ ELIGOS_results <- function(path_directory,
   mcols(hits_eligos_chr_ass_confirmed_5) <- cbind(mcols(hits_eligos_chr_ass_confirmed_5), gene_id = gene_ids)
   
   eligos_nucleo_all_samplings <- c(gr_eligos_nucleo[[1]],gr_eligos_nucleo[[2]],gr_eligos_nucleo[[3]],gr_eligos_nucleo[[4]],gr_eligos_nucleo[[5]])
-  eligos_nucleo_all_samplings_without_SNPs <- rm_SNPs("/path/to/SNPs_SUM159_hg38.bed","/path/to/SNPs_k562_hg38.bed",eligos_nucleo_all_samplings)
+  eligos_nucleo_all_samplings_without_SNPs <- rm_SNPs("/path/to/SNPs_SUM159_hg38.bed","/path/to/SNPs_k562_hg38.vcf",eligos_nucleo_all_samplings)
   
   confirmed_by_nucleo <- data.frame(num_samplings=seq(1,5), num_hits=rep(0,5))
   confirmed_by_5_nucleo <- c()
@@ -199,7 +199,7 @@ ELIGOS_results <- function(path_directory,
   mcols(hits_eligos_nucleo_confirmed_5) <- cbind(mcols(hits_eligos_nucleo_confirmed_5), gene_id = gene_ids)
   
   eligos_cyto_all_samplings <- c(gr_eligos_cyto[[1]],gr_eligos_cyto[[2]],gr_eligos_cyto[[3]],gr_eligos_cyto[[4]],gr_eligos_cyto[[5]])
-  eligos_cyto_all_samplings_without_SNPs <- rm_SNPs("/path/to/SNPs_SUM159_hg38.bed","/path/to/SNPs_k562_hg38.bed",eligos_cyto_all_samplings)
+  eligos_cyto_all_samplings_without_SNPs <- rm_SNPs("/path/to/SNPs_SUM159_hg38.bed","/path/to/SNPs_k562_hg38.vcf",eligos_cyto_all_samplings)
   
   confirmed_by_cyto <- data.frame(num_samplings=seq(1,5), num_hits=rep(0,5))
   confirmed_by_5_cyto <- c()
