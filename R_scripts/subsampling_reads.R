@@ -3,9 +3,10 @@
 args = commandArgs(trailingOnly=TRUE)
 
 # to run the script from the terminal: Rscript subsampling_reads.R [list of arguments]
-# Arguments: path to the fastq file of each fraction, path to the reference genome (optional), path to the gtf file (optional), number
-# of threads for the mapping (optional), minimum number of reads mapping on each gene (optional), number of samplings to do (optional), 
-# path to minimap2, samtools and seqtk tools (optional) and the different conditions with the same order of the corresponding fastq files
+# Arguments: path to the fastq file of each fraction (path_fastq_chr_ass, path_fastq_nucleo, path_fastq_cyto), path to the reference genome (optional), 
+# path to the gtf file (optional), number of threads for the mapping (optional), minimum number of reads mapping on each gene (optional), 
+# number of gene-level samplings to do (optional), path to minimap2, samtools and seqtk tools (optional) 
+# and the different conditions with the same order of the corresponding fastq files (cond1, cond2, cond3)
 
 for(v in args)
 {
