@@ -212,7 +212,8 @@ ELIGOS_results <- function(path_directory, gr) {
   gr_eligos_chr_ass <- unlist(gr_eligos_chr_ass)
   gr_eligos_nucleo <- unlist(gr_eligos_nucleo)
   gr_eligos_cyto <- unlist(gr_eligos_cyto)
-  
+
+  # remove ELIGOS hits overlapping with the coordinates of the SNPs of SUM159 and k562 cell lines
   eligos_chr_ass_all_samplings <- c(gr_eligos_chr_ass[[1]],gr_eligos_chr_ass[[2]],gr_eligos_chr_ass[[3]],gr_eligos_chr_ass[[4]],gr_eligos_chr_ass[[5]])
   eligos_chr_ass_all_samplings_without_SNPs <- rm_SNPs("/path/to/SNPs_SUM_hg38.bed","/path/to/IVT_k562_hg38.vcf",eligos_chr_ass_all_samplings)
   
