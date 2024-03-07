@@ -1,5 +1,6 @@
 library('GenomicFeatures')
 library('GenomicRanges')
+library('bedr')
 
 gtf_file <- "/path/to/Homo_sapiens.GRCh38.104.gtf"
 txdb <- makeTxDbFromGFF(gtf_file)
