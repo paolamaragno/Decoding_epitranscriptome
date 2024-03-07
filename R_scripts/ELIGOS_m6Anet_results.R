@@ -24,7 +24,7 @@ rm_SNPs <- function(bed_SNPs_SUM159, bed_SNPs_k562, hits) {
     
     grange_bed_SUM159 <- GRanges(seqnames = bed_SNPs_SUM159$V1,
                             ranges = IRanges(start = bed_SNPs_SUM159$V2, end=bed_SNPs_SUM159$V2)) 
-    grange_bed_SUM159 <- resize(grange_bed_SUM, 5, 'center')
+    grange_bed_SUM159 <- resize(grange_bed_SUM159, 5, 'center')
   
     over_hits_eligos_bed_SUM <- suppressWarnings(findOverlaps(hits,grange_bed_SUM159, type = 'any', ignore.strand=TRUE))
     hits_without_SNPs_SUM <- hits[-unique(queryHits(over_hits_eligos_bed_SUM))]
