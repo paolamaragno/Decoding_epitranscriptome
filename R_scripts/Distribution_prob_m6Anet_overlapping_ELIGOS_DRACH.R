@@ -164,8 +164,8 @@ rm_SNPs <- function(path_SNPs_SUM, path_SNPs_k562, hits) {
     vcf_k562<-read.vcf(path_SNPs_k562)
     bed_k562<-vcf2bed(vcf_k562, filename = NULL, header = FALSE, other = NULL, verbose = TRUE)
 
-    grange_bed_k562 <- GRanges(seqnames = gsub('chr', '', bed_k562$V1),
-                               ranges = IRanges(start = bed_k562$V2, end=bed_k562$V2))
+    grange_bed_k562 <- GRanges(seqnames = gsub('chr', '', bed_k562$chr),
+                               ranges = IRanges(start = bed_k562$start, end=bed_k562$end))
     grange_bed_k562 <- resize(grange_bed_k562, 5, 'center')
     
     over_hits_eligos_bed_k562 <- suppressWarnings(findOverlaps(hits_without_SNPs_SUM,grange_bed_k562, type = 'any', ignore.strand=TRUE))
