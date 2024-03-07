@@ -150,15 +150,15 @@ ELIGOS_results_min05_mag05_min1 <- function(path_directory, p, ap, OR) {
 }
 
 # function to remove ELIGOS hits overlapping with the coordinates of the SNPs of SUM159 and k562 cell lines
-rm_SNPs <- function(path_SNPs_SUM, path_SNPs_k562, hits) {
+rm_SNPs <- function(path_SNPs_SUM159, path_SNPs_k562, hits) {
     # SNPs SUM159 on hg38
-    bed_SUM <-read.table(path_SNPs_SUM)
+    bed_SUM159 <-read.table(path_SNPs_SUM159)
     
-    grange_bed_SUM <- GRanges(seqnames = bed_SUM$V1,
-                            ranges = IRanges(start = bed_SUM$V2, end=bed_SUM$V2)) 
-    grange_bed_SUM <- resize(grange_bed_SUM, 5, 'center')
+    grange_bed_SUM159 <- GRanges(seqnames = bed_SUM159$V1,
+                            ranges = IRanges(start = bed_SUM159$V2, end=bed_SUM159$V2)) 
+    grange_bed_SUM159 <- resize(grange_bed_SUM159, 5, 'center')
   
-    over_hits_eligos_bed_SUM <- suppressWarnings(findOverlaps(hits,grange_bed_SUM, type = 'any', ignore.strand=TRUE))
+    over_hits_eligos_bed_SUM <- suppressWarnings(findOverlaps(hits,grange_bed_SUM159, type = 'any', ignore.strand=TRUE))
     hits_without_SNPs_SUM <- hits[-unique(queryHits(over_hits_eligos_bed_SUM))]
   
     # SNPs k562 on hg38
