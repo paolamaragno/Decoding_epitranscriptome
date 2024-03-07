@@ -527,7 +527,7 @@ DRACH_overlap_ELIGOS <- function(path_directory, hits_ELIGOS_chr, hits_ELIGOS_nu
 # path_directory is the path to the directory containing three folders: /chr/, /nucleo/, /cyto/ each with the 5 tsv files 
 # produced by m6Anet for each of the 5 samplings
 m6Anet_results <- function(path_directory, gr_m6Anet_chr_ass, gr_m6Anet_nucleo, gr_m6Anet_cyto,
-                           name_pdf_overlap_10samplings_chr_ass, name_pdf_overlap_10samplings_nucleo, name_pdf_overlap_10samplings_cyto,
+                           name_pdf_overlap_5samplings_chr_ass, name_pdf_overlap_5samplings_nucleo, name_pdf_overlap_5samplings_cyto,
                            name_pdf_histogram_chr_ass, name_pdf_histogram_nucleo, name_pdf_histogram_cyto,
                            name_pdf_overlap_3fractions) {
   
@@ -547,17 +547,17 @@ m6Anet_results <- function(path_directory, gr_m6Anet_chr_ass, gr_m6Anet_nucleo, 
   # create a heatmap that reports the overlap between the hits identified in one sampling vs the hits identified 
   # in each other sampling
   gr_m6anet_chr_ass <- unlist(gr_m6anet_chr_ass)
-  pdf(file = paste0(path_directory, '/chr/', name_pdf_overlap_10samplings_chr_ass), width = 5, height = 7)
+  pdf(file = paste0(path_directory, '/chr/', name_pdf_overlap_5samplings_chr_ass), width = 5, height = 7)
   overlapOfGRanges(gr_m6anet_chr_ass,plot = TRUE)
   dev.off()
   
   gr_m6anet_nucleo <- unlist(gr_m6anet_nucleo)
-  pdf(file = paste0(path_directory, '/nucleo/', name_pdf_overlap_10samplings_nucleo), width = 5, height = 7)
+  pdf(file = paste0(path_directory, '/nucleo/', name_pdf_overlap_5samplings_nucleo), width = 5, height = 7)
   overlapOfGRanges(gr_m6anet_nucleo,plot = TRUE)
   dev.off()
   
   gr_m6anet_cyto <- unlist(gr_m6anet_cyto)
-  pdf(file = paste0(path_directory, '/cyto/', name_pdf_overlap_10samplings_cyto), width = 5, height = 7)
+  pdf(file = paste0(path_directory, '/cyto/', name_pdf_overlap_5samplings_cyto), width = 5, height = 7)
   overlapOfGRanges(gr_m6anet_cyto,plot = TRUE)
   dev.off()
   
@@ -566,7 +566,7 @@ m6Anet_results <- function(path_directory, gr_m6Anet_chr_ass, gr_m6Anet_nucleo, 
   confirmed_by_chr <- data.frame(num_samplings=seq(1,5), num_hits=rep(0,5))
   confirmed_by_5_chr <- c()
   
-  # identify the hits present in at least 5 samplings (any type of overlap)
+  # identify the hits present in all the 5 samplings (any type of overlap)
   for (r in 1:length(m6anet_chr_ass_all_samplings)) {
     gr_r_rep <- queryHits(findOverlaps(m6anet_chr_ass_all_samplings, m6anet_chr_ass_all_samplings[r], type='any')) 
     confirmed_by_chr[length(unique(m6anet_chr_ass_all_samplings[gr_r_rep]$rep)),2] <- confirmed_by_chr[length(unique(m6anet_chr_ass_all_samplings[gr_r_rep]$rep)),2] +1
@@ -792,9 +792,8 @@ DRACH_overlap_m6Anet <- function(path_directory, hits_m6Anet_chr, hits_m6Anet_nu
 
 # path_directory is the path to directory containing three folders: /chr/, /nucleo/, /cyto/ each with the 5 tsv files 
 # produced by m6Anet for each of the 5 samplings.
-# create a folder /ELIGOS_confirmed_DRACH/ inside path_directory where you will save 
-# ELIGOS DRACH+ hits confirmed by m6Anet. Create a folder /not/ inside /ELIGOS_confirmed_DRACH/ where you will save  
-# ELIGOS DRACH+ hits not confirmed by m6Anet
+# create a folder /ELIGOS_confirmed_DRACH/ inside path_directory where you will save ELIGOS DRACH+ hits confirmed by m6Anet. 
+# Create a folder /not/ inside /ELIGOS_confirmed_DRACH/ where you will save ELIGOS DRACH+ hits not confirmed by m6Anet
 comparison_ELIGOS_m6Anet <- function(path_directory, hits_ELIGOS_chr, hits_ELIGOS_nucleo, hits_ELIGOS_cyto, 
                                      hits_ELIGOS_chr_DRACH, hits_ELIGOS_nucleo_DRACH, hits_ELIGOS_cyto_DRACH, 
                                      hits_m6Anet_chr, hits_m6Anet_nucleo, hits_m6Anet_cyto,
