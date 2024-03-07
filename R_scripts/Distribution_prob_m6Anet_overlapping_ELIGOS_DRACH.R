@@ -339,7 +339,7 @@ DRACH_overlap_ELIGOS <- function(path_directory, hits_ELIGOS_chr, hits_ELIGOS_nu
 ####################
 
 gr_ELIGOS_min05_min05_min1 <- ELIGOS_results_min05_min_05_min1(path_directory = '/path/to/fractions_eligos_4sU_library_gene_subsampling_min05_min05_min1/', p=0.05,ap=0.05,OR=1)
-confirmed_hits_ELIGOS_min05_min05_min1 <- ELIGOS_results(path_directory = '/path/to/fractions_analysis_Paola_SUM159/fractions_eligos_4sU_library_gene_subsampling_min05_min05_min1/',gr_ELIGOS_min05_min05_min1)
+confirmed_hits_ELIGOS_min05_min05_min1 <- ELIGOS_results(path_directory = '/path/to/fractions_eligos_4sU_library_gene_subsampling_min05_min05_min1/',gr_ELIGOS_min05_min05_min1)
 confirmed_hits_DRACH_ELIGOS_min05_min05_min1 <- DRACH_overlap_ELIGOS(path_directory = '/path/to/fractions_eligos_4sU_library_gene_subsampling_min05_min05_min1/',
                                                                      hits_ELIGOS_chr = confirmed_hits_ELIGOS_min05_min05_min1[[1]], hits_ELIGOS_nucleo = confirmed_hits_ELIGOS_min05_min05_min1[[2]], hits_ELIGOS_cyto = confirmed_hits_ELIGOS_min05_min05_min1[[3]])
 
