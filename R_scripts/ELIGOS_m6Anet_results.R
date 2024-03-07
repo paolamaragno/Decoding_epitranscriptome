@@ -115,7 +115,8 @@ ELIGOS_results <- function(path_directory,
     mcols(gr_eligos_cyto[[i]]) <- cbind(mcols(gr_eligos_cyto[[i]]), gene_id = gene_ids)
   }
   
-  # create a heatmap that reports the overlap between the hits identified in one sampling vs the hits identified 
+  # remove ELIGOS hits overlapping with the SNPs of SUM159 or K562 cells and create a heatmap that 
+  # reports the overlap between the hits identified in one sampling vs the hits identified 
   # in each other sampling
   gr_eligos_chr_ass <- unlist(gr_eligos_chr_ass)
   gr_eligos_chr_ass_without_SNPs <- lapply(gr_eligos_chr_ass, function(x) rm_SNPs("/Users/paolamarango/Documents/IVT_SNPs/SUM159/SNPs_SUM_hg38.bed","/Users/paolamarango/Documents/IVT_SNPs/k562/IVT_k562_hg38.vcf",x))
