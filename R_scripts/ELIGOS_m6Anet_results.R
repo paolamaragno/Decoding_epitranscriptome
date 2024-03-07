@@ -13,24 +13,24 @@ gtf_file <- "/path/to/Homo_sapiens.GRCh38.104.gtf"
 txdb <- makeTxDbFromGFF(gtf_file)
 genes_txdb <- GenomicFeatures::genes(txdb)
 
-# function to remove ELIGOS hits overlapping with the coordinates of the SNPs of SUM159 and k562 cell lines
-rm_SNPs <- function(path_SNPs_SUM, path_SNPs_k562, hits) {
-    # SNPs SUM159 on hg38
-    bed_SUM <-read.table(path_SNPs_SUM)
-    
-    grange_bed_SUM <- GRanges(seqnames = bed_SUM$V1,
-                            ranges = IRanges(start = bed_SUM$V2, end=bed_SUM$V2)) 
-    grange_bed_SUM <- resize(grange_bed_SUM, 5, 'center')
-  
-    over_hits_eligos_bed_SUM <- suppressWarnings(findOverlaps(hits,grange_bed_SUM, type = 'any', ignore.strand=TRUE))
-    hits_without_SNPs_SUM <- hits[-unique(queryHits(over_hits_eligos_bed_SUM))]
-  
-    # SNPs k562 on hg38
-    vcf_k562<-read.vcf(path_SNPs_k562)
-    bed_k562<-vcf2bed(vcf_k562, filename = NULL, header = FALSE, other = NULL, verbose = TRUE)
+# SNPs SUM159 on hg38
+bed_SNPs_SUM159 <-read.table("/path/to/SNPs_SUM159_hg38.bed")
+# SNPs k562 on hg38
+vcf_SNPs_k562<-read.vcf("/path/to/SNPs_k562_hg38.vcf")
+bed_SNPs_k562<-vcf2bed(vcf_SNPs_k562, filename = NULL, header = FALSE, other = NULL, verbose = TRUE)
 
-    grange_bed_k562 <- GRanges(seqnames = gsub('chr', '', bed_k562$chr),
-                               ranges = IRanges(start = bed_k562$start, end=bed_k562$end))
+# function to remove ELIGOS hits overlapping with the coordinates of the SNPs of SUM159 and k562 cell lines
+rm_SNPs <- function(bed_SNPs_SUM159, bed_SNPs_k562, hits) {
+    
+    grange_bed_SUM159 <- GRanges(seqnames = bed_SNPs_SUM159$V1,
+                            ranges = IRanges(start = bed_SNPs_SUM159$V2, end=bed_SNPs_SUM159$V2)) 
+    grange_bed_SUM159 <- resize(grange_bed_SUM, 5, 'center')
+  
+    over_hits_eligos_bed_SUM <- suppressWarnings(findOverlaps(hits,grange_bed_SUM159, type = 'any', ignore.strand=TRUE))
+    hits_without_SNPs_SUM <- hits[-unique(queryHits(over_hits_eligos_bed_SUM))]
+    
+    grange_bed_k562 <- GRanges(seqnames = gsub('chr', '', bed_SNPs_k562$chr),
+                               ranges = IRanges(start = bed_SNPs_k562$start, end=bed_SNPs_k562$end))
     grange_bed_k562 <- resize(grange_bed_k562, 5, 'center')
     
     over_hits_eligos_bed_k562 <- suppressWarnings(findOverlaps(hits_without_SNPs_SUM,grange_bed_k562, type = 'any', ignore.strand=TRUE))
@@ -119,19 +119,19 @@ ELIGOS_results <- function(path_directory,
   # reports the overlap between the hits identified in one sampling vs the hits identified 
   # in each other sampling
   gr_eligos_chr_ass <- unlist(gr_eligos_chr_ass)
-  gr_eligos_chr_ass_without_SNPs <- lapply(gr_eligos_chr_ass, function(x) rm_SNPs("/path/to/SNPs_SUM_hg38.bed","/path/to/IVT_k562_hg38.vcf",x))
+  gr_eligos_chr_ass_without_SNPs <- lapply(gr_eligos_chr_ass, function(x) rm_SNPs(bed_SNPs_SUM159, bed_SNPs_k562,x))
   pdf(file = paste0(path_directory, 'chr/', name_pdf_overlap_5samplings_chr_ass), width = 5, height = 7)
   overlapOfGRanges(gr_eligos_chr_ass_without_SNPs,plot = TRUE)
   dev.off()
   
   gr_eligos_nucleo <- unlist(gr_eligos_nucleo)
-  gr_eligos_nucleo_without_SNPs <- lapply(gr_eligos_nucleo, function(x) rm_SNPs("/path/to/SNPs_SUM_hg38.bed","/path/to/IVT_k562_hg38.vcf",x))
+  gr_eligos_nucleo_without_SNPs <- lapply(gr_eligos_nucleo, function(x) rm_SNPs(bed_SNPs_SUM159, bed_SNPs_k562, x))
   pdf(file = paste0(path_directory, 'nucleo/', name_pdf_overlap_5samplings_nucleo), width = 5, height = 7)
   overlapOfGRanges(gr_eligos_nucleo_without_SNPs,plot = TRUE)
   dev.off()
   
   gr_eligos_cyto <- unlist(gr_eligos_cyto)
-  gr_eligos_cyto_without_SNPs <- lapply(gr_eligos_cyto, function(x) rm_SNPs("/path/to/SNPs_SUM_hg38.bed","/path/to/IVT_k562_hg38.vcf",x))
+  gr_eligos_cyto_without_SNPs <- lapply(gr_eligos_cyto, function(x) rm_SNPs(bed_SNPs_SUM159, bed_SNPs_k562, x))
   pdf(file = paste0(path_directory, 'cyto/', name_pdf_overlap_5samplings_cyto), width = 5, height = 7)
   overlapOfGRanges(gr_eligos_cyto_without_SNPs,plot = TRUE)
   dev.off()
