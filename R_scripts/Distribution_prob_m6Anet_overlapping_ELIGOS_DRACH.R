@@ -150,29 +150,26 @@ ELIGOS_results_min05_mag05_min1 <- function(path_directory, p, ap, OR) {
 
 # function to remove ELIGOS hits overlapping with the coordinates of the SNPs of SUM159 and k562 cell lines
 rm_SNPs <- function(path_SNPs_SUM, path_SNPs_k562, hits) {
-    
     # SNPs SUM159 on hg38
-    vcf_SUM <-read.table(path_SNPs_SUM)
+    bed_SUM <-read.table(path_SNPs_SUM)
     
-    grange_vcf_SUM <- GRanges(seqnames = vcf_SUM$V1,
-                              ranges = IRanges(start = vcf_SUM$V2, end=vcf_SUM$V2))
-    grange_vcf_SUM <- resize(grange_vcf_SUM, 5, 'center')
-    
-    length(hits)
-    
-    over_hits_eligos_vcf_SUM <- suppressWarnings(findOverlaps(hits,grange_vcf_SUM, type = 'any', ignore.strand=TRUE))
-    hits_without_SNPs_SUM <- hits[-unique(queryHits(over_hits_eligos_vcf_SUM))]
-    
+    grange_bed_SUM <- GRanges(seqnames = bed_SUM$V1,
+                            ranges = IRanges(start = bed_SUM$V2, end=bed_SUM$V2)) 
+    grange_bed_SUM <- resize(grange_bed_SUM, 5, 'center')
+  
+    over_hits_eligos_bed_SUM <- suppressWarnings(findOverlaps(hits,grange_bed_SUM, type = 'any', ignore.strand=TRUE))
+    hits_without_SNPs_SUM <- hits[-unique(queryHits(over_hits_eligos_bed_SUM))]
+  
     # SNPs k562 on hg38
-    vcf_k562 <-read.table(path_SNPs_k562)
+    vcf_k562<-read.vcf(path_SNPs_k562)
+    bed_k562<-vcf2bed(vcf_k562, filename = NULL, header = FALSE, other = NULL, verbose = TRUE)
+
+    grange_bed_k562 <- GRanges(seqnames = gsub('chr', '', bed_k562$V1),
+                               ranges = IRanges(start = bed_k562$V2, end=bed_k562$V2))
+    grange_bed_k562 <- resize(grange_bed_k562, 5, 'center')
     
-    grange_vcf_k562 <- GRanges(seqnames = gsub('chr', '', vcf_k562$V1),
-                               ranges = IRanges(start = vcf_k562$V2, end=vcf_k562$V2))
-    grange_vcf_k562 <- resize(grange_vcf_k562, 5, 'center')
-    
-    over_hits_eligos_vcf_k562 <- suppressWarnings(findOverlaps(hits_without_SNPs_SUM,grange_vcf_k562, type = 'any', ignore.strand=TRUE))
-    length(unique(queryHits(over_hits_eligos_vcf_k562)))
-    hits_without_SNPs_SUM_k562 <- hits_without_SNPs_SUM[-unique(queryHits(over_hits_eligos_vcf_k562))]
+    over_hits_eligos_bed_k562 <- suppressWarnings(findOverlaps(hits_without_SNPs_SUM,grange_bed_k562, type = 'any', ignore.strand=TRUE))
+    hits_without_SNPs_SUM_k562 <- hits_without_SNPs_SUM[-unique(queryHits(over_hits_eligos_bed_k562))]
     
     return(hits_without_SNPs_SUM_k562)
 }
@@ -217,7 +214,7 @@ ELIGOS_results <- function(path_directory, gr) {
   gr_eligos_cyto <- unlist(gr_eligos_cyto)
   
   eligos_chr_ass_all_samplings <- c(gr_eligos_chr_ass[[1]],gr_eligos_chr_ass[[2]],gr_eligos_chr_ass[[3]],gr_eligos_chr_ass[[4]],gr_eligos_chr_ass[[5]])
-  eligos_chr_ass_all_samplings_without_SNPs <- rm_SNPs("/Users/paolamarango/Documents/IVT_SNPs/SUM159/SNPs_SUM_hg38.bed","/Users/paolamarango/Documents/IVT_SNPs/k562/IVT_k562_hg38.vcf",eligos_chr_ass_all_samplings)
+  eligos_chr_ass_all_samplings_without_SNPs <- rm_SNPs("/path/to/SNPs_SUM_hg38.bed","/path/to/IVT_k562_hg38.vcf",eligos_chr_ass_all_samplings)
   
   confirmed_by_chr <- data.frame(num_samplings=seq(1,5), num_hits=rep(0,5))
   confirmed_by_5_chr <- c()
@@ -252,7 +249,7 @@ ELIGOS_results <- function(path_directory, gr) {
   mcols(hits_eligos_chr_ass_confirmed_5) <- cbind(mcols(hits_eligos_chr_ass_confirmed_5), gene_id = gene_ids)
   
   eligos_nucleo_all_samplings <- c(gr_eligos_nucleo[[1]],gr_eligos_nucleo[[2]],gr_eligos_nucleo[[3]],gr_eligos_nucleo[[4]],gr_eligos_nucleo[[5]])
-  eligos_nucleo_all_samplings_without_SNPs <- rm_SNPs("/Users/paolamarango/Documents/IVT_SNPs/SUM159/SNPs_SUM_hg38.bed","/Users/paolamarango/Documents/IVT_SNPs/k562/IVT_k562_hg38.vcf",eligos_nucleo_all_samplings)
+  eligos_nucleo_all_samplings_without_SNPs <- rm_SNPs("/path/to/SNPs_SUM_hg38.bed","/path/to/IVT_k562_hg38.vcf",eligos_nucleo_all_samplings)
   
   confirmed_by_nucleo <- data.frame(num_samplings=seq(1,5), num_hits=rep(0,5))
   confirmed_by_5_nucleo <- c()
@@ -283,7 +280,7 @@ ELIGOS_results <- function(path_directory, gr) {
   mcols(hits_eligos_nucleo_confirmed_5) <- cbind(mcols(hits_eligos_nucleo_confirmed_5), gene_id = gene_ids)
   
   eligos_cyto_all_samplings <- c(gr_eligos_cyto[[1]],gr_eligos_cyto[[2]],gr_eligos_cyto[[3]],gr_eligos_cyto[[4]],gr_eligos_cyto[[5]])
-  eligos_cyto_all_samplings_without_SNPs <- rm_SNPs("/Users/paolamarango/Documents/IVT_SNPs/SUM159/SNPs_SUM_hg38.bed","/Users/paolamarango/Documents/IVT_SNPs/k562/IVT_k562_hg38.vcf",eligos_cyto_all_samplings)
+  eligos_cyto_all_samplings_without_SNPs <- rm_SNPs("/path/to/SNPs_SUM_hg38.bed","/path/to/IVT_k562_hg38.vcf",eligos_cyto_all_samplings)
   
   confirmed_by_cyto <- data.frame(num_samplings=seq(1,5), num_hits=rep(0,5))
   confirmed_by_5_cyto <- c()
