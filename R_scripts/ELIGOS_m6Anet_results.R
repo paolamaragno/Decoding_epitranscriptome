@@ -119,19 +119,19 @@ ELIGOS_results <- function(path_directory,
   # reports the overlap between the hits identified in one sampling vs the hits identified 
   # in each other sampling
   gr_eligos_chr_ass <- unlist(gr_eligos_chr_ass)
-  gr_eligos_chr_ass_without_SNPs <- lapply(gr_eligos_chr_ass, function(x) rm_SNPs("/Users/paolamarango/Documents/IVT_SNPs/SUM159/SNPs_SUM_hg38.bed","/Users/paolamarango/Documents/IVT_SNPs/k562/IVT_k562_hg38.vcf",x))
+  gr_eligos_chr_ass_without_SNPs <- lapply(gr_eligos_chr_ass, function(x) rm_SNPs("/path/to/SNPs_SUM_hg38.bed","/path/to/IVT_k562_hg38.vcf",x))
   pdf(file = paste0(path_directory, 'chr/', name_pdf_overlap_5samplings_chr_ass), width = 5, height = 7)
   overlapOfGRanges(gr_eligos_chr_ass_without_SNPs,plot = TRUE)
   dev.off()
   
   gr_eligos_nucleo <- unlist(gr_eligos_nucleo)
-  gr_eligos_nucleo_without_SNPs <- lapply(gr_eligos_nucleo, function(x) rm_SNPs("/Users/paolamarango/Documents/IVT_SNPs/SUM159/SNPs_SUM_hg38.bed","/Users/paolamarango/Documents/IVT_SNPs/k562/IVT_k562_hg38.vcf",x))
+  gr_eligos_nucleo_without_SNPs <- lapply(gr_eligos_nucleo, function(x) rm_SNPs("/path/to/SNPs_SUM_hg38.bed","/path/to/IVT_k562_hg38.vcf",x))
   pdf(file = paste0(path_directory, 'nucleo/', name_pdf_overlap_5samplings_nucleo), width = 5, height = 7)
   overlapOfGRanges(gr_eligos_nucleo_without_SNPs,plot = TRUE)
   dev.off()
   
   gr_eligos_cyto <- unlist(gr_eligos_cyto)
-  gr_eligos_cyto_without_SNPs <- lapply(gr_eligos_cyto, function(x) rm_SNPs("/Users/paolamarango/Documents/IVT_SNPs/SUM159/SNPs_SUM_hg38.bed","/Users/paolamarango/Documents/IVT_SNPs/k562/IVT_k562_hg38.vcf",x))
+  gr_eligos_cyto_without_SNPs <- lapply(gr_eligos_cyto, function(x) rm_SNPs("/path/to/SNPs_SUM_hg38.bed","/path/to/IVT_k562_hg38.vcf",x))
   pdf(file = paste0(path_directory, 'cyto/', name_pdf_overlap_5samplings_cyto), width = 5, height = 7)
   overlapOfGRanges(gr_eligos_cyto_without_SNPs,plot = TRUE)
   dev.off()
