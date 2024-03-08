@@ -265,13 +265,13 @@ ELIGOS_results <- function(path_directory,
   colnames(mods) <- c('chr_ass','nucleo','cyto')
   rownames(mods) <- c('# hits >= 1 samplings','# hits in 5 samplings', '# hits in 5 samplings after reduce')
   
-  mods[1,1] <- length(eligos_chr_ass_all_samplings)
+  mods[1,1] <- length(eligos_chr_ass_all_samplings_without_SNPs)
   mods[2,1] <- confirmed_by_chr[5,2]
   mods[3,1] <- length(hits_eligos_chr_ass_confirmed_5)
-  mods[1,2] <- length(eligos_nucleo_all_samplings)
+  mods[1,2] <- length(eligos_nucleo_all_samplings_without_SNPs)
   mods[2,2] <- confirmed_by_nucleo[5,2]
   mods[3,2] <- length(hits_eligos_nucleo_confirmed_5)
-  mods[1,3] <- length(eligos_cyto_all_samplings)
+  mods[1,3] <- length(eligos_cyto_all_samplings_without_SNPs)
   mods[2,3] <- confirmed_by_cyto[5,2]
   mods[3,3] <- length(hits_eligos_cyto_confirmed_5)
   
