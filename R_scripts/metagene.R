@@ -139,7 +139,7 @@ count_mods <- function(directory) {
       }
       
       # use the information in m2 to indicate in m with NA which are the genes that lack of one or more gene parts and which
-      # they are 
+      # gene parts they are 
       for (r in 1:nrow(m2)) {
         for (c in 1:ncol(m2)) {
           if (m2[r,c] == 0) {
@@ -298,6 +298,7 @@ count_mods(directory='/path/to/fractions_eligos_4sU_library_gene_subsampling_rep
 count_mods(directory='/path/to/fractions_eligos_4sU_library_gene_subsampling_rep2_min05_min05_mag1/')
 count_mods(directory='/path/to/fractions_eligos_4sU_library_gene_subsampling_nascent_min05_min05_mag1/')
 count_mods(directory='/path/to/fractions_eligos_4sU_library_gene_subsampling_total_510645_min05_min05_mag1/')
+count_mods(directory='/path/to/fractions_eligos_STORM_K562/eligos_total_reads/')
 
 
 ###########
