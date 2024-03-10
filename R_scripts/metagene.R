@@ -44,7 +44,7 @@ count_mods <- function(directory) {
   
   f2 <- function(R_objects) {
     
-    # create three matrix that will be used to report the Spearman correlation between the number of hits
+    # create three matrices that will be used to report the Spearman correlation between the number of hits
     # identified in each gene part and different gene features
     correlation_read_counts <- matrix(nrow=3, ncol=5)
     colnames(correlation_read_counts) <- c('5UTR', 'coding exon', 'intron', 'stop codon', '3UTR')
