@@ -161,74 +161,71 @@ motif_analysis <- function(path_directory) {
 
 #################
 
-# rep1
-motif_analysis('/path/to/fractions_eligos_4sU_library_gene_subsampling_rep1_min05_min05_mag1/')
-
-# rep2
 # in the file /sea_out/sequences.tsv, for each motif identified as enriched by SEA, there is the id of the input sequences
-# in which that motif is present. I saved all the columns but the first in a xlsx file (as MAGGACAV.xlsx) 
-t <- read_xlsx('/path/to/fractions_eligos_4sU_library_gene_subsampling_rep2_min05_min05_mag1/xstreme/MAGGACAV.xlsx',col_names = FALSE)
+# in which that motif is present. Save all the columns but the first in a xlsx file (as CGGAGGR.xlsx) 
 
-# remove the sequences there are false positives and the ones that have been used as controls 
-t <- t[-which(t$...5 =='fp'),]
-t <- t[-which(t$...6 ==1),]
-t <- t[,3]
-write.xlsx(x = data.frame(t),file = '/path/to/fractions_eligos_4sU_library_gene_subsampling_rep2_min05_min05_mag1/xstreme/MAGGACAV.xlsx',col.names = FALSE)
-motif_analysis('/path/to/fractions_eligos_4sU_library_gene_subsampling_rep2_min05_min05_mag1/')
+t <- read_xlsx('/path/to/fractions_eligos_4sU_library_gene_subsampling_min05_min05_mag1/xstreme/CGGAGGR.xlsx',col_names = FALSE)
 
-# nascent
-motif_analysis('/path/to/fractions_eligos_4sU_library_gene_subsampling_nascent_min05_min05_mag1/')
-
-# total
-t <- read_xlsx('/path/to/fractions_eligos_4sU_library_gene_subsampling_min05_min05_mag1/xstreme/CCYCUG.xlsx',col_names = FALSE)
-
-t <- t[-which(t$...4 =='fp'),]
-t <- t[-which(t$...5 ==1),]
-t <- t[,2]
-write.xlsx(x = data.frame(t),file = '/path/to/fractions_eligos_4sU_library_gene_subsampling_min05_min05_mag1/xstreme/CCYCUG.xlsx',col.names = FALSE )
-
-t <- read_xlsx('/path/to/fractions_eligos_4sU_library_gene_subsampling_min05_min05_mag1/xstreme/AGAGARR.xlsx',col_names = FALSE)
-
-t <- t[-which(t$...4 =='fp'),]
-t <- t[-which(t$...5 ==1),]
-t <- t[,2]
-write.xlsx(x = data.frame(t),file = '/path/to/fractions_eligos_4sU_library_gene_subsampling_min05_min05_mag1/xstreme/AGAGARR.xlsx',col.names = FALSE )
+t <- t[-which(t$...3 =='fp'),]
+t <- t[-which(t$...4 ==1),]
+t <- t[,1]
+write.xlsx(x = data.frame(t),file = '/path/to/fractions_eligos_4sU_library_gene_subsampling_min05_min05_mag1/xstreme/CGGAGGR.xlsx',col.names = FALSE )
 
 t <- read_xlsx('/path/to/fractions_eligos_4sU_library_gene_subsampling_min05_min05_mag1/xstreme/GAAGGAA.xlsx',col_names = FALSE)
 
-t <- t[-which(t$...4 =='fp'),]
-t <- t[-which(t$...5 ==1),]
-t <- t[,2]
+t <- t[-which(t$...3 =='fp'),]
+t <- t[-which(t$...4 ==1),]
+t <- t[,1]
 write.xlsx(x = data.frame(t),file = '/path/to/fractions_eligos_4sU_library_gene_subsampling_min05_min05_mag1/xstreme/GAAGGAA.xlsx',col.names = FALSE )
 
-t <- read_xlsx('/path/to/fractions_eligos_4sU_library_gene_subsampling_min05_min05_mag1/xstreme/AGGAGCA.xlsx',col_names = FALSE)
+t <- read_xlsx('/path/to/fractions_eligos_4sU_library_gene_subsampling_min05_min05_mag1/xstreme/AGAGARR.xlsx',col_names = FALSE)
+
+t <- t[-which(t$...3 =='fp'),]
+t <- t[-which(t$...4 ==1),]
+t <- t[,1]
+write.xlsx(x = data.frame(t),file = '/path/to/fractions_eligos_4sU_library_gene_subsampling_min05_min05_mag1/xstreme/AGAGARR.xlsx',col.names = FALSE )
+
+t <- read_xlsx('/path/to/fractions_eligos_4sU_library_gene_subsampling_min05_min05_mag1/xstreme/CCUYCCC.xlsx',col_names = FALSE)
+
+t <- t[-which(t$...3 =='fp'),]
+t <- t[-which(t$...4 ==1),]
+t <- t[,1]
+write.xlsx(x = data.frame(t),file = '/path/to/fractions_eligos_4sU_library_gene_subsampling_min05_min05_mag1/xstreme/CCUYCCC.xlsx',col.names = FALSE )
+
+t <- read_xlsx('/path/to/fractions_eligos_4sU_library_gene_subsampling_min05_min05_mag1/xstreme/UGGGGAU.xlsx',col_names = FALSE)
 
 t <- t[-which(t$...4 =='fp'),]
 t <- t[-which(t$...5 ==1),]
 t <- t[,2]
-write.xlsx(x = data.frame(t),file = '/path/to/fractions_eligos_4sU_library_gene_subsampling_min05_min05_mag1/xstreme/AGGAGCA.xlsx',col.names = FALSE )
+write.xlsx(x = data.frame(t),file = '/path/to/fractions_eligos_4sU_library_gene_subsampling_min05_min05_mag1/xstreme/UGGGGAU.xlsx',col.names = FALSE )
 
 t <- read_xlsx('/path/to/fractions_eligos_4sU_library_gene_subsampling_min05_min05_mag1/xstreme/DUAGGGA.xlsx',col_names = FALSE)
 
-t <- t[-which(t$...4 =='fp'),]
-t <- t[-which(t$...5 ==1),]
-t <- t[,2]
+t <- t[-which(t$...3 =='fp'),]
+t <- t[-which(t$...4 ==1),]
+t <- t[,1]
 write.xlsx(x = data.frame(t),file = '/path/to/fractions_eligos_4sU_library_gene_subsampling_min05_min05_mag1/xstreme/DUAGGGA.xlsx',col.names = FALSE )
 
-t <- read_xlsx('/path/to/fractions_eligos_4sU_library_gene_subsampling_min05_min05_mag1/xstreme/RWUCAAG.xlsx',col_names = FALSE)
+t <- read_xlsx('/path/to/fractions_eligos_4sU_library_gene_subsampling_min05_min05_mag1/xstreme/AGAAGAN.xlsx',col_names = FALSE)
 
-t <- t[-which(t$...4 =='fp'),]
-t <- t[-which(t$...5 ==1),]
-t <- t[,2]
-write.xlsx(x = data.frame(t),file = '/path/to/fractions_eligos_4sU_library_gene_subsampling_min05_min05_mag1/xstreme/RWUCAAG.xlsx',col.names = FALSE )
+t <- t[-which(t$...3 =='fp'),]
+t <- t[-which(t$...4 ==1),]
+t <- t[,1]
+write.xlsx(x = data.frame(t),file = '/path/to/fractions_eligos_4sU_library_gene_subsampling_min05_min05_mag1/xstreme/AGAAGAN.xlsx',col.names = FALSE )
+
+t <- read_xlsx('/path/to/fractions_eligos_4sU_library_gene_subsampling_min05_min05_mag1/xstreme/GCUGGMC.xlsx',col_names = FALSE)
+
+t <- t[-which(t$...3 =='fp'),]
+t <- t[-which(t$...4 ==1),]
+t <- t[,1]
+write.xlsx(x = data.frame(t),file = '/path/to/fractions_eligos_4sU_library_gene_subsampling_min05_min05_mag1/xstreme/GCUGGMC.xlsx',col.names = FALSE )
+
+t <- read_xlsx('/path/to/fractions_eligos_4sU_library_gene_subsampling_min05_min05_mag1/xstreme/AGGAGCA.xlsx',col_names = FALSE)
+
+t <- t[-which(t$...3 =='fp'),]
+t <- t[-which(t$...4 ==1),]
+t <- t[,1]
+write.xlsx(x = data.frame(t),file = '/path/to/fractions_eligos_4sU_library_gene_subsampling_min05_min05_mag1/xstreme/AGGAGCA.xlsx',col.names = FALSE )
 
 motif_analysis('/path/to/fractions_eligos_4sU_library_gene_subsampling_min05_min05_mag1/')
 
-# total subsampling nascent
-t <- read_xlsx('/path/to/fractions_eligos_4sU_library_gene_subsampling_total_510645_min05_min05_mag1/xstreme/AGAGARR.xlsx',col_names = FALSE)
-
-t <- t[-which(t$...5 =='fp'),]
-t <- t[-which(t$...6 ==1),]
-t <- t[,3]
-write.xlsx(x = data.frame(t),file = '/path/to/fractions_eligos_4sU_library_gene_subsampling_total_510645_min05_min05_mag1/xstreme/AGAGARR.xlsx',col.names = FALSE )
-motif_analysis('/path/to/fractions_eligos_4sU_library_gene_subsampling_total_510645_min05_min05_mag1/')
