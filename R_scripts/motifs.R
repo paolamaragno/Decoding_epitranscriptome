@@ -6,8 +6,8 @@ library('pheatmap')
 
 load("/path/to/R_data/protein_coding_genes_5UTR_3UTR_introns_exons_stop.Rda")
 
-# path_directory is the path to the directory containing three folders: /chr/, /nucleo/, /cyto/ each with the 10 txt files 
-# produced by ELIGOS for each of the 10 samplings
+# path_directory is the path to the directory containing three folders: /chr/, /nucleo/, /cyto/ each with the 5 txt files 
+# produced by ELIGOS for each of the 5 samplings
 # /xstreme/ is a folder in path_directory with the results of XSTREME analysis
 motif_analysis <- function(path_directory) {
   
