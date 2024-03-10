@@ -291,6 +291,8 @@ count_mods <- function(directory) {
   f2(R_objects_all)
   R_objects_DRACH <- R_objects[unlist(lapply(strsplit(R_objects,'_'), function(x) {'DRACH.Rda' %in% x}))]
   f2(R_objects_DRACH)
+  R_objects_without_DRACH <- list.files(path = paste0(directory, '/without_DRACH/'), pattern = 'Rda', full.names = TRUE)
+  f2(R_objects_without_DRACH)
 }
 
 count_mods(directory= '/path/to/fractions_eligos_4sU_library_gene_subsampling_min05_min05_mag1/')
