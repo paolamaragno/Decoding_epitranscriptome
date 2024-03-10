@@ -466,23 +466,6 @@ count_mods_nascent_only_chr <- function(directory) {
           }
         }
       
-      # evaluate if there is any kind of correlation between the length of the coding exons and the length of the 3'UTR
-      # of the genes with 3 hits falling in the coding exons 
-      genes_hits_coding <- rownames(m[m[,2]>3,])
-      
-      length_coding_exons <- unlist(lapply(protein_coding_genes_5UTR_3UTR_introns_exons_stop[genes_hits_coding], function(x) {
-        sum(width(x[x$feature == 'coding exon']))
-      }))
-      length_3UTR <- unlist(lapply(protein_coding_genes_5UTR_3UTR_introns_exons_stop[genes_hits_coding], function(x) {
-        sum(width(x[x$feature == '3UTR']))
-      }))
-      
-      pdf(paste0(directory, '/', n, '_hist.pdf'), width = 13, height = 7)
-      par(mfrow=c(1,2))
-      hist(length_coding_exons, main = as.character(cor(length_coding_exons,length_3UTR, method = 'spearman')))
-      hist(length_3UTR)
-      dev.off()
-      
       ann <- data.frame(log10_gene_length = log10(length_genes)[rownames(m)], gene_strand = strand_genes[rownames(m)], log10_read_counts = log10(read_counts)[rownames(m)])
       rownames(ann) <- rownames(m)
       
