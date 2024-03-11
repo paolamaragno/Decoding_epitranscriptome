@@ -229,7 +229,7 @@ ELIGOS_hits_DB_effectors <- function(directory_hits_only_chr) {
   number_hits_per_mod_RBP_DRACH[2,3] <<-length(specific_effectors)
   number_hits_per_mod_RBP_DRACH[2,4] <<-length(unique(enzyme_type_mod_unique[,1]))
   
-  # add a metadata column to each GRanges object in which the names of the effectors with hit overlaps will be reported as well as the 
+  # add a metadata column to each GRanges object in which the names of the effectors with which each hit overlaps will be reported as well as the 
   # function of these effectors (both initiated with "Unknown")
   mcols(hits_non_DRACH) <- cbind(mcols(hits_non_DRACH), effector = 'Unknown', type_effector = 'Unknown')
   mcols(hits_DRACH) <- cbind(mcols(hits_DRACH), effector = 'Unknown', type_effector = 'Unknown')
@@ -261,7 +261,7 @@ ELIGOS_hits_DB_effectors(directory_hits_only_chr = '/path/to/fractions_eligos_4s
 
 # combine the information from the overlap with the RNA marks and the overlap with the binding sites of the
 # effectors from the public databases.
-# directory_hits_only_chr is the path to the directory containing ELIGOS hits thare only in nascent chromatin associated RNAs
+# directory_hits_only_chr is the path to the directory containing ELIGOS hits that are only in nascent chromatin associated RNAs
 final_summary <- function(all_mods, directory_hits_only_chr) {
   
   load(paste0(directory_hits_only_chr,'/without_DRACH/hits_eligos_only_chr_without_DRACH_mod_type_RBP.Rda'))
