@@ -94,7 +94,7 @@ generate_random_hits <- function(number_hits, fraction) {
 
 load('/path/to/DRACH_forward_strand.Rda')
 
-# for each fraction generate for 1,000 times a number of random hits equal to
+# for each fraction generate for 1,000 times a number of random sequences equal to
 # the overall number of ELIGOS hits from the same fraction 
 random_hits_chr <- generate_random_hits(tot_hits_chr, 'chr')
 random_hits_chr_DRACH <- random_hits_chr[[1]]
