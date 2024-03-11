@@ -1266,3 +1266,25 @@ all_mods <- c('m6A', 'Y', 'm1A','m5C', 'm7G', 'A-I','Nm', 'm6Am', 'Ambiguous')
 
 final_summary(all_mods,directory_hits = '/path/to/fractions_eligos_4sU_library_gene_subsampling_total_510645_min05_min05_mag1/')
 
+# STORM
+directory_hits = '/path/to/fractions_eligos_STORM_K562/eligos_total_reads/'
+
+load(paste0(directory_hits,'/without_DRACH/hits_eligos_chr_ass_confirmed_5_without_DRACH_mod_type_RBP.Rda'))
+load(paste0(directory_hits,'/without_DRACH/hits_eligos_nucleo_confirmed_5_without_DRACH_mod_type_RBP.Rda'))
+load(paste0(directory_hits,'/without_DRACH/hits_eligos_cyto_confirmed_5_without_DRACH_mod_type_RBP.Rda'))
+load(paste0(directory_hits,'/hits_ELIGOS/hits_eligos_chr_ass_confirmed_5_with_DRACH_mod_type_RBP.Rda'))
+load(paste0(directory_hits,'/hits_ELIGOS/hits_eligos_nucleo_confirmed_5_with_DRACH_mod_type_RBP.Rda'))
+load(paste0(directory_hits,'/hits_ELIGOS/hits_eligos_cyto_confirmed_5_with_DRACH_mod_type_RBP.Rda'))
+
+all_mods <- c(unique(hits_eligos_chr_ass_confirmed_5_without_DRACH_with_bindings$mod_type),
+              unique(hits_eligos_nucleo_confirmed_5_without_DRACH_with_bindings$mod_type),
+              unique(hits_eligos_cyto_confirmed_5_without_DRACH_with_bindings$mod_type),
+              unique(hits_eligos_chr_ass_confirmed_5_with_DRACH_with_bindings$mod_type),
+              unique(hits_eligos_nucleo_confirmed_5_with_DRACH_with_bindings$mod_type),
+              unique(hits_eligos_cyto_confirmed_5_with_DRACH_with_bindings$mod_type))
+all_mods <- unique(all_mods)
+all_mods <- unique(unlist(strsplit(all_mods, split=';')))
+all_mods <- c('m6A', 'Y', 'm1A','m5C', 'm7G', 'A-I','Nm', 'm6Am', 'Ambiguous')
+
+final_summary(all_mods,directory_hits = '/path/to/fractions_eligos_STORM_K562/eligos_total_reads/')
+                                                                                                                                                                                    
