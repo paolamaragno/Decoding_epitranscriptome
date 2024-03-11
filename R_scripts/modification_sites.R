@@ -489,6 +489,8 @@ ELIGOS_hits_DB_marks(directory_mod = '/path/to/mod',
 ELIGOS_hits_DB_marks(directory_mod = '/path/to/mod', 
                      directory_hits = '/path/to/fractions_eligos_4sU_library_gene_subsampling_total_510645_min05_min05_mag1/')
 
+ELIGOS_hits_DB_marks(directory_mod = '/path/to/mod', 
+                     directory_hits = '/path/to/fractions_eligos_STORM_K562/eligos_total_reads/')
 
 
 ## DATABASES OF EFFECTORS' BINDING SITES
