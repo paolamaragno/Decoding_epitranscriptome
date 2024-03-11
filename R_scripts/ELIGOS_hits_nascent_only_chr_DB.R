@@ -125,7 +125,7 @@ load('/path/to/RBPs/enzyme_type_mod_unique.RDa')
 load('/path/to/RBPs/all_sites_RMBase_RMvar.Rda')
 
 # overlap between ELIGOS hits (only in Chromatin Associated nascent RNAs) and effectors' binding sites from the two databases.
-# m6A is TRUE if we are analysing DRACH+ hits, otherwise FALSE
+# m6A is TRUE when analysing DRACH+ hits, otherwise FALSE
 overlap_binding_sites <- function(hits, n, m, p, q, r, m6A) {
   
   over <-findOverlaps(hits,all_sites_RMBase_RMvar, ignore.strand=TRUE, type='any')
