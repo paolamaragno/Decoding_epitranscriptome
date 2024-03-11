@@ -608,7 +608,7 @@ nrow(enzyme_type_mod_unique[,c(1,2)] %>% distinct())
 
 # identify which effectors are associated only with one RNA mod type (specific) and
 # which with more than one (ambiguous).
-# in each RMBase file there are no duplicates of the same binding site (the binding site of each effectors is not duplicated); 
+# in each RMBase file there are no duplicates of the same binding site (the binding site of each effector is not duplicated); 
 # but the same binding site of the same effector can be associated with different modifications (contained in different RMBase3 files)
 specific_effectors <- names(table(enzyme_type_mod_unique$Name_effector)[table(enzyme_type_mod_unique$Name_effector)==1])
 # 31 specific effectors 
