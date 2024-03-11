@@ -3,10 +3,10 @@ library('GenomicFeatures')
 library('xlsx')
 
 # overlap between ELIGOS hits (only in Chromatin Associated nascent RNAs) and RNA marks, of each RNA mod type, from the two databases.
-# directory_hits_only_chr is the path to the directory containing ELIGOS hits only in chromatin associated RNAs.
+# directory_hits_only_chr is the path to the directory containing ELIGOS hits only in chromatin associated nascent RNAs.
 # directory_mod is the path to the directory containing, for each RNA mod type, the bed file with
 # the coordinates of all the RNA marks of that type from RMBase3+RMVar.
-# m6A is TRUE if we are analysing DRACH+ hits, otherwise FALSE
+# m6A is TRUE when analysing DRACH+ hits, otherwise FALSE
 overlap_marks <- function(hits_chr_grange,m6A,directory_hits_only_chr,directory_mod) {
   
   # initiate a matrix that will report the number (and percentage) of ELIGOS hits only present in chromatin associated nascent 
