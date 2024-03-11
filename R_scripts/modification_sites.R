@@ -1062,6 +1062,7 @@ ELIGOS_hits_DB_effectors(directory_hits = '/path/to/fractions_eligos_4sU_library
 
 ELIGOS_hits_DB_effectors(directory_hits = '/path/to/fractions_eligos_4sU_library_gene_subsampling_total_510645_min05_min05_mag1/')
 
+ELIGOS_hits_DB_effectors(directory_hits = '/path/to/fractions_eligos_STORM_K562/eligos_total_reads/')
 
 #############
 # combine the information from the overlap with the RNA marks and the overlap with the binding sites of the
