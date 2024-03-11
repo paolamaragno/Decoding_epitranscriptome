@@ -274,7 +274,7 @@ for (f in mod) {
 # ELIGOS hits of a fraction and the RNA marks databases.
 # directory_mod is the path to the directory containing, for each RNA mod type, the bed file with
 # the coordinates of all the RNA marks of that type from RMBase3+RMVar.
-# m6A is TRUE if we are analysing DRACH+ hits, otherwise FALSE
+# m6A is TRUE if when analysing DRACH+ hits, otherwise FALSE
 overlap_marks <- function(hits_chr_grange,hits_nucleo_grange,hits_cyto_grange,m6A,directory_hits,directory_mod) {
   
   # initiate a matrix that will report, for each fraction, the number (and percentage) of ELIGOS hits containing each RNA mod type
