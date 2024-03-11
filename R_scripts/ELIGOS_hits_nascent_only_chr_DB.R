@@ -327,7 +327,7 @@ all_mods <- c(unique(hits_DRACH_with_bindings$mod_type),
               unique(hits_non_DRACH_with_bindings$mod_type))
 all_mods <- unique(all_mods)
 all_mods <- unique(unlist(strsplit(all_mods, split=';')))
-all_mods <- c('m6A', 'm1A', 'm5C', 'm7G', 'A-I', 'Nm', 'Ambiguous')
+all_mods <- c('m6A', 'm1A', 'm5C', 'm7G', 'A-I', 'Nm', 'Y', 'Ambiguous')
 
 final_summary(all_mods,directory_hits_only_chr)
 
