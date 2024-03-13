@@ -30,8 +30,6 @@ Finally, the combinatorial co-occurrence of various modifications within the tra
 
 # Usage
 ## Subsampling reads obtained through Nanopore dRNA sequencing 
-First perform the two library-level subsampling and gene-level subsampling from the terminal running the command
-
 To perform library-level and gene-level subsampling on the reads obtained through Nanopore dRNA sequencing of the RNAs from chromatin, nucleoplasm and cytoplasm fractions, create an environment with the installation of minimap2 (v2.26-r1175), samtools (v1.17) and seqtk (v1.4-r122).
 Then, activate R environment and run the following command:
 ```
