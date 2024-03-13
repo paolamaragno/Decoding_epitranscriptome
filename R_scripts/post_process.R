@@ -388,102 +388,102 @@ mods_combination_only_significant <- function(directory_hits,condition,mods_sign
   
   if (condition == 'both') {
     # keep only ELIGOS DRACH- hits from chromatin associated RNAs annotated to significant RNA modifications
-    lapply(seq_along(hits_eligos_chr_ass_confirmed_5_without_DRACH), function(i) {
-      mods <- unlist(strsplit(hits_eligos_chr_ass_confirmed_5_without_DRACH[i]$mod_type, split =';'))
+    lapply(seq_along(hits_eligos_chr_ass_confirmed_5_without_DRACH_with_bindings), function(i) {
+      mods <- unlist(strsplit(hits_eligos_chr_ass_confirmed_5_without_DRACH_with_bindings[i]$mod_type, split =';'))
       mods_significant <- mods[mods %in% mods_significant_without_DRACH_chr]
-      hits_eligos_chr_ass_confirmed_5_without_DRACH[i]$mod_type <<- paste(mods_significant, collapse = ';')
+      hits_eligos_chr_ass_confirmed_5_without_DRACH_with_bindings[i]$mod_type <<- paste(mods_significant, collapse = ';')
     })
     
     # keep only ELIGOS DRACH- hits from nucleoplasmic RNAs annotated to significant RNA modifications
-    lapply(seq_along(hits_eligos_nucleo_confirmed_5_without_DRACH), function(i) {
-      mods <- unlist(strsplit(hits_eligos_nucleo_confirmed_5_without_DRACH[i]$mod_type, split =';'))
+    lapply(seq_along(hits_eligos_nucleo_confirmed_5_without_DRACH_with_bindings), function(i) {
+      mods <- unlist(strsplit(hits_eligos_nucleo_confirmed_5_without_DRACH_with_bindings[i]$mod_type, split =';'))
       mods_significant <- mods[mods %in% mods_significant_without_DRACH_nucleo]
-      hits_eligos_nucleo_confirmed_5_without_DRACH[i]$mod_type <<- paste(mods_significant, collapse = ';')
+      hits_eligos_nucleo_confirmed_5_without_DRACH_with_bindings[i]$mod_type <<- paste(mods_significant, collapse = ';')
     })
     
     # keep only ELIGOS DRACH- hits from cytoplasmic RNAs annotated to significant RNA modifications
-    lapply(seq_along(hits_eligos_cyto_confirmed_5_without_DRACH), function(i) {
-      mods <- unlist(strsplit(hits_eligos_cyto_confirmed_5_without_DRACH[i]$mod_type, split =';'))
+    lapply(seq_along(hits_eligos_cyto_confirmed_5_without_DRACH_with_bindings), function(i) {
+      mods <- unlist(strsplit(hits_eligos_cyto_confirmed_5_without_DRACH_with_bindings[i]$mod_type, split =';'))
       mods_significant <- mods[mods %in% mods_significant_without_DRACH_cyto]
-      hits_eligos_cyto_confirmed_5_without_DRACH[i]$mod_type <<- paste(mods_significant, collapse = ';')
+      hits_eligos_cyto_confirmed_5_without_DRACH_with_bindings[i]$mod_type <<- paste(mods_significant, collapse = ';')
     })
     
     # keep only ELIGOS DRACH+ hits from chromatin associated RNAs annotated to significant RNA modifications
-    lapply(seq_along(hits_eligos_chr_ass_confirmed_5_with_DRACH), function(i) {
-      mods <- unlist(strsplit(hits_eligos_chr_ass_confirmed_5_with_DRACH[i]$mod_type, split =';'))
+    lapply(seq_along(hits_eligos_chr_ass_confirmed_5_with_DRACH_with_bindings), function(i) {
+      mods <- unlist(strsplit(hits_eligos_chr_ass_confirmed_5_with_DRACH_with_bindings[i]$mod_type, split =';'))
       mods_significant <- mods[mods %in% mods_significant_with_DRACH_chr]
-      hits_eligos_chr_ass_confirmed_5_with_DRACH[i]$mod_type <<- paste(mods_significant, collapse = ';')
+      hits_eligos_chr_ass_confirmed_5_with_DRACH_with_bindings[i]$mod_type <<- paste(mods_significant, collapse = ';')
     })
     
     # keep only ELIGOS DRACH+ hits from nucleoplasmic RNAs annotated to significant RNA modifications
-    lapply(seq_along(hits_eligos_nucleo_confirmed_5_with_DRACH), function(i) {
-      mods <- unlist(strsplit(hits_eligos_nucleo_confirmed_5_with_DRACH[i]$mod_type, split =';'))
+    lapply(seq_along(hits_eligos_nucleo_confirmed_5_with_DRACH_with_bindings), function(i) {
+      mods <- unlist(strsplit(hits_eligos_nucleo_confirmed_5_with_DRACH_with_bindings[i]$mod_type, split =';'))
       mods_significant <- mods[mods %in% mods_significant_with_DRACH_nucleo]
-      hits_eligos_nucleo_confirmed_5_with_DRACH[i]$mod_type <<- paste(mods_significant, collapse = ';')
+      hits_eligos_nucleo_confirmed_5_with_DRACH_with_bindings[i]$mod_type <<- paste(mods_significant, collapse = ';')
     })
     
     # keep only ELIGOS DRACH+ hits from cytoplasmic RNAs annotated to significant RNA modifications
-    lapply(seq_along(hits_eligos_cyto_confirmed_5_with_DRACH), function(i) {
-      mods <- unlist(strsplit(hits_eligos_cyto_confirmed_5_with_DRACH[i]$mod_type, split =';'))
+    lapply(seq_along(hits_eligos_cyto_confirmed_5_with_DRACH_with_bindings), function(i) {
+      mods <- unlist(strsplit(hits_eligos_cyto_confirmed_5_with_DRACH_with_bindings[i]$mod_type, split =';'))
       mods_significant <- mods[mods %in% mods_significant_with_DRACH_cyto]
-      hits_eligos_cyto_confirmed_5_with_DRACH[i]$mod_type <<- paste(mods_significant, collapse = ';')
+      hits_eligos_cyto_confirmed_5_with_DRACH_with_bindings[i]$mod_type <<- paste(mods_significant, collapse = ';')
     })
     
     # for each fraction, concatenate ELIGOS DRACH+ and DRACH- hits
-    hits_chr <- c(hits_eligos_chr_ass_confirmed_5_without_DRACH, hits_eligos_chr_ass_confirmed_5_with_DRACH)
-    hits_nucleo <- c(hits_eligos_nucleo_confirmed_5_without_DRACH, hits_eligos_nucleo_confirmed_5_with_DRACH)
-    hits_cyto<- c(hits_eligos_cyto_confirmed_5_without_DRACH, hits_eligos_cyto_confirmed_5_with_DRACH)
+    hits_chr <- c(hits_eligos_chr_ass_confirmed_5_without_DRACH_with_bindings, hits_eligos_chr_ass_confirmed_5_with_DRACH_with_bindings)
+    hits_nucleo <- c(hits_eligos_nucleo_confirmed_5_without_DRACH_with_bindings, hits_eligos_nucleo_confirmed_5_with_DRACH_with_bindings)
+    hits_cyto<- c(hits_eligos_cyto_confirmed_5_without_DRACH_with_bindings, hits_eligos_cyto_confirmed_5_with_DRACH_with_bindings)
     
   } else if (condition == 'DRACH') {
     # keep only ELIGOS DRACH+ hits from chromatin associated RNAs annotated to significant RNA modifications
-    lapply(seq_along(hits_eligos_chr_ass_confirmed_5_with_DRACH), function(i) {
-      mods <- unlist(strsplit(hits_eligos_chr_ass_confirmed_5_with_DRACH[i]$mod_type, split =';'))
+    lapply(seq_along(hits_eligos_chr_ass_confirmed_5_with_DRACH_with_bindings), function(i) {
+      mods <- unlist(strsplit(hits_eligos_chr_ass_confirmed_5_with_DRACH_with_bindings[i]$mod_type, split =';'))
       mods_significant <- mods[mods %in% mods_significant_with_DRACH_chr]
-      hits_eligos_chr_ass_confirmed_5_with_DRACH[i]$mod_type <<- paste(mods_significant, collapse = ';')
+      hits_eligos_chr_ass_confirmed_5_with_DRACH_with_bindings[i]$mod_type <<- paste(mods_significant, collapse = ';')
     })
     
     # keep only ELIGOS DRACH+ hits from nucleoplasmic RNAs annotated to significant RNA modifications
-    lapply(seq_along(hits_eligos_nucleo_confirmed_5_with_DRACH), function(i) {
-      mods <- unlist(strsplit(hits_eligos_nucleo_confirmed_5_with_DRACH[i]$mod_type, split =';'))
+    lapply(seq_along(hits_eligos_nucleo_confirmed_5_with_DRACH_with_bindings), function(i) {
+      mods <- unlist(strsplit(hits_eligos_nucleo_confirmed_5_with_DRACH_with_bindings[i]$mod_type, split =';'))
       mods_significant <- mods[mods %in% mods_significant_with_DRACH_nucleo]
-      hits_eligos_nucleo_confirmed_5_with_DRACH[i]$mod_type <<- paste(mods_significant, collapse = ';')
+      hits_eligos_nucleo_confirmed_5_with_DRACH_with_bindings[i]$mod_type <<- paste(mods_significant, collapse = ';')
     })
     
     # keep only ELIGOS DRACH+ hits from cytoplasmic RNAs annotated to significant RNA modifications
-    lapply(seq_along(hits_eligos_cyto_confirmed_5_with_DRACH), function(i) {
-      mods <- unlist(strsplit(hits_eligos_cyto_confirmed_5_with_DRACH[i]$mod_type, split =';'))
+    lapply(seq_along(hits_eligos_cyto_confirmed_5_with_DRACH_with_bindings), function(i) {
+      mods <- unlist(strsplit(hits_eligos_cyto_confirmed_5_with_DRACH_with_bindings[i]$mod_type, split =';'))
       mods_significant <- mods[mods %in% mods_significant_with_DRACH_cyto]
-      hits_eligos_cyto_confirmed_5_with_DRACH[i]$mod_type <<- paste(mods_significant, collapse = ';')
+      hits_eligos_cyto_confirmed_5_with_DRACH_with_bindings[i]$mod_type <<- paste(mods_significant, collapse = ';')
     })
     
-    hits_chr <- hits_eligos_chr_ass_confirmed_5_with_DRACH
-    hits_nucleo <- hits_eligos_nucleo_confirmed_5_with_DRACH
-    hits_cyto<- hits_eligos_cyto_confirmed_5_with_DRACH
+    hits_chr <- hits_eligos_chr_ass_confirmed_5_with_DRACH_with_bindings
+    hits_nucleo <- hits_eligos_nucleo_confirmed_5_with_DRACH_with_bindings
+    hits_cyto<- hits_eligos_cyto_confirmed_5_with_DRACH_with_bindings
   } else {
     # keep only ELIGOS DRACH- hits from chromatin associated RNAs annotated to significant RNA modifications
-    lapply(seq_along(hits_eligos_chr_ass_confirmed_5_without_DRACH), function(i) {
-      mods <- unlist(strsplit(hits_eligos_chr_ass_confirmed_5_without_DRACH[i]$mod_type, split =';'))
+    lapply(seq_along(hits_eligos_chr_ass_confirmed_5_without_DRACH_with_bindings), function(i) {
+      mods <- unlist(strsplit(hits_eligos_chr_ass_confirmed_5_without_DRACH_with_bindings[i]$mod_type, split =';'))
       mods_significant <- mods[mods %in% mods_significant_without_DRACH_chr]
-      hits_eligos_chr_ass_confirmed_5_without_DRACH[i]$mod_type <<- paste(mods_significant, collapse = ';')
+      hits_eligos_chr_ass_confirmed_5_without_DRACH_with_bindings[i]$mod_type <<- paste(mods_significant, collapse = ';')
     })
     
     # keep only ELIGOS DRACH- hits from nucleoplasmic RNAs annotated to significant RNA modifications
-    lapply(seq_along(hits_eligos_nucleo_confirmed_5_without_DRACH), function(i) {
-      mods <- unlist(strsplit(hits_eligos_nucleo_confirmed_5_without_DRACH[i]$mod_type, split =';'))
+    lapply(seq_along(hits_eligos_nucleo_confirmed_5_without_DRACH_with_bindings), function(i) {
+      mods <- unlist(strsplit(hits_eligos_nucleo_confirmed_5_without_DRACH_with_bindings[i]$mod_type, split =';'))
       mods_significant <- mods[mods %in% mods_significant_without_DRACH_nucleo]
-      hits_eligos_nucleo_confirmed_5_without_DRACH[i]$mod_type <<- paste(mods_significant, collapse = ';')
+      hits_eligos_nucleo_confirmed_5_without_DRACH_with_bindings[i]$mod_type <<- paste(mods_significant, collapse = ';')
     })
     
     # keep only ELIGOS DRACH- hits from cytoplasmic RNAs annotated to significant RNA modifications
-    lapply(seq_along(hits_eligos_cyto_confirmed_5_without_DRACH), function(i) {
-      mods <- unlist(strsplit(hits_eligos_cyto_confirmed_5_without_DRACH[i]$mod_type, split =';'))
+    lapply(seq_along(hits_eligos_cyto_confirmed_5_without_DRACH_with_bindings), function(i) {
+      mods <- unlist(strsplit(hits_eligos_cyto_confirmed_5_without_DRACH_with_bindings[i]$mod_type, split =';'))
       mods_significant <- mods[mods %in% mods_significant_without_DRACH_cyto]
-      hits_eligos_cyto_confirmed_5_without_DRACH[i]$mod_type <<- paste(mods_significant, collapse = ';')
+      hits_eligos_cyto_confirmed_5_without_DRACH_with_bindings[i]$mod_type <<- paste(mods_significant, collapse = ';')
     })
     
-    hits_chr <- hits_eligos_chr_ass_confirmed_5_without_DRACH
-    hits_nucleo <- hits_eligos_nucleo_confirmed_5_without_DRACH
-    hits_cyto<- hits_eligos_cyto_confirmed_5_without_DRACH
+    hits_chr <- hits_eligos_chr_ass_confirmed_5_without_DRACH_with_bindings
+    hits_nucleo <- hits_eligos_nucleo_confirmed_5_without_DRACH_with_bindings
+    hits_cyto<- hits_eligos_cyto_confirmed_5_without_DRACH_with_bindings
   }
   
   # initiate a matrix reporting, for each gene, the RNA modification types of the hits mapping on it
@@ -673,103 +673,103 @@ comparison_mods_combination_nascent_total_only_significant <- function(directory
   
   if (condition == 'both') {
     # keep only ELIGOS DRACH- hits from chromatin associated RNAs annotated to significant RNA modifications
-    lapply(seq_along(hits_eligos_chr_ass_confirmed_5_without_DRACH), function(i) {
-      mods <- unlist(strsplit(hits_eligos_chr_ass_confirmed_5_without_DRACH[i]$mod_type, split =';'))
+    lapply(seq_along(hits_eligos_chr_ass_confirmed_5_without_DRACH_with_bindings), function(i) {
+      mods <- unlist(strsplit(hits_eligos_chr_ass_confirmed_5_without_DRACH_with_bindings[i]$mod_type, split =';'))
       mods_significant <- mods[mods %in% mods_significant_without_DRACH_chr_nascent]
-      hits_eligos_chr_ass_confirmed_5_without_DRACH[i]$mod_type <<- paste(mods_significant, collapse = ';')
+      hits_eligos_chr_ass_confirmed_5_without_DRACH_with_bindings[i]$mod_type <<- paste(mods_significant, collapse = ';')
     })
     
     # keep only ELIGOS DRACH- hits from nucleoplasmic RNAs annotated to significant RNA modifications
-    lapply(seq_along(hits_eligos_nucleo_confirmed_5_without_DRACH), function(i) {
-      mods <- unlist(strsplit(hits_eligos_nucleo_confirmed_5_without_DRACH[i]$mod_type, split =';'))
+    lapply(seq_along(hits_eligos_nucleo_confirmed_5_without_DRACH_with_bindings), function(i) {
+      mods <- unlist(strsplit(hits_eligos_nucleo_confirmed_5_without_DRACH_with_bindings[i]$mod_type, split =';'))
       mods_significant <- mods[mods %in% mods_significant_without_DRACH_nucleo_nascent]
-      hits_eligos_nucleo_confirmed_5_without_DRACH[i]$mod_type <<- paste(mods_significant, collapse = ';')
+      hits_eligos_nucleo_confirmed_5_without_DRACH_with_bindings[i]$mod_type <<- paste(mods_significant, collapse = ';')
     })
     
     # keep only ELIGOS DRACH- hits from cytoplasmic RNAs annotated to significant RNA modifications
-    lapply(seq_along(hits_eligos_cyto_confirmed_5_without_DRACH), function(i) {
-      mods <- unlist(strsplit(hits_eligos_cyto_confirmed_5_without_DRACH[i]$mod_type, split =';'))
+    lapply(seq_along(hits_eligos_cyto_confirmed_5_without_DRACH_with_bindings), function(i) {
+      mods <- unlist(strsplit(hits_eligos_cyto_confirmed_5_without_DRACH_with_bindings[i]$mod_type, split =';'))
       mods_significant <- mods[mods %in% mods_significant_without_DRACH_cyto_nascent]
-      hits_eligos_cyto_confirmed_5_without_DRACH[i]$mod_type <<- paste(mods_significant, collapse = ';')
+      hits_eligos_cyto_confirmed_5_without_DRACH_with_bindings[i]$mod_type <<- paste(mods_significant, collapse = ';')
     })
     
     # keep only ELIGOS DRACH+ hits from chromatin associated RNAs annotated to significant RNA modifications
-    lapply(seq_along(hits_eligos_chr_ass_confirmed_5_with_DRACH), function(i) {
-      mods <- unlist(strsplit(hits_eligos_chr_ass_confirmed_5_with_DRACH[i]$mod_type, split =';'))
+    lapply(seq_along(hits_eligos_chr_ass_confirmed_5_with_DRACH_with_bindings), function(i) {
+      mods <- unlist(strsplit(hits_eligos_chr_ass_confirmed_5_with_DRACH_with_bindings[i]$mod_type, split =';'))
       mods_significant <- mods[mods %in% mods_significant_with_DRACH_chr_nascent]
-      hits_eligos_chr_ass_confirmed_5_with_DRACH[i]$mod_type <<- paste(mods_significant, collapse = ';')
+      hits_eligos_chr_ass_confirmed_5_with_DRACH_with_bindings[i]$mod_type <<- paste(mods_significant, collapse = ';')
     })
     
     # keep only ELIGOS DRACH+ hits from nucleoplasmic RNAs annotated to significant RNA modifications
-    lapply(seq_along(hits_eligos_nucleo_confirmed_5_with_DRACH), function(i) {
-      mods <- unlist(strsplit(hits_eligos_nucleo_confirmed_5_with_DRACH[i]$mod_type, split =';'))
+    lapply(seq_along(hits_eligos_nucleo_confirmed_5_with_DRACH_with_bindings), function(i) {
+      mods <- unlist(strsplit(hits_eligos_nucleo_confirmed_5_with_DRACH_with_bindings[i]$mod_type, split =';'))
       mods_significant <- mods[mods %in% mods_significant_with_DRACH_nucleo_nascent]
-      hits_eligos_nucleo_confirmed_5_with_DRACH[i]$mod_type <<- paste(mods_significant, collapse = ';')
+      hits_eligos_nucleo_confirmed_5_with_DRACH_with_bindings[i]$mod_type <<- paste(mods_significant, collapse = ';')
     })
     
     # keep only ELIGOS DRACH+ hits from cytoplasmic RNAs annotated to significant RNA modifications
-    lapply(seq_along(hits_eligos_cyto_confirmed_5_with_DRACH), function(i) {
-      mods <- unlist(strsplit(hits_eligos_cyto_confirmed_5_with_DRACH[i]$mod_type, split =';'))
+    lapply(seq_along(hits_eligos_cyto_confirmed_5_with_DRACH_with_bindings), function(i) {
+      mods <- unlist(strsplit(hits_eligos_cyto_confirmed_5_with_DRACH_with_bindings[i]$mod_type, split =';'))
       mods_significant <- mods[mods %in% mods_significant_with_DRACH_cyto_nascent]
-      hits_eligos_cyto_confirmed_5_with_DRACH[i]$mod_type <<- paste(mods_significant, collapse = ';')
+      hits_eligos_cyto_confirmed_5_with_DRACH_with_bindings[i]$mod_type <<- paste(mods_significant, collapse = ';')
     })
     
     # for each fraction, concatenate ELIGOS DRACH+ and DRACH- hits
-    hits_chr <- c(hits_eligos_chr_ass_confirmed_5_without_DRACH, hits_eligos_chr_ass_confirmed_5_with_DRACH)
-    hits_nucleo <- c(hits_eligos_nucleo_confirmed_5_without_DRACH, hits_eligos_nucleo_confirmed_5_with_DRACH)
-    hits_cyto<- c(hits_eligos_cyto_confirmed_5_without_DRACH, hits_eligos_cyto_confirmed_5_with_DRACH)
+    hits_chr <- c(hits_eligos_chr_ass_confirmed_5_without_DRACH_with_bindings, hits_eligos_chr_ass_confirmed_5_with_DRACH_with_bindings)
+    hits_nucleo <- c(hits_eligos_nucleo_confirmed_5_without_DRACH_with_bindings, hits_eligos_nucleo_confirmed_5_with_DRACH_with_bindings)
+    hits_cyto<- c(hits_eligos_cyto_confirmed_5_without_DRACH_with_bindings, hits_eligos_cyto_confirmed_5_with_DRACH_with_bindings)
     
   } else if (condition == 'DRACH') {
     # keep only ELIGOS DRACH+ hits from chromatin associated RNAs annotated to significant RNA modifications
-    lapply(seq_along(hits_eligos_chr_ass_confirmed_5_with_DRACH), function(i) {
-      mods <- unlist(strsplit(hits_eligos_chr_ass_confirmed_5_with_DRACH[i]$mod_type, split =';'))
+    lapply(seq_along(hits_eligos_chr_ass_confirmed_5_with_DRACH_with_bindings), function(i) {
+      mods <- unlist(strsplit(hits_eligos_chr_ass_confirmed_5_with_DRACH_with_bindings[i]$mod_type, split =';'))
       mods_significant <- mods[mods %in% mods_significant_with_DRACH_chr_nascent]
-      hits_eligos_chr_ass_confirmed_5_with_DRACH[i]$mod_type <<- paste(mods_significant, collapse = ';')
+      hits_eligos_chr_ass_confirmed_5_with_DRACH_with_bindings[i]$mod_type <<- paste(mods_significant, collapse = ';')
     })
     
     # keep only ELIGOS DRACH+ hits from nucleoplasmic RNAs annotated to significant RNA modifications
-    lapply(seq_along(hits_eligos_nucleo_confirmed_5_with_DRACH), function(i) {
-      mods <- unlist(strsplit(hits_eligos_nucleo_confirmed_5_with_DRACH[i]$mod_type, split =';'))
+    lapply(seq_along(hits_eligos_nucleo_confirmed_5_with_DRACH_with_bindings), function(i) {
+      mods <- unlist(strsplit(hits_eligos_nucleo_confirmed_5_with_DRACH_with_bindings[i]$mod_type, split =';'))
       mods_significant <- mods[mods %in% mods_significant_with_DRACH_nucleo_nascent]
-      hits_eligos_nucleo_confirmed_5_with_DRACH[i]$mod_type <<- paste(mods_significant, collapse = ';')
+      hits_eligos_nucleo_confirmed_5_with_DRACH_with_bindings[i]$mod_type <<- paste(mods_significant, collapse = ';')
     })
     
     # keep only ELIGOS DRACH+ hits from cytoplasmic RNAs annotated to significant RNA modifications
-    lapply(seq_along(hits_eligos_cyto_confirmed_5_with_DRACH), function(i) {
-      mods <- unlist(strsplit(hits_eligos_cyto_confirmed_5_with_DRACH[i]$mod_type, split =';'))
+    lapply(seq_along(hits_eligos_cyto_confirmed_5_with_DRACH_with_bindings), function(i) {
+      mods <- unlist(strsplit(hits_eligos_cyto_confirmed_5_with_DRACH_with_bindings[i]$mod_type, split =';'))
       mods_significant <- mods[mods %in% mods_significant_with_DRACH_cyto_nascent]
-      hits_eligos_cyto_confirmed_5_with_DRACH[i]$mod_type <<- paste(mods_significant, collapse = ';')
+      hits_eligos_cyto_confirmed_5_with_DRACH_with_bindings[i]$mod_type <<- paste(mods_significant, collapse = ';')
     })
     
-    hits_chr <- hits_eligos_chr_ass_confirmed_5_with_DRACH
-    hits_nucleo <- hits_eligos_nucleo_confirmed_5_with_DRACH
-    hits_cyto<- hits_eligos_cyto_confirmed_5_with_DRACH
+    hits_chr <- hits_eligos_chr_ass_confirmed_5_with_DRACH_with_bindings
+    hits_nucleo <- hits_eligos_nucleo_confirmed_5_with_DRACH_with_bindings
+    hits_cyto<- hits_eligos_cyto_confirmed_5_with_DRACH_with_bindings
     
   } else {
     # keep only ELIGOS DRACH- hits from chromatin associated RNAs annotated to significant RNA modifications
-    lapply(seq_along(hits_eligos_chr_ass_confirmed_5_without_DRACH), function(i) {
-      mods <- unlist(strsplit(hits_eligos_chr_ass_confirmed_5_without_DRACH[i]$mod_type, split =';'))
+    lapply(seq_along(hits_eligos_chr_ass_confirmed_5_without_DRACH_with_bindings), function(i) {
+      mods <- unlist(strsplit(hits_eligos_chr_ass_confirmed_5_without_DRACH_with_bindings[i]$mod_type, split =';'))
       mods_significant <- mods[mods %in% mods_significant_without_DRACH_chr_nascent]
-      hits_eligos_chr_ass_confirmed_5_without_DRACH[i]$mod_type <<- paste(mods_significant, collapse = ';')
+      hits_eligos_chr_ass_confirmed_5_without_DRACH_with_bindings[i]$mod_type <<- paste(mods_significant, collapse = ';')
     })
     
     # keep only ELIGOS DRACH- hits from nucleoplasmic RNAs annotated to significant RNA modifications
-    lapply(seq_along(hits_eligos_nucleo_confirmed_5_without_DRACH), function(i) {
-      mods <- unlist(strsplit(hits_eligos_nucleo_confirmed_5_without_DRACH[i]$mod_type, split =';'))
+    lapply(seq_along(hits_eligos_nucleo_confirmed_5_without_DRACH_with_bindings), function(i) {
+      mods <- unlist(strsplit(hits_eligos_nucleo_confirmed_5_without_DRACH_with_bindings[i]$mod_type, split =';'))
       mods_significant <- mods[mods %in% mods_significant_without_DRACH_nucleo_nascent]
-      hits_eligos_nucleo_confirmed_5_without_DRACH[i]$mod_type <<- paste(mods_significant, collapse = ';')
+      hits_eligos_nucleo_confirmed_5_without_DRACH_with_bindings[i]$mod_type <<- paste(mods_significant, collapse = ';')
     })
     
     # keep only ELIGOS DRACH- hits from cytoplasmic RNAs annotated to significant RNA modifications
-    lapply(seq_along(hits_eligos_cyto_confirmed_5_without_DRACH), function(i) {
-      mods <- unlist(strsplit(hits_eligos_cyto_confirmed_5_without_DRACH[i]$mod_type, split =';'))
+    lapply(seq_along(hits_eligos_cyto_confirmed_5_without_DRACH_with_bindings), function(i) {
+      mods <- unlist(strsplit(hits_eligos_cyto_confirmed_5_without_DRACH_with_bindings[i]$mod_type, split =';'))
       mods_significant <- mods[mods %in% mods_significant_without_DRACH_cyto_nascent]
-      hits_eligos_cyto_confirmed_5_without_DRACH[i]$mod_type <<- paste(mods_significant, collapse = ';')
+      hits_eligos_cyto_confirmed_5_without_DRACH_with_bindings[i]$mod_type <<- paste(mods_significant, collapse = ';')
     })
     
-    hits_chr <- hits_eligos_chr_ass_confirmed_5_without_DRACH
-    hits_nucleo <- hits_eligos_nucleo_confirmed_5_without_DRACH
-    hits_cyto<- hits_eligos_cyto_confirmed_5_without_DRACH
+    hits_chr <- hits_eligos_chr_ass_confirmed_5_without_DRACH_with_bindings
+    hits_nucleo <- hits_eligos_nucleo_confirmed_5_without_DRACH_with_bindings
+    hits_cyto<- hits_eligos_cyto_confirmed_5_without_DRACH_with_bindings
   }
   
   # initiate a matrix reporting, for each gene, the RNA modification types of the hits mapping on it
@@ -917,103 +917,103 @@ comparison_mods_combination_nascent_total_only_significant <- function(directory
   
   if (condition == 'both') {
     # keep only ELIGOS DRACH- hits from chromatin associated RNAs annotated to significant RNA modifications
-    lapply(seq_along(hits_eligos_chr_ass_confirmed_5_without_DRACH), function(i) {
-      mods <- unlist(strsplit(hits_eligos_chr_ass_confirmed_5_without_DRACH[i]$mod_type, split =';'))
+    lapply(seq_along(hits_eligos_chr_ass_confirmed_5_without_DRACH_with_bindings), function(i) {
+      mods <- unlist(strsplit(hits_eligos_chr_ass_confirmed_5_without_DRACH_with_bindings[i]$mod_type, split =';'))
       mods_significant <- mods[mods %in% mods_significant_without_DRACH_chr_nascent]
-      hits_eligos_chr_ass_confirmed_5_without_DRACH[i]$mod_type <<- paste(mods_significant, collapse = ';')
+      hits_eligos_chr_ass_confirmed_5_without_DRACH_with_bindings[i]$mod_type <<- paste(mods_significant, collapse = ';')
     })
     
     # keep only ELIGOS DRACH- hits from nucleoplasmic RNAs annotated to significant RNA modifications
-    lapply(seq_along(hits_eligos_nucleo_confirmed_5_without_DRACH), function(i) {
-      mods <- unlist(strsplit(hits_eligos_nucleo_confirmed_5_without_DRACH[i]$mod_type, split =';'))
+    lapply(seq_along(hits_eligos_nucleo_confirmed_5_without_DRACH_with_bindings), function(i) {
+      mods <- unlist(strsplit(hits_eligos_nucleo_confirmed_5_without_DRACH_with_bindings[i]$mod_type, split =';'))
       mods_significant <- mods[mods %in% mods_significant_without_DRACH_nucleo_nascent]
-      hits_eligos_nucleo_confirmed_5_without_DRACH[i]$mod_type <<- paste(mods_significant, collapse = ';')
+      hits_eligos_nucleo_confirmed_5_without_DRACH_with_bindings[i]$mod_type <<- paste(mods_significant, collapse = ';')
     })
     
     # keep only ELIGOS DRACH- hits from cytoplasmic RNAs annotated to significant RNA modifications
-    lapply(seq_along(hits_eligos_cyto_confirmed_5_without_DRACH), function(i) {
-      mods <- unlist(strsplit(hits_eligos_cyto_confirmed_5_without_DRACH[i]$mod_type, split =';'))
+    lapply(seq_along(hits_eligos_cyto_confirmed_5_without_DRACH_with_bindings), function(i) {
+      mods <- unlist(strsplit(hits_eligos_cyto_confirmed_5_without_DRACH_with_bindings[i]$mod_type, split =';'))
       mods_significant <- mods[mods %in% mods_significant_without_DRACH_cyto_nascent]
-      hits_eligos_cyto_confirmed_5_without_DRACH[i]$mod_type <<- paste(mods_significant, collapse = ';')
+      hits_eligos_cyto_confirmed_5_without_DRACH_with_bindings[i]$mod_type <<- paste(mods_significant, collapse = ';')
     })
     
     # keep only ELIGOS DRACH+ hits from chromatin associated RNAs annotated to significant RNA modifications
-    lapply(seq_along(hits_eligos_chr_ass_confirmed_5_with_DRACH), function(i) {
-      mods <- unlist(strsplit(hits_eligos_chr_ass_confirmed_5_with_DRACH[i]$mod_type, split =';'))
+    lapply(seq_along(hits_eligos_chr_ass_confirmed_5_with_DRACH_with_bindings), function(i) {
+      mods <- unlist(strsplit(hits_eligos_chr_ass_confirmed_5_with_DRACH_with_bindings[i]$mod_type, split =';'))
       mods_significant <- mods[mods %in% mods_significant_with_DRACH_chr_nascent]
-      hits_eligos_chr_ass_confirmed_5_with_DRACH[i]$mod_type <<- paste(mods_significant, collapse = ';')
+      hits_eligos_chr_ass_confirmed_5_with_DRACH_with_bindings[i]$mod_type <<- paste(mods_significant, collapse = ';')
     })
     
     # keep only ELIGOS DRACH+ hits from nucleoplasmic RNAs annotated to significant RNA modifications
-    lapply(seq_along(hits_eligos_nucleo_confirmed_5_with_DRACH), function(i) {
-      mods <- unlist(strsplit(hits_eligos_nucleo_confirmed_5_with_DRACH[i]$mod_type, split =';'))
+    lapply(seq_along(hits_eligos_nucleo_confirmed_5_with_DRACH_with_bindings), function(i) {
+      mods <- unlist(strsplit(hits_eligos_nucleo_confirmed_5_with_DRACH_with_bindings[i]$mod_type, split =';'))
       mods_significant <- mods[mods %in% mods_significant_with_DRACH_nucleo_nascent]
-      hits_eligos_nucleo_confirmed_5_with_DRACH[i]$mod_type <<- paste(mods_significant, collapse = ';')
+      hits_eligos_nucleo_confirmed_5_with_DRACH_with_bindings[i]$mod_type <<- paste(mods_significant, collapse = ';')
     })
     
     # keep only ELIGOS DRACH+ hits from cytoplasmic RNAs annotated to significant RNA modifications
-    lapply(seq_along(hits_eligos_cyto_confirmed_5_with_DRACH), function(i) {
-      mods <- unlist(strsplit(hits_eligos_cyto_confirmed_5_with_DRACH[i]$mod_type, split =';'))
+    lapply(seq_along(hits_eligos_cyto_confirmed_5_with_DRACH_with_bindings), function(i) {
+      mods <- unlist(strsplit(hits_eligos_cyto_confirmed_5_with_DRACH_with_bindings[i]$mod_type, split =';'))
       mods_significant <- mods[mods %in% mods_significant_with_DRACH_cyto_nascent]
-      hits_eligos_cyto_confirmed_5_with_DRACH[i]$mod_type <<- paste(mods_significant, collapse = ';')
+      hits_eligos_cyto_confirmed_5_with_DRACH_with_bindings[i]$mod_type <<- paste(mods_significant, collapse = ';')
     })
     
     # for each fraction, concatenate ELIGOS DRACH+ and DRACH- hits
-    hits_chr <- c(hits_eligos_chr_ass_confirmed_5_without_DRACH, hits_eligos_chr_ass_confirmed_5_with_DRACH)
-    hits_nucleo <- c(hits_eligos_nucleo_confirmed_5_without_DRACH, hits_eligos_nucleo_confirmed_5_with_DRACH)
-    hits_cyto<- c(hits_eligos_cyto_confirmed_5_without_DRACH, hits_eligos_cyto_confirmed_5_with_DRACH)
+    hits_chr <- c(hits_eligos_chr_ass_confirmed_5_without_DRACH_with_bindings, hits_eligos_chr_ass_confirmed_5_with_DRACH_with_bindings)
+    hits_nucleo <- c(hits_eligos_nucleo_confirmed_5_without_DRACH_with_bindings, hits_eligos_nucleo_confirmed_5_with_DRACH_with_bindings)
+    hits_cyto<- c(hits_eligos_cyto_confirmed_5_without_DRACH_with_bindings, hits_eligos_cyto_confirmed_5_with_DRACH_with_bindings)
     
   } else if (condition == 'DRACH') {
     # keep only ELIGOS DRACH+ hits from chromatin associated RNAs annotated to significant RNA modifications
-    lapply(seq_along(hits_eligos_chr_ass_confirmed_5_with_DRACH), function(i) {
-      mods <- unlist(strsplit(hits_eligos_chr_ass_confirmed_5_with_DRACH[i]$mod_type, split =';'))
+    lapply(seq_along(hits_eligos_chr_ass_confirmed_5_with_DRACH_with_bindings), function(i) {
+      mods <- unlist(strsplit(hits_eligos_chr_ass_confirmed_5_with_DRACH_with_bindings[i]$mod_type, split =';'))
       mods_significant <- mods[mods %in% mods_significant_with_DRACH_chr_nascent]
-      hits_eligos_chr_ass_confirmed_5_with_DRACH[i]$mod_type <<- paste(mods_significant, collapse = ';')
+      hits_eligos_chr_ass_confirmed_5_with_DRACH_with_bindings[i]$mod_type <<- paste(mods_significant, collapse = ';')
     })
     
     # keep only ELIGOS DRACH+ hits from nucleoplasmic RNAs annotated to significant RNA modifications
-    lapply(seq_along(hits_eligos_nucleo_confirmed_5_with_DRACH), function(i) {
-      mods <- unlist(strsplit(hits_eligos_nucleo_confirmed_5_with_DRACH[i]$mod_type, split =';'))
+    lapply(seq_along(hits_eligos_nucleo_confirmed_5_with_DRACH_with_bindings), function(i) {
+      mods <- unlist(strsplit(hits_eligos_nucleo_confirmed_5_with_DRACH_with_bindings[i]$mod_type, split =';'))
       mods_significant <- mods[mods %in% mods_significant_with_DRACH_nucleo_nascent]
-      hits_eligos_nucleo_confirmed_5_with_DRACH[i]$mod_type <<- paste(mods_significant, collapse = ';')
+      hits_eligos_nucleo_confirmed_5_with_DRACH_with_bindings[i]$mod_type <<- paste(mods_significant, collapse = ';')
     })
     
     # keep only ELIGOS DRACH+ hits from cytoplasmic RNAs annotated to significant RNA modifications
-    lapply(seq_along(hits_eligos_cyto_confirmed_5_with_DRACH), function(i) {
-      mods <- unlist(strsplit(hits_eligos_cyto_confirmed_5_with_DRACH[i]$mod_type, split =';'))
+    lapply(seq_along(hits_eligos_cyto_confirmed_5_with_DRACH_with_bindings), function(i) {
+      mods <- unlist(strsplit(hits_eligos_cyto_confirmed_5_with_DRACH_with_bindings[i]$mod_type, split =';'))
       mods_significant <- mods[mods %in% mods_significant_with_DRACH_cyto_nascent]
-      hits_eligos_cyto_confirmed_5_with_DRACH[i]$mod_type <<- paste(mods_significant, collapse = ';')
+      hits_eligos_cyto_confirmed_5_with_DRACH_with_bindings[i]$mod_type <<- paste(mods_significant, collapse = ';')
     })
     
-    hits_chr <- hits_eligos_chr_ass_confirmed_5_with_DRACH
-    hits_nucleo <- hits_eligos_nucleo_confirmed_5_with_DRACH
-    hits_cyto<- hits_eligos_cyto_confirmed_5_with_DRACH
+    hits_chr <- hits_eligos_chr_ass_confirmed_5_with_DRACH_with_bindings
+    hits_nucleo <- hits_eligos_nucleo_confirmed_5_with_DRACH_with_bindings
+    hits_cyto<- hits_eligos_cyto_confirmed_5_with_DRACH_with_bindings
     
   } else {
     # keep only ELIGOS DRACH- hits from chromatin associated RNAs annotated to significant RNA modifications
-    lapply(seq_along(hits_eligos_chr_ass_confirmed_5_without_DRACH), function(i) {
-      mods <- unlist(strsplit(hits_eligos_chr_ass_confirmed_5_without_DRACH[i]$mod_type, split =';'))
+    lapply(seq_along(hits_eligos_chr_ass_confirmed_5_without_DRACH_with_bindings), function(i) {
+      mods <- unlist(strsplit(hits_eligos_chr_ass_confirmed_5_without_DRACH_with_bindings[i]$mod_type, split =';'))
       mods_significant <- mods[mods %in% mods_significant_without_DRACH_chr_nascent]
-      hits_eligos_chr_ass_confirmed_5_without_DRACH[i]$mod_type <<- paste(mods_significant, collapse = ';')
+      hits_eligos_chr_ass_confirmed_5_without_DRACH_with_bindings[i]$mod_type <<- paste(mods_significant, collapse = ';')
     })
     
     # keep only ELIGOS DRACH- hits from nucleoplasmic RNAs annotated to significant RNA modifications
-    lapply(seq_along(hits_eligos_nucleo_confirmed_5_without_DRACH), function(i) {
-      mods <- unlist(strsplit(hits_eligos_nucleo_confirmed_5_without_DRACH[i]$mod_type, split =';'))
+    lapply(seq_along(hits_eligos_nucleo_confirmed_5_without_DRACH_with_bindings), function(i) {
+      mods <- unlist(strsplit(hits_eligos_nucleo_confirmed_5_without_DRACH_with_bindings[i]$mod_type, split =';'))
       mods_significant <- mods[mods %in% mods_significant_without_DRACH_nucleo_nascent]
-      hits_eligos_nucleo_confirmed_5_without_DRACH[i]$mod_type <<- paste(mods_significant, collapse = ';')
+      hits_eligos_nucleo_confirmed_5_without_DRACH_with_bindings[i]$mod_type <<- paste(mods_significant, collapse = ';')
     })
     
     # keep only ELIGOS DRACH- hits from cytoplasmic RNAs annotated to significant RNA modifications
-    lapply(seq_along(hits_eligos_cyto_confirmed_5_without_DRACH), function(i) {
-      mods <- unlist(strsplit(hits_eligos_cyto_confirmed_5_without_DRACH[i]$mod_type, split =';'))
+    lapply(seq_along(hits_eligos_cyto_confirmed_5_without_DRACH_with_bindings), function(i) {
+      mods <- unlist(strsplit(hits_eligos_cyto_confirmed_5_without_DRACH_with_bindings[i]$mod_type, split =';'))
       mods_significant <- mods[mods %in% mods_significant_without_DRACH_cyto_nascent]
-      hits_eligos_cyto_confirmed_5_without_DRACH[i]$mod_type <<- paste(mods_significant, collapse = ';')
+      hits_eligos_cyto_confirmed_5_without_DRACH_with_bindings[i]$mod_type <<- paste(mods_significant, collapse = ';')
     })
     
-    hits_chr <- hits_eligos_chr_ass_confirmed_5_without_DRACH
-    hits_nucleo <- hits_eligos_nucleo_confirmed_5_without_DRACH
-    hits_cyto<- hits_eligos_cyto_confirmed_5_without_DRACH
+    hits_chr <- hits_eligos_chr_ass_confirmed_5_without_DRACH_with_bindings
+    hits_nucleo <- hits_eligos_nucleo_confirmed_5_without_DRACH_with_bindings
+    hits_cyto<- hits_eligos_cyto_confirmed_5_without_DRACH_with_bindings
   }
   
   # initiate a matrix reporting, for each gene, the RNA modification types of the hits mapping on it
@@ -1291,7 +1291,7 @@ load('/path/to/folder_random_nascent_hits_cluster/chr_ass_mod_type_without_DRACH
 # plot the distribution of the percentages of DRACH+/DRACH- random hits annotated to each RNA mod type and the corresponding percentage 
 # of ELIGOS DRACH+/DRACH- hits
 RNA_mods_chr_nascent <- post_process_mods(chr_ass_mod_type_without_DRACH[c(1,2,3,4,5,6,7,11)],chr_ass_mod_type_DRACH[c(1,2,3,4,5,6,7,11)],
-                                          c(8.43,0.37,2.41,4.24,1.78,0.31,1.41,18.02), c(70.34,0.43,1.72,1.72,3.15,0.72,4.3,73.78),
+                                          c(9.13,0.96,1.98,3.15,1.62,0.41,1.62,7.55), c(71.34,0.25,1.14,1.89,3.41,0.38,3.54,74.62),
                                           'violin_hit_per_mod_bothBD_chr.pdf','chromatin',
                                           paste(as.character(unique(lapply(chr_ass_mod_type_DRACH[[12]], length))),'DRACH+ random sequences (10 nt) generated 1,000 times;', as.character(unique(lapply(chr_ass_mod_type_without_DRACH[[12]], length))),'DRACH- random sequences (10 nt) generated 1,000 times'),
                                           '/path/to/folder_random_nascent_hits_cluster/')
@@ -1307,7 +1307,7 @@ load('/path/to/folder_random_nascent_hits_cluster/nucleo_mod_type_without_DRACH.
 # plot the distribution of the percentages of DRACH+/DRACH- random hits annotated to each RNA mod type and the corresponding percentage 
 # of ELIGOS DRACH+/DRACH- hits
 RNA_mods_nucleo_nascent <- post_process_mods(nucleo_mod_type_without_DRACH[c(1,2,3,4,5,6,7,11)],nucleo_mod_type_DRACH[c(1,2,3,4,5,6,7,11)],
-                                             c(7.78,0.74,3.29,4.49,1.81,0.13,1.81,18.51), c(69.42,0.52,1.89,2.75,3.61,0.69,4.47,73.54),
+                                             c(9.56,1.47,2.57,3.58,1.84,0.46,1.65,19.39), c(74.31,0.4,0.79,2.57,4.15,0.59,4.94,77.27),
                                              'violin_hit_per_mod_bothBD_nucleo.pdf','nucleoplasm',
                                              paste(as.character(unique(lapply(nucleo_mod_type_DRACH[[12]], length))),'DRACH+ random sequences (10 nt) generated 1,000 times;', as.character(unique(lapply(nucleo_mod_type_without_DRACH[[12]], length))),'DRACH- random sequences (10 nt) generated 1,000 times'),
                                              '/path/to/folder_random_nascent_hits_cluster/')
@@ -1323,7 +1323,7 @@ load('/path/to/folder_random_nascent_hits_cluster/cyto_mod_type_without_DRACH.Rd
 # plot the distribution of the percentages of DRACH+/DRACH- random hits annotated to each RNA mod type and the corresponding percentage 
 # of ELIGOS DRACH+/DRACH- hits
 RNA_mods_cyto_nascent <- post_process_mods(cyto_mod_type_without_DRACH[c(1,2,3,4,5,6,7,11)],cyto_mod_type_DRACH[c(1,2,3,4,5,6,7,11)],
-                                           c(7.73,0.87,2.97,4.08,2.53,0.25,1.48,18.23), c(67.57,0.54,1.63,1.99,2.54,0.72,4.17,69.57),
+                                           c(7.72,1.08,2.17,3.86,1.83,0.14,1.56,16.87), c(71.07,0.68,1.02,2.2,2.2,1.18,3.89,73.6),
                                            'violin_hit_per_mod_bothBD_cyto.pdf','cytoplasm',
                                            paste(as.character(unique(lapply(cyto_mod_type_DRACH[[12]], length))),'DRACH+ random sequences (10 nt) generated 1,000 times;', as.character(unique(lapply(cyto_mod_type_without_DRACH[[12]], length))),'DRACH- random sequences (10 nt) generated 1,000 times'),
                                            '/path/to/folder_random_nascent_hits_cluster/')
@@ -1338,11 +1338,11 @@ print_heatmap(directory_hits = '/path/to/fractions_eligos_4sU_library_gene_subsa
               significant_RNA_mods_with_DRACH_nucleo_nascent, significant_RNA_mods_without_DRACH_cyto_nascent, significant_RNA_mods_with_DRACH_cyto_nascent)
 
 heatmap_enrichment(directory_hits = '/path/to/fractions_eligos_4sU_library_gene_subsampling_nascent_min05_min05_mag1/',
-                   c(70.34,0.43,1.72,1.72,3.15,0.72,4.3), c(69.42,0.52,1.89,2.75,3.61,0.69,4.47), c(67.57,0.54,1.63,1.99,2.54,0.72,4.17),
+                   c(71.34,0.25,1.14,1.89,3.41,0.38,3.54), c(74.31,0.4,0.79,2.57,4.15,0.59,4.94), c(71.07,0.68,1.02,2.2,2.2,1.18,3.89),
                    pvalues_with_DRACH_chr_nascent, pvalues_with_DRACH_nucleo_nascent, pvalues_with_DRACH_cyto_nascent, TRUE)
 
 heatmap_enrichment(directory_hits = '/path/to/fractions_eligos_4sU_library_gene_subsampling_nascent_min05_min05_mag1/',
-                   c(8.43,0.37,2.41,4.24,1.78,0.31,1.41),c(7.78,0.74,3.29,4.49,1.81,0.13,1.81),c(7.73,0.87,2.97,4.08,2.53,0.25,1.48),
+                   c(9.13,0.96,1.98,3.15,1.62,0.41,1.62),c(9.56,1.47,2.57,3.58,1.84,0.46,1.65),c(7.72,1.08,2.17,3.86,1.83,0.14,1.56),
                    pvalues_without_DRACH_chr_nascent, pvalues_without_DRACH_nucleo_nascent, pvalues_without_DRACH_cyto_nascent, FALSE)
 
 # both DRACH+ and DRACH- hits
@@ -1359,7 +1359,7 @@ mods_combination_only_significant('/path/to/fractions_eligos_4sU_library_gene_su
                                   significant_RNA_mods_with_DRACH_nucleo_nascent, significant_RNA_mods_without_DRACH_cyto_nascent, significant_RNA_mods_with_DRACH_cyto_nascent)
 
 #################
-# nascent + pre-existent RNAs with library-level subsampling threshold used for nascent reads
+# nascent + pre-existent RNAs SUM159 with library-level subsampling threshold used for nascent reads
 
 load('/path/to/folder_random_tot2_hits_cluster/chr_ass_mod_type_DRACH.Rda')
 load('/path/to/folder_random_tot2_hits_cluster/chr_ass_mod_type_without_DRACH.Rda')
