@@ -1202,13 +1202,26 @@ confirmed_hits_ELIGOS_2_min05_min05_mag1 <- ELIGOS_results(path_directory = '/pa
 confirmed_hits_DRACH_ELIGOS_2_min05_min05_mag1 <- DRACH_overlap_ELIGOS(path_directory = '/path/to/fractions_eligos_4sU_library_gene_subsampling_total_510645_min05_min05_mag1/',
                                                                        hits_ELIGOS_chr = confirmed_hits_ELIGOS_2_min05_min05_mag1[[1]], hits_ELIGOS_nucleo = confirmed_hits_ELIGOS_2_min05_min05_mag1[[2]], hits_ELIGOS_cyto = confirmed_hits_ELIGOS_2_min05_min05_mag1[[3]])
 
-######################## 
-# STORM K562: ELIGOS ANALYSIS ON NASCENT+PRE-EXISTING READS (pvalue<0.05, ad.pval<0.05, OR>1)
 
-confirmed_hits_ELIGOS_min05_min05_mag1 <- ELIGOS_results(path_directory = '/path/to/fractions_eligos_STORM_K562/eligos_total_reads/',
+########################
+# K562: ELIGOS ANALYSIS ON NASCENT+PRE-EXISTING READS (pvalue<0.05, ad.pval<0.05, OR>1)
+confirmed_hits_ELIGOS_K562_min05_min05_mag1 <- ELIGOS_results(path_directory = '/path/to/fractions_eligos_K562_all_reads/',
                                                          name_pdf_overlap_5samplings_cyto = 'overlap_cyto_replicates_4sU_10nt.pdf', name_pdf_overlap_5samplings_chr_ass = 'overlap_chr_ass_replicates_4sU_10nt.pdf', name_pdf_overlap_5samplings_nucleo = 'overlap_nucleo_replicates_4sU_10nt.pdf',
                                                          name_pdf_histogram_cyto = 'number_rep_with_hit_cyto_4sU.pdf', name_pdf_histogram_chr_ass = 'number_rep_with_hit_chr_ass_4sU.pdf', name_pdf_histogram_nucleo = 'number_rep_with_hit_nucleo_4sU.pdf',
                                                          name_pdf_overlap_3fractions = 'overlap_hits_eligos_confirmed_5_4sU_10nt.pdf', p=0.05,ap=0.05,OR=1)
 
-confirmed_hits_DRACH_ELIGOS_min05_min05_mag1 <- DRACH_overlap_ELIGOS(path_directory = '/path/to/fractions_eligos_STORM_K562/eligos_total_reads/',
-                                                                     hits_ELIGOS_chr = confirmed_hits_ELIGOS_min05_min05_mag1[[1]], hits_ELIGOS_nucleo = confirmed_hits_ELIGOS_min05_min05_mag1[[2]], hits_ELIGOS_cyto = confirmed_hits_ELIGOS_min05_min05_mag1[[3]])
+confirmed_hits_DRACH_K562_ELIGOS_min05_min05_mag1 <- DRACH_overlap_ELIGOS(path_directory = '/path/to/fractions_eligos_K562_all_reads/',
+                                                                     hits_ELIGOS_chr = confirmed_hits_ELIGOS_K562_min05_min05_mag1[[1]], hits_ELIGOS_nucleo = confirmed_hits_ELIGOS_K562_min05_min05_mag1[[2]], hits_ELIGOS_cyto = confirmed_hits_K562_ELIGOS_min05_min05_mag1[[3]])
+
+
+########################                                        
+# STORM K562: ELIGOS ANALYSIS ON NASCENT+PRE-EXISTING READS (pvalue<0.05, ad.pval<0.05, OR>1)
+
+confirmed_hits_ELIGOS_K562_STORM_min05_min05_mag1 <- ELIGOS_results(path_directory = '/path/to/fractions_eligos_STORM_K562/eligos_total_reads/',
+                                                         name_pdf_overlap_5samplings_cyto = 'overlap_cyto_replicates_4sU_10nt.pdf', name_pdf_overlap_5samplings_chr_ass = 'overlap_chr_ass_replicates_4sU_10nt.pdf', name_pdf_overlap_5samplings_nucleo = 'overlap_nucleo_replicates_4sU_10nt.pdf',
+                                                         name_pdf_histogram_cyto = 'number_rep_with_hit_cyto_4sU.pdf', name_pdf_histogram_chr_ass = 'number_rep_with_hit_chr_ass_4sU.pdf', name_pdf_histogram_nucleo = 'number_rep_with_hit_nucleo_4sU.pdf',
+                                                         name_pdf_overlap_3fractions = 'overlap_hits_eligos_confirmed_5_4sU_10nt.pdf', p=0.05,ap=0.05,OR=1)
+
+confirmed_hits_DRACH_ELIGOS_K562_STORM_min05_min05_mag1 <- DRACH_overlap_ELIGOS(path_directory = '/path/to/fractions_eligos_STORM_K562/eligos_total_reads/',
+                                                                     hits_ELIGOS_chr = confirmed_hits_ELIGOS_K562_STORM_min05_min05_mag1[[1]], hits_ELIGOS_nucleo = confirmed_hits_ELIGOS_K562_STORM_min05_min05_mag1[[2]], hits_ELIGOS_cyto = confirmed_hits_ELIGOS_K562_STORM_min05_min05_mag1[[3]])
+
