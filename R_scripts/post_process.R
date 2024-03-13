@@ -257,7 +257,7 @@ generate_heatmap_gene <- function(hits_non_DRACH, hits_DRACH, fraction, path_dir
       }
     }
     
-    pdf(paste0(path_directory, '/mods_RBPs/Only_significant/mods_distribution_on_gene_', fraction, '.pdf'), height = 7, width = 5)
+    pdf(paste0(path_directory, '/mods_RBPs/mods_distribution_on_gene_', fraction, '.pdf'), height = 7, width = 5)
     pheatmap(m, cluster_rows = FALSE, cluster_cols = FALSE, show_rownames = TRUE, 
              treeheight_row = 0, fontsize = 10, color = colorRampPalette(c("white", "red"))(50), 
              legend_breaks = round(seq(0,max(m),length.out=13),0), legend_labels = as.character(round(seq(0,max(m),length.out=13),0)), fontsize_row = 10, fontsize_col = 10,display_numbers = m)
@@ -308,7 +308,7 @@ generate_heatmap_gene <- function(hits_non_DRACH, hits_DRACH, fraction, path_dir
       }
     }
     
-    pdf(paste0(path_directory, '/mods_RBPs/Only_significant/m6A_distribution_on_gene_', fraction, '.pdf'), height = 1, width = 5)
+    pdf(paste0(path_directory, '/mods_RBPs/m6A_distribution_on_gene_', fraction, '.pdf'), height = 1, width = 5)
     pheatmap(m, cluster_rows = FALSE, cluster_cols = FALSE, show_rownames = TRUE, show_colnames = FALSE, legend = FALSE,
              treeheight_row = 0, main = fraction, fontsize = 10, color = colorRampPalette(c("white", "red"))(50), 
              fontsize_row = 10, fontsize_col = 10,display_numbers = m)
