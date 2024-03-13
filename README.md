@@ -38,19 +38,21 @@ Rscript subsampling_reads.R [list of arguments]
 --path_fastq_chr_ass                                     Path to the fastq file of chromatin fraction
 --path_fastq_nucleo                                      Path to the fastq file of nucleoplasm fraction
 --path_fastq_cyto                                        Path to the fastq file of cytoplasm fraction
---path_reference_genome                                  Path to the reference genome (optional)
---path_gtf_file                                          Path to the gtf file (optional)
---threads                                                Number of threads for the mapping (optional)
---num_reads                                              Minimum number of reads mapping on each gene (optional)
---num_subsampling                                        Number of samplings to do (optional)
---minimap2                                               Path to minimap2 (optional)
---samtools                                               Path to samtools (optional)
---seqtk                                                  Path to seqtk (optional)
+--path_reference_genome                                  Path to the reference genome (*)
+--path_gtf_file                                          Path to the gtf file (*)
+--threads                                                Number of threads for the mapping (*)
+--num_reads                                              Minimum number of reads mapping on each gene (*)
+--num_subsampling                                        Number of samplings to do (*)
+--minimap2                                               Path to minimap2 (*)
+--samtools                                               Path to samtools (*)
+--seqtk                                                  Path to seqtk (*)
 --cond1                                                  Different conditions with the same order of the corresponding fastq files 
 --cond2                                                  Different conditions with the same order of the corresponding fastq files
 --cond3                                                  Different conditions with the same order of the corresponding fastq files
 
-Example of execution with default values:
+For all the parameters indicated with (*) the default values can be set directly inside the R script.
+
+Example of execution with default parameters:
 Rscript subsampling_reads.R path_fastq_chr_ass='/path/to/chromatin_associated_PASS_reads.fastq' path_fastq_nucleo='/path/to/nucleoplasmic_PASS_reads.fastq' path_fastq_cyto='/path/to/cytoplasmic_PASS_reads.fastq' cond1='chr' cond2='nucleo' cond3='cyto'
 ```
 
