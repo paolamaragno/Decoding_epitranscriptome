@@ -1285,8 +1285,8 @@ mods_combination_only_significant('/path/to/fractions_eligos_4sU_library_gene_su
 #################
 # nascent RNAs SUM159
 
-load('/path/to/folder_random_nascent_hits_cluster/chr_ass_mod_type_DRACH.Rda')
-load('/path/to/folder_random_nascent_hits_cluster/chr_ass_mod_type_without_DRACH.Rda')
+load('/path/to/folder_random_hits_cluster_nascent/chr_ass_mod_type_DRACH.Rda')
+load('/path/to/folder_random_hits_cluster_nascent/chr_ass_mod_type_without_DRACH.Rda')
 
 # plot the distribution of the percentages of DRACH+/DRACH- random hits annotated to each RNA mod type and the corresponding percentage 
 # of ELIGOS DRACH+/DRACH- hits
@@ -1294,15 +1294,15 @@ RNA_mods_chr_nascent <- post_process_mods(chr_ass_mod_type_without_DRACH[c(1,2,3
                                           c(9.13,0.96,1.98,3.15,1.62,0.41,1.62,7.55), c(71.34,0.25,1.14,1.89,3.41,0.38,3.54,74.62),
                                           'violin_hit_per_mod_bothBD_chr.pdf','chromatin',
                                           paste(as.character(unique(lapply(chr_ass_mod_type_DRACH[[12]], length))),'DRACH+ random sequences (10 nt) generated 1,000 times;', as.character(unique(lapply(chr_ass_mod_type_without_DRACH[[12]], length))),'DRACH- random sequences (10 nt) generated 1,000 times'),
-                                          '/path/to/folder_random_nascent_hits_cluster/')
+                                          '/path/to/folder_random_hits_cluster_nascent/')
 
 pvalues_without_DRACH_chr_nascent <- RNA_mods_chr_nascent[[1]]
 pvalues_with_DRACH_chr_nascent <- RNA_mods_chr[[2]]
 significant_RNA_mods_without_DRACH_chr_nascent <- RNA_mods_chr_nascent[[3]]
 significant_RNA_mods_with_DRACH_chr_nascent <- RNA_mods_chr_nascent[[4]]
 
-load('/path/to/folder_random_nascent_hits_cluster/nucleo_mod_type_DRACH.Rda')
-load('/path/to/folder_random_nascent_hits_cluster/nucleo_mod_type_without_DRACH.Rda')
+load('/path/to/folder_random_hits_cluster_nascent/nucleo_mod_type_DRACH.Rda')
+load('/path/to/folder_random_hits_cluster_nascent/nucleo_mod_type_without_DRACH.Rda')
 
 # plot the distribution of the percentages of DRACH+/DRACH- random hits annotated to each RNA mod type and the corresponding percentage 
 # of ELIGOS DRACH+/DRACH- hits
@@ -1310,15 +1310,15 @@ RNA_mods_nucleo_nascent <- post_process_mods(nucleo_mod_type_without_DRACH[c(1,2
                                              c(9.56,1.47,2.57,3.58,1.84,0.46,1.65,19.39), c(74.31,0.4,0.79,2.57,4.15,0.59,4.94,77.27),
                                              'violin_hit_per_mod_bothBD_nucleo.pdf','nucleoplasm',
                                              paste(as.character(unique(lapply(nucleo_mod_type_DRACH[[12]], length))),'DRACH+ random sequences (10 nt) generated 1,000 times;', as.character(unique(lapply(nucleo_mod_type_without_DRACH[[12]], length))),'DRACH- random sequences (10 nt) generated 1,000 times'),
-                                             '/path/to/folder_random_nascent_hits_cluster/')
+                                             '/path/to/folder_random_hits_cluster_nascent/')
 
 pvalues_without_DRACH_nucleo_nascent <- RNA_mods_nucleo_nascent[[1]]
 pvalues_with_DRACH_nucleo_nascent <- RNA_mods_nucleo_nascent[[2]]
 significant_RNA_mods_without_DRACH_nucleo_nascent <- RNA_mods_nucleo_nascent[[3]]
 significant_RNA_mods_with_DRACH_nucleo_nascent <- RNA_mods_nucleo_nascent[[4]]
 
-load('/path/to/folder_random_nascent_hits_cluster/cyto_mod_type_DRACH.Rda')
-load('/path/to/folder_random_nascent_hits_cluster/cyto_mod_type_without_DRACH.Rda')
+load('/path/to/folder_random_hits_cluster_nascent/cyto_mod_type_DRACH.Rda')
+load('/path/to/folder_random_hits_cluster_nascent/cyto_mod_type_without_DRACH.Rda')
 
 # plot the distribution of the percentages of DRACH+/DRACH- random hits annotated to each RNA mod type and the corresponding percentage 
 # of ELIGOS DRACH+/DRACH- hits
@@ -1326,7 +1326,7 @@ RNA_mods_cyto_nascent <- post_process_mods(cyto_mod_type_without_DRACH[c(1,2,3,4
                                            c(7.72,1.08,2.17,3.86,1.83,0.14,1.56,16.87), c(71.07,0.68,1.02,2.2,2.2,1.18,3.89,73.6),
                                            'violin_hit_per_mod_bothBD_cyto.pdf','cytoplasm',
                                            paste(as.character(unique(lapply(cyto_mod_type_DRACH[[12]], length))),'DRACH+ random sequences (10 nt) generated 1,000 times;', as.character(unique(lapply(cyto_mod_type_without_DRACH[[12]], length))),'DRACH- random sequences (10 nt) generated 1,000 times'),
-                                           '/path/to/folder_random_nascent_hits_cluster/')
+                                           '/path/to/folder_random_hits_cluster_nascent/')
 
 pvalues_without_DRACH_cyto_nascent <- RNA_mods_cyto_nascent[[1]]
 pvalues_with_DRACH_cyto_nascent <- RNA_mods_cyto_nascent[[2]]
@@ -1361,8 +1361,8 @@ mods_combination_only_significant('/path/to/fractions_eligos_4sU_library_gene_su
 #################
 # nascent + pre-existent RNAs SUM159 with library-level subsampling threshold used for nascent reads
 
-load('/path/to/folder_random_tot2_hits_cluster/chr_ass_mod_type_DRACH.Rda')
-load('/path/to/folder_random_tot2_hits_cluster/chr_ass_mod_type_without_DRACH.Rda')
+load('/path/to/folder_random_hits_cluster_tot2/chr_ass_mod_type_DRACH.Rda')
+load('/path/to/folder_random_hits_cluster_tot2/chr_ass_mod_type_without_DRACH.Rda')
 
 # plot the distribution of the percentages of DRACH+/DRACH- random hits annotated to each RNA mod type and the corresponding percentage 
 # of ELIGOS DRACH+/DRACH- hits
@@ -1370,15 +1370,15 @@ RNA_mods_chr_tot2 <- post_process_mods(chr_ass_mod_type_without_DRACH[c(1,2,3,4,
                                        c(9.18,1.41,2.81,3.09,2.16,0.19,1.22,18.84), c(84.04,0.3,1.37,1.37,3.65,0.3,2.58,86.17),
                                        'violin_hit_per_mod_bothBD_chr.pdf','chromatin',
                                        paste(as.character(unique(lapply(chr_ass_mod_type_DRACH[[12]], length))),'DRACH+ random sequences (10 nt) generated 1,000 times;', as.character(unique(lapply(chr_ass_mod_type_without_DRACH[[12]], length))),'DRACH- random sequences (10 nt) generated 1,000 times'),
-                                       '/path/to/folder_random_tot2_hits_cluster/')
+                                       '/path/to/folder_random_hits_cluster_tot2/')
 
 pvalues_without_DRACH_chr_tot2 <- RNA_mods_chr_tot2[[1]]
 pvalues_with_DRACH_chr_tot2 <- RNA_mods_chr_tot2[[2]]
 significant_RNA_mods_without_DRACH_chr_tot2 <- RNA_mods_chr_tot2[[3]]
 significant_RNA_mods_with_DRACH_chr_tot2 <- RNA_mods_chr_tot2[[4]]
 
-load('/path/to/folder_random_tot2_hits_cluster/nucleo_mod_type_DRACH.Rda')
-load('/path/to/folder_random_tot2_hits_cluster/nucleo_mod_type_without_DRACH.Rda')
+load('/path/to/folder_random_hits_cluster_tot2/nucleo_mod_type_DRACH.Rda')
+load('/path/to/folder_random_hits_cluster_tot2/nucleo_mod_type_without_DRACH.Rda')
 
 # plot the distribution of the percentages of DRACH+/DRACH- random hits annotated to each RNA mod type and the corresponding percentage 
 # of ELIGOS DRACH+/DRACH- hits
@@ -1386,15 +1386,15 @@ RNA_mods_nucleo_tot2 <- post_process_mods(nucleo_mod_type_without_DRACH[c(1,2,3,
                                           c(6.82,1.86,3.23,3.23,2.23,0.37,0.62,17.37), c(87.73,0.72,0.54,1.08,3.25,0.36,2.35,88.81),
                                           'violin_hit_per_mod_bothBD_nucleo.pdf','nucleoplasm',
                                           paste(as.character(unique(lapply(nucleo_mod_type_DRACH[[12]], length))),'DRACH+ random sequences (10 nt) generated 1,000 times;', as.character(unique(lapply(nucleo_mod_type_without_DRACH[[12]], length))),'DRACH- random sequences (10 nt) generated 1,000 times'),
-                                          '/path/to/folder_random_tot2_hits_cluster/')
+                                          '/path/to/folder_random_hits_cluster_tot2/')
 
 pvalues_without_DRACH_nucleo_tot2 <- RNA_mods_nucleo_tot2[[1]]
 pvalues_with_DRACH_nucleo_tot2 <- RNA_mods_nucleo_tot2[[2]]
 significant_RNA_mods_without_DRACH_nucleo_tot2 <- RNA_mods_nucleo_tot2[[3]]
 significant_RNA_mods_with_DRACH_nucleo_tot2 <- RNA_mods_nucleo_tot2[[4]]
 
-load('/path/to/folder_random_tot2_hits_cluster/cyto_mod_type_DRACH.Rda')
-load('/path/to/folder_random_tot2_hits_cluster/cyto_mod_type_without_DRACH.Rda')
+load('/path/to/folder_random_hits_cluster_tot2/cyto_mod_type_DRACH.Rda')
+load('/path/to/folder_random_hits_cluster_tot2/cyto_mod_type_without_DRACH.Rda')
 
 # plot the distribution of the percentages of DRACH+/DRACH- random hits annotated to each RNA mod type and the corresponding percentage 
 # of ELIGOS DRACH+/DRACH- hits
@@ -1402,7 +1402,7 @@ RNA_mods_cyto_tot2 <- post_process_mods(cyto_mod_type_without_DRACH[c(1,2,3,4,5,
                                         c(6.9,1.72,2.78,4.12,1.82,0.38,0.77,17.15), c(84.63,0.62,0.78,1.55,3.11,1.24,2.95,86.49),
                                         'violin_hit_per_mod_bothBD_cyto.pdf','cytoplasm',
                                         paste(as.character(unique(lapply(cyto_mod_type_DRACH[[12]], length))),'DRACH+ random sequences (10 nt) generated 1,000 times;', as.character(unique(lapply(cyto_mod_type_without_DRACH[[12]], length))),'DRACH- random sequences (10 nt) generated 1,000 times'),
-                                        '/path/to/folder_random_tot2_hits_cluster/')
+                                        '/path/to/folder_random_hits_cluster_tot2/')
 
 pvalues_without_DRACH_cyto_tot2 <- RNA_mods_cyto_tot2[[1]]
 pvalues_with_DRACH_cyto_tot2 <- RNA_mods_cyto_tot2[[2]]
@@ -1544,8 +1544,8 @@ mods_combination_only_significant('/path/to/fractions_eligos_STORM_K562/eligos_t
 # give in input, for each fraction, the 1,000 sets of DRACH- random hits (hits_effector_without_DRACH) and 
 # the 1,000 sets of DRACH+ random hits (hits_effector_with_DRACH) (both overlapped
 # with the coordinates of RNA marks+effectors' binding sites from the databases) and the percentage
-# of ELIGOS DRACH-/DRACH+ hits overlapping with each category of effectors from the DB from the same fraction
-# (ELIGOS_results_without_DRACH/ELIGOS_results_with_DRACH)
+# of ELIGOS DRACH-/DRACH+ hits overlapping with each category of effectors from the DB for the same fraction
+# (ELIGOS_results_without_DRACH/ELIGOS_results_with_DRACH).
 # Path is the path to the directory in which saving the plot
 post_process_effectors <- function(hits_effector_without_DRACH, hits_effector_with_DRACH, ELIGOS_results_without_DRACH, ELIGOS_results_with_DRACH, name_pdf,t,st, path) {
   hits_effector <- c(hits_effector_without_DRACH[2],hits_effector_with_DRACH[2],
@@ -1585,7 +1585,7 @@ post_process_effectors <- function(hits_effector_without_DRACH, hits_effector_wi
   
   # for each category of effectors, compute how many of the 1,000
   # values of percentage of DRACH- random hits overlapping with each category are higher than the percentage of ELIGOS DRACH- hits 
-  # overlapping with the same category divided by 1,000
+  # overlapping with the same category and then divide by 1,000
   p_value_without_DRACH <- unlist(lapply(seq_along(c(1,3,5,7)), function(x,n,i) {
     if (length(x[[i]][x[[i]]>ELIGOS_results_without_DRACH[names(ELIGOS_results_without_DRACH) == n[i]]])/1000 == 0) {
       paste0('< ',as.character(1e-3))
@@ -1666,7 +1666,7 @@ post_process_effectors <- function(hits_effector_without_DRACH, hits_effector_wi
 
 
 ##########
-# ALL READS
+# ALL READS SUM159
 
 load('/path/to/folder_random_hits_cluster/hits_chr_mod_RBP_DRACH.Rda')
 load('/path/to/folder_random_hits_cluster/hits_chr_mod_RBP_without_DRACH.Rda')
@@ -1699,68 +1699,100 @@ post_process_effectors(hits_cyto_mod_RBP_without_DRACH,hits_cyto_mod_RBP_DRACH, 
                        path = '/path/to/folder_random_hits_cluster/')
 
 ######
-# NASCENT READS
+# NASCENT READS SUM159
 
-load('/path/to/folder_random_nascent_hits_cluster/hits_chr_mod_RBP_DRACH.Rda')
-load('/path/to/folder_random_nascent_hits_cluster/hits_chr_mod_RBP_without_DRACH.Rda')
+load('/path/to/folder_random_hits_cluster_nascent/hits_chr_mod_RBP_DRACH.Rda')
+load('/path/to/folder_random_hits_cluster_nascent/hits_chr_mod_RBP_without_DRACH.Rda')
 
 # plot the distribution of the percentages of DRACH+/DRACH- random hits annotated to each category of effectors and the corresponding percentage 
 # of ELIGOS DRACH+/DRACH- hits
 post_process_effectors(hits_chr_mod_RBP_without_DRACH,hits_chr_mod_RBP_DRACH, c(25.67,70.72,72.29,92.35), c(34.67,85.39,86.53,97.42), 
                        'violin_hit_effectors_bothBD_chr.pdf', 'chromatin',
                        paste(as.character(unique(lapply(hits_chr_mod_RBP_DRACH[5:length(hits_chr_mod_RBP_DRACH)], length))),'DRACH+ random sequences (10 nt) generated 1,000 times;', as.character(unique(lapply(hits_chr_mod_RBP_without_DRACH[5:length(hits_chr_mod_RBP_without_DRACH)], length))),'DRACH- random sequences (10 nt) generated 1,000 times'),
-                       path = '/path/to/folder_random_nascent_hits_cluster/')
+                       path = '/path/to/folder_random_hits_cluster_nascent/')
 
-load('/path/to/folder_random_nascent_hits_cluster/hits_nucleo_mod_RBP_DRACH.Rda')
-load('/path/to/folder_random_nascent_hits_cluster/hits_nucleo_mod_RBP_without_DRACH.Rda')
+load('/path/to/folder_random_hits_cluster_nascent/hits_nucleo_mod_RBP_DRACH.Rda')
+load('/path/to/folder_random_hits_cluster_nascent/hits_nucleo_mod_RBP_without_DRACH.Rda')
 
 # plot the distribution of the percentages of DRACH+/DRACH- random hits annotated to each category of effectors and the corresponding percentage 
 # of ELIGOS DRACH+/DRACH- hits
 post_process_effectors(hits_nucleo_mod_RBP_without_DRACH,hits_nucleo_mod_RBP_DRACH, c(27.77,69.82,71.83,92.29), c(38.66,87.97,88.49,97.25), 
                        'violin_hit_effectors_bothBD_nucleo.pdf', 'nucleoplasm',
                        paste(as.character(unique(lapply(hits_nucleo_mod_RBP_DRACH[5:length(hits_nucleo_mod_RBP_DRACH)], length))),'DRACH+ random sequences (10 nt) generated 1,000 times;', as.character(unique(lapply(hits_nucleo_mod_RBP_without_DRACH[5:length(hits_nucleo_mod_RBP_without_DRACH)], length))),'DRACH- random sequences (10 nt) generated 1,000 times'),
-                       path = '/path/to/folder_random_nascent_hits_cluster/')
+                       path = '/path/to/folder_random_hits_cluster_nascent/')
 
-load('/path/to/folder_random_nascent_hits_cluster/hits_cyto_mod_RBP_DRACH.Rda')
-load('/path/to/folder_random_nascent_hits_cluster/hits_cyto_mod_RBP_without_DRACH.Rda')
+load('/path/to/folder_random_hits_cluster_nascent/hits_cyto_mod_RBP_DRACH.Rda')
+load('/path/to/folder_random_hits_cluster_nascent/hits_cyto_mod_RBP_without_DRACH.Rda')
 
 # plot the distribution of the percentages of DRACH+/DRACH- random hits annotated to each category of effectors and the corresponding percentage 
 # of ELIGOS DRACH+/DRACH- hits
 post_process_effectors(hits_cyto_mod_RBP_without_DRACH,hits_cyto_mod_RBP_DRACH, c(26.95,70.27,71.69,92.27), c(34.96,86.96,88.04,96.38), 
                        'violin_hit_effectors_bothBD_cyto.pdf', 'cytoplasm',
                        paste(as.character(unique(lapply(hits_cyto_mod_RBP_DRACH[5:length(hits_cyto_mod_RBP_DRACH)], length))),'DRACH+ random sequences (10 nt) generated 1,000 times;', as.character(unique(lapply(hits_cyto_mod_RBP_without_DRACH[5:length(hits_cyto_mod_RBP_without_DRACH)], length))),'DRACH- random sequences (10 nt) generated 1,000 times'),
-                       path = '/path/to/folder_random_nascent_hits_cluster/')
+                       path = '/path/to/folder_random_hits_cluster_nascent/')
 
 ######
-# ALL READS with library-level subsampling threshold used for nascent reads
+# ALL READS SUM159 with library-level subsampling threshold used for nascent reads
 
-load('/path/to/folder_random_tot2_hits_cluster/hits_chr_mod_RBP_DRACH.Rda')
-load('/path/to/folder_random_tot2_hits_cluster/hits_chr_mod_RBP_without_DRACH.Rda')
+load('/path/to/folder_random_hits_cluster_tot2/hits_chr_mod_RBP_DRACH.Rda')
+load('/path/to/folder_random_hits_cluster_tot2/hits_chr_mod_RBP_without_DRACH.Rda')
 
 # plot the distribution of the percentages of DRACH+/DRACH- random hits annotated to each category of effectors and the corresponding percentage 
 # of ELIGOS DRACH+/DRACH- hits
 post_process_effectors(hits_chr_mod_RBP_without_DRACH,hits_chr_mod_RBP_DRACH, c(23.01,70.51,72,91.97), c(31.1,90.39,90.75,97.69), 
                        'violin_hit_effectors_bothBD_chr.pdf', 'chromatin',
                        paste(as.character(unique(lapply(hits_chr_mod_RBP_DRACH[5:length(hits_chr_mod_RBP_DRACH)], length))),'DRACH+ random sequences (10 nt) generated 1,000 times;', as.character(unique(lapply(hits_chr_mod_RBP_without_DRACH[5:length(hits_chr_mod_RBP_without_DRACH)], length))),'DRACH- random sequences (10 nt) generated 1,000 times'),
-                       path = '/path/to/folder_random_tot2_hits_cluster/')
+                       path = '/path/to/folder_random_hits_cluster_tot2/')
 
-load('/path/to/folder_random_tot2_hits_cluster/hits_nucleo_mod_RBP_DRACH.Rda')
-load('/path/to/folder_random_tot2_hits_cluster/hits_nucleo_mod_RBP_without_DRACH.Rda')
+load('/path/to/folder_random_hits_cluster_tot2/hits_nucleo_mod_RBP_DRACH.Rda')
+load('/path/to/folder_random_hits_cluster_tot2/hits_nucleo_mod_RBP_without_DRACH.Rda')
 
 # plot the distribution of the percentages of DRACH+/DRACH- random hits annotated to each category of effectors and the corresponding percentage 
 # of ELIGOS DRACH+/DRACH- hits
 post_process_effectors(hits_nucleo_mod_RBP_without_DRACH,hits_nucleo_mod_RBP_DRACH, c(24.41,69.15,71.11,91.99), c(37.1,89.85,90.52,97.84), 
                        'violin_hit_effectors_bothBD_nucleo.pdf', 'nucleoplasm',
                        paste(as.character(unique(lapply(hits_nucleo_mod_RBP_DRACH[5:length(hits_nucleo_mod_RBP_DRACH)], length))),'DRACH+ random sequences (10 nt) generated 1,000 times;', as.character(unique(lapply(hits_nucleo_mod_RBP_without_DRACH[5:length(hits_nucleo_mod_RBP_without_DRACH)], length))),'DRACH- random sequences (10 nt) generated 1,000 times'),
-                       path = '/path/to/folder_random_tot2_hits_cluster/')
+                       path = '/path/to/folder_random_hits_cluster_tot2/')
 
-load('/path/to/folder_random_tot2_hits_cluster/hits_cyto_mod_RBP_DRACH.Rda')
-load('/path/to/folder_random_tot2_hits_cluster/hits_cyto_mod_RBP_without_DRACH.Rda')
+load('/path/to/folder_random_hits_cluster_tot2/hits_cyto_mod_RBP_DRACH.Rda')
+load('/path/to/folder_random_hits_cluster_tot2/hits_cyto_mod_RBP_without_DRACH.Rda')
 
 # plot the distribution of the percentages of DRACH+/DRACH- random hits annotated to each category of effectors and the corresponding percentage 
 # of ELIGOS DRACH+/DRACH- hits
 post_process_effectors(hits_cyto_mod_RBP_without_DRACH,hits_cyto_mod_RBP_DRACH, c(24.17,67.74,69.57,90.3), c(32.6,91.39,91.89,98.14), 
                        'violin_hit_effectors_bothBD_cyto.pdf', 'cytoplasm',
                        paste(as.character(unique(lapply(hits_cyto_mod_RBP_DRACH[5:length(hits_cyto_mod_RBP_DRACH)], length))),'DRACH+ random sequences (10 nt) generated 1,000 times;', as.character(unique(lapply(hits_cyto_mod_RBP_without_DRACH[5:length(hits_cyto_mod_RBP_without_DRACH)], length))),'DRACH- random sequences (10 nt) generated 1,000 times'),
-                       path = '/path/to/folder_random_tot2_hits_cluster/')
+                       path = '/path/to/folder_random_hits_cluster_tot2/')
 
+#######
+# ALL READS K562 Storm treated
+
+load('/path/to/folder_random_hits_cluster_storm/hits_chr_mod_RBP_DRACH.Rda')
+load('/path/to/folder_random_hits_cluster_storm/hits_chr_mod_RBP_without_DRACH.Rda')
+
+# plot the distribution of the percentages of DRACH+/DRACH- random hits annotated to each category of effectors and the corresponding percentage 
+# of ELIGOS DRACH+/DRACH- hits
+post_process_effectors(hits_chr_mod_RBP_without_DRACH,hits_chr_mod_RBP_DRACH, c(18.85,63.72,65.13,88.35), c(27.08,88.72,89.51,97.64), 
+                       'violin_hit_effectors_bothBD_chr.pdf', 'chromatin',
+                       paste(as.character(unique(lapply(hits_chr_mod_RBP_DRACH[5:length(hits_chr_mod_RBP_DRACH)], length))),'DRACH+ random sequences (10 nt) generated 1,000 times;', as.character(unique(lapply(hits_chr_mod_RBP_without_DRACH[5:length(hits_chr_mod_RBP_without_DRACH)], length))),'DRACH- random sequences (10 nt) generated 1,000 times'),
+                       path = '/path/to/folder_random_hits_cluster_storm/')
+
+load('/path/to/folder_random_hits_cluster_storm/hits_nucleo_mod_RBP_DRACH.Rda')
+load('/path/to/folder_random_hits_cluster_storm/hits_nucleo_mod_RBP_without_DRACH.Rda')
+
+# plot the distribution of the percentages of DRACH+/DRACH- random hits annotated to each category of effectors and the corresponding percentage 
+# of ELIGOS DRACH+/DRACH- hits
+post_process_effectors(hits_nucleo_mod_RBP_without_DRACH,hits_nucleo_mod_RBP_DRACH, c(18.91,64.51,65.8,88.39), c(27.08,87.15,87.87,97.18), 
+                       'violin_hit_effectors_bothBD_nucleo.pdf', 'nucleoplasm',
+                       paste(as.character(unique(lapply(hits_nucleo_mod_RBP_DRACH[5:length(hits_nucleo_mod_RBP_DRACH)], length))),'DRACH+ random sequences (10 nt) generated 1,000 times;', as.character(unique(lapply(hits_nucleo_mod_RBP_without_DRACH[5:length(hits_nucleo_mod_RBP_without_DRACH)], length))),'DRACH- random sequences (10 nt) generated 1,000 times'),
+                       path = '/path/to/folder_random_hits_cluster_storm/')
+
+load('/path/to/folder_random_hits_cluster_storm/hits_cyto_mod_RBP_DRACH.Rda')
+load('/path/to/folder_random_hits_cluster_storm/hits_cyto_mod_RBP_without_DRACH.Rda')
+
+# plot the distribution of the percentages of DRACH+/DRACH- random hits annotated to each category of effectors and the corresponding percentage 
+# of ELIGOS DRACH+/DRACH- hits
+post_process_effectors(hits_cyto_mod_RBP_without_DRACH,hits_cyto_mod_RBP_DRACH, c(18.72,64.29,65.59,87.86), c(26.55,87.55,88.41,97.56), 
+                       'violin_hit_effectors_bothBD_cyto.pdf', 'cytoplasm',
+                       paste(as.character(unique(lapply(hits_cyto_mod_RBP_DRACH[5:length(hits_cyto_mod_RBP_DRACH)], length))),'DRACH+ random sequences (10 nt) generated 1,000 times;', as.character(unique(lapply(hits_cyto_mod_RBP_without_DRACH[5:length(hits_cyto_mod_RBP_without_DRACH)], length))),'DRACH- random sequences (10 nt) generated 1,000 times'),
+                       path = '/path/to/folder_random_hits_cluster_storm/')
