@@ -179,11 +179,11 @@ post_process_mods <- function(hits_without, hits_DRACH, ELIGOS_results_without, 
 
 
 # create a heatmap reporting, for each RNA modification type, in which gene parts ELIGOS hits (considering DRACH+ and DRACH- hits together)
-# annotated to that RNA modification type - either from the overlap with RNA marks or from the overlap with the effectors' biding sites -
-# fall. Limiting to the RNA mod significantly enriched in ELIGOS DRACH- (mods_significant_without_DRACH) and DRACH+ (mods_significant_with_DRACH) 
+# annotated to that RNA modification type - from the overlap with RNA marks - fall. 
+# Limiting to the RNA mod significantly enriched in ELIGOS DRACH- (mods_significant_without_DRACH) and DRACH+ (mods_significant_with_DRACH) 
 # hits with respect to the random data.
 # This function is executed for each fraction passing the GRanges object with ELIGOS DRACH- (hits_non_DRACH) and DRACH+ hits 
-# (hits_DRACH) that have been overlapped with RNA marks and effectors' binding sites from the public databases.
+# (hits_DRACH) that have been overlapped with RNA marks from the public databases.
 # path_directory is the path to the directory containing the results of ELIGOS analysis. m6A is set to TRUE (plot
 # a heatmap with the distribution of ELIGOS hits annotated to m6A) or FALSE (plot
 # a heatmap with the distribution of ELIGOS hits annotated to all the RNA mod types except m6A)
