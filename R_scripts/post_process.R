@@ -179,7 +179,8 @@ post_process_mods <- function(hits_without, hits_DRACH, ELIGOS_results_without, 
 
 
 # create a heatmap reporting, for each RNA modification type, in which gene parts ELIGOS hits (considering DRACH+ and DRACH- hits together)
-# annotated to that RNA modification type - from the overlap with RNA marks - fall. 
+# annotated to that RNA modification type - both from the overlap with RNA marks and from the overlap with the effectors' binding sites 
+# from the public databases - fall. 
 # Limiting to the RNA mod significantly enriched in ELIGOS DRACH- (mods_significant_without_DRACH) and DRACH+ (mods_significant_with_DRACH) 
 # hits with respect to the random data.
 # This function is executed for each fraction passing the GRanges object with ELIGOS DRACH- (hits_non_DRACH) and DRACH+ hits 
@@ -338,8 +339,8 @@ print_heatmap <- function(directory_hits, mods_significant_without_DRACH_chr, mo
   generate_heatmap_gene(hits_eligos_cyto_confirmed_5_without_DRACH_with_bindings, hits_eligos_cyto_confirmed_5_with_DRACH_with_bindings, 'cytoplasm', directory_hits, TRUE, mods_significant_without_DRACH_cyto, mods_significant_with_DRACH_cyto)
 }
 
-# generate a heatmap reporting, for each fraction and RNA mod, the percentage of hits annotated to that RNA mod and 
-# the p-value of the enrichment with respect to the random data
+# generate a heatmap reporting, for each fraction and RNA mod, the percentage of ELIGOS hits annotated to that RNA mod - after the overlap
+# with the RNA marks reported in the public databases - and the p-value of the enrichment with respect to the random data
 heatmap_enrichment <- function(directory_hits, percentage_chr, percentage_nucleo, percentage_cyto, 
                                p_value_chr, p_value_nucleo, p_value_cyto, DRACH) {
   
@@ -369,20 +370,21 @@ heatmap_enrichment <- function(directory_hits, percentage_chr, percentage_nucleo
 
 # identify the combinations of RNA modifications (limiting to the RNA mods significantly enriched in ELIGOS DRACH- 
 # (mods_significant_without_DRACH) and DRACH+ (mods_significant_with_DRACH) hits with respect to the random data)
-# co-occurring on the genes. Only the information about the modification type to which 
-# each hit has been annotated during the overlapping with the coordinates of RNA marks from RMBase3 and RMVar is considered.
+# co-occurring on the genes. Both the information about the modification type to which 
+# each ELIGOS hit has been annotated during the overlap with the coordinates of RNA marks and the overlap with the effectors' 
+# binding sites from RMBase3 and RMVar are considered.
 # If condition = 'both' both ELIGOS DRACH- and DRACH+ hits are considered, if condition = 'DRACH' only ELIGOS DRACH+ hits are evaluated,
 # otherwise only ELIGOS DRACH- hits
 mods_combination_only_significant <- function(directory_hits,condition,mods_significant_without_DRACH_chr, mods_significant_with_DRACH_chr,
                                               mods_significant_without_DRACH_nucleo, mods_significant_with_DRACH_nucleo,
                                               mods_significant_without_DRACH_cyto, mods_significant_with_DRACH_cyto) {
   
-  load(paste0(directory_hits,'/without_DRACH/hits_eligos_chr_ass_confirmed_5_without_DRACH_mod_type.Rda'))
-  load(paste0(directory_hits,'/without_DRACH/hits_eligos_nucleo_confirmed_5_without_DRACH_mod_type.Rda'))
-  load(paste0(directory_hits,'/without_DRACH/hits_eligos_cyto_confirmed_5_without_DRACH_mod_type.Rda'))
-  load(paste0(directory_hits,'/hits_ELIGOS/hits_eligos_chr_ass_confirmed_5_with_DRACH_mod_type.Rda'))
-  load(paste0(directory_hits,'/hits_ELIGOS/hits_eligos_nucleo_confirmed_5_with_DRACH_mod_type.Rda'))
-  load(paste0(directory_hits,'/hits_ELIGOS/hits_eligos_cyto_confirmed_5_with_DRACH_mod_type.Rda'))
+  load(paste0(directory_hits,'/without_DRACH/hits_eligos_chr_ass_confirmed_5_without_DRACH_mod_type_RBP.Rda'))
+  load(paste0(directory_hits,'/without_DRACH/hits_eligos_nucleo_confirmed_5_without_DRACH_mod_type_RBP.Rda'))
+  load(paste0(directory_hits,'/without_DRACH/hits_eligos_cyto_confirmed_5_without_DRACH_mod_type_RBP.Rda'))
+  load(paste0(directory_hits,'/hits_ELIGOS/hits_eligos_chr_ass_confirmed_5_with_DRACH_mod_type_RBP.Rda'))
+  load(paste0(directory_hits,'/hits_ELIGOS/hits_eligos_nucleo_confirmed_5_with_DRACH_mod_type_RBP.Rda'))
+  load(paste0(directory_hits,'/hits_ELIGOS/hits_eligos_cyto_confirmed_5_with_DRACH_mod_type_RBP.Rda'))
   
   if (condition == 'both') {
     # keep only ELIGOS DRACH- hits from chromatin associated RNAs annotated to significant RNA modifications
@@ -662,12 +664,12 @@ comparison_mods_combination_nascent_total_only_significant <- function(directory
                                                                        mods_significant_without_DRACH_nucleo_total, mods_significant_with_DRACH_nucleo_total,
                                                                        mods_significant_without_DRACH_cyto_total, mods_significant_with_DRACH_cyto_total) {
   
-  load(paste0(directory_hits_nascent,'/without_DRACH/hits_eligos_chr_ass_confirmed_5_without_DRACH_mod_type.Rda'))
-  load(paste0(directory_hits_nascent,'/without_DRACH/hits_eligos_nucleo_confirmed_5_without_DRACH_mod_type.Rda'))
-  load(paste0(directory_hits_nascent,'/without_DRACH/hits_eligos_cyto_confirmed_5_without_DRACH_mod_type.Rda'))
-  load(paste0(directory_hits_nascent,'/hits_ELIGOS/hits_eligos_chr_ass_confirmed_5_with_DRACH_mod_type.Rda'))
-  load(paste0(directory_hits_nascent,'/hits_ELIGOS/hits_eligos_nucleo_confirmed_5_with_DRACH_mod_type.Rda'))
-  load(paste0(directory_hits_nascent,'/hits_ELIGOS/hits_eligos_cyto_confirmed_5_with_DRACH_mod_type.Rda'))
+  load(paste0(directory_hits,'/without_DRACH/hits_eligos_chr_ass_confirmed_5_without_DRACH_mod_type_RBP.Rda'))
+  load(paste0(directory_hits,'/without_DRACH/hits_eligos_nucleo_confirmed_5_without_DRACH_mod_type_RBP.Rda'))
+  load(paste0(directory_hits,'/without_DRACH/hits_eligos_cyto_confirmed_5_without_DRACH_mod_type_RBP.Rda'))
+  load(paste0(directory_hits,'/hits_ELIGOS/hits_eligos_chr_ass_confirmed_5_with_DRACH_mod_type_RBP.Rda'))
+  load(paste0(directory_hits,'/hits_ELIGOS/hits_eligos_nucleo_confirmed_5_with_DRACH_mod_type_RBP.Rda'))
+  load(paste0(directory_hits,'/hits_ELIGOS/hits_eligos_cyto_confirmed_5_with_DRACH_mod_type_RBP.Rda'))
   
   if (condition == 'both') {
     # keep only ELIGOS DRACH- hits from chromatin associated RNAs annotated to significant RNA modifications
@@ -906,12 +908,12 @@ comparison_mods_combination_nascent_total_only_significant <- function(directory
   # identify the combinations of RNA mods with a median frequency across the fractions at least equal to 4 (nascent reads)
   order_nascent <- order_nascent[order_nascent>=4]
   
-  load(paste0(directory_hits_total,'/without_DRACH/hits_eligos_chr_ass_confirmed_5_without_DRACH_mod_type.Rda'))
-  load(paste0(directory_hits_total,'/without_DRACH/hits_eligos_nucleo_confirmed_5_without_DRACH_mod_type.Rda'))
-  load(paste0(directory_hits_total,'/without_DRACH/hits_eligos_cyto_confirmed_5_without_DRACH_mod_type.Rda'))
-  load(paste0(directory_hits_total,'/hits_ELIGOS/hits_eligos_chr_ass_confirmed_5_with_DRACH_mod_type.Rda'))
-  load(paste0(directory_hits_total,'/hits_ELIGOS/hits_eligos_nucleo_confirmed_5_with_DRACH_mod_type.Rda'))
-  load(paste0(directory_hits_total,'/hits_ELIGOS/hits_eligos_cyto_confirmed_5_with_DRACH_mod_type.Rda'))
+  load(paste0(directory_hits,'/without_DRACH/hits_eligos_chr_ass_confirmed_5_without_DRACH_mod_type_RBP.Rda'))
+  load(paste0(directory_hits,'/without_DRACH/hits_eligos_nucleo_confirmed_5_without_DRACH_mod_type_RBP.Rda'))
+  load(paste0(directory_hits,'/without_DRACH/hits_eligos_cyto_confirmed_5_without_DRACH_mod_type_RBP.Rda'))
+  load(paste0(directory_hits,'/hits_ELIGOS/hits_eligos_chr_ass_confirmed_5_with_DRACH_mod_type_RBP.Rda'))
+  load(paste0(directory_hits,'/hits_ELIGOS/hits_eligos_nucleo_confirmed_5_with_DRACH_mod_type_RBP.Rda'))
+  load(paste0(directory_hits,'/hits_ELIGOS/hits_eligos_cyto_confirmed_5_with_DRACH_mod_type_RBP.Rda'))
   
   if (condition == 'both') {
     # keep only ELIGOS DRACH- hits from chromatin associated RNAs annotated to significant RNA modifications
