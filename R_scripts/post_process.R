@@ -371,7 +371,7 @@ heatmap_enrichment <- function(directory_hits, percentage_chr, percentage_nucleo
 # (mods_significant_without_DRACH) and DRACH+ (mods_significant_with_DRACH) hits with respect to the random data)
 # co-occurring on the genes. Only the information about the modification type to which 
 # each hit has been annotated during the overlapping with the coordinates of RNA marks from RMBase3 and RMVar is considered.
-# if condition = 'both' both ELIGOS DRACH- and DRACH+ hits are considered, if condition = 'DRACH' only ELIGOS DRACH+ hits are evaluated,
+# If condition = 'both' both ELIGOS DRACH- and DRACH+ hits are considered, if condition = 'DRACH' only ELIGOS DRACH+ hits are evaluated,
 # otherwise only ELIGOS DRACH- hits
 mods_combination_only_significant <- function(directory_hits,condition,mods_significant_without_DRACH_chr, mods_significant_with_DRACH_chr,
                                               mods_significant_without_DRACH_nucleo, mods_significant_with_DRACH_nucleo,
@@ -514,7 +514,7 @@ mods_combination_only_significant <- function(directory_hits,condition,mods_sign
         # if ELIGOS DRACH+/DRACH- hits mapping on this gene are annotated with multiple specific modification types they are reported in the matrix 
         all_genes_mods_chr[x[i],] <<- paste(sort(unique(unlist(strsplit(genes$mod_type, split=';')))[!unique(unlist(strsplit(genes$mod_type, split=';'))) %in% c('Unknown', 'Ambiguous')]), collapse='\n')
       } else if ((length(mods_gene) == 1) & (mods_gene == 'm6A')) {
-        # if ELIGOS DRACH+/DRACH- hits mapping on this gene are annotated only with m6A it is reported in the matrix 
+        # if ELIGOS DRACH+/DRACH- hits mapping on this gene are annotated only with m6A they are reported in the matrix 
         all_genes_mods_chr[x[i],] <<- 'm6A'
       }
     }, x=rownames(all_genes_mods_chr), y=hits_chr)
@@ -629,7 +629,7 @@ mods_combination_only_significant <- function(directory_hits,condition,mods_sign
     x_labels <- names(order)
   }
   
-  # plot a barplot reporting, for the 10 combinations of RNA marks occuring in the genes of the different fractions with the highest median
+  # plot a barplot reporting, for the 10 combinations of RNA marks occurring in the genes of the different fractions with the highest median
   # frequency, the frequency of that combination in each fraction
   p <- ggplot(data = df, aes(fill=Fractions, y=number, x=all_mods_comb)) + 
     geom_bar(position="dodge", stat="identity") +
@@ -648,11 +648,11 @@ mods_combination_only_significant <- function(directory_hits,condition,mods_sign
   }
 }
 
-# identify which combinations of RNA marks have a median frequency at least equal to 4 either in at least one of the analyses (on nascent reads
-# or on all the reads with the library level subsampling threshold used for nascent reads).
-# generate a scatterplot reporting on the x axis the median frequency across the fractions of the selected combinations of RNA marks in nascent analysis
+# identify which combinations of RNA marks have a median frequency at least equal to 4 in at least one of the analyses (either on nascent reads
+# or on all the reads with the library-level subsampling threshold used for nascent reads).
+# Generate a scatterplot reporting on the x axis the median frequency across the fractions of the selected combinations of RNA marks in nascent analysis
 # and on the y axis the median frequency across the fractions of the selected combinations of RNA marks in the analysis on all the reads.
-# if condition = 'both' both ELIGOS DRACH- and DRACH+ hits are considered, if condition = 'DRACH' only ELIGOS DRACH+ hits are evaluated,
+# If condition = 'both' both ELIGOS DRACH- and DRACH+ hits are considered, if condition = 'DRACH' only ELIGOS DRACH+ hits are evaluated,
 # otherwise only ELIGOS DRACH- hits
 comparison_mods_combination_nascent_total_only_significant <- function(directory_hits_nascent, directory_hits_total, condition,
                                                                        mods_significant_without_DRACH_chr_nascent, mods_significant_with_DRACH_chr_nascent,
@@ -800,7 +800,7 @@ comparison_mods_combination_nascent_total_only_significant <- function(directory
         # if ELIGOS DRACH+/DRACH- hits mapping on this gene are annotated with multiple specific modification types they are reported in the matrix 
         all_genes_mods_chr[x[i],] <<- paste(sort(unique(unlist(strsplit(genes$mod_type, split=';')))[!unique(unlist(strsplit(genes$mod_type, split=';'))) %in% c('Unknown', 'Ambiguous')]), collapse='\n')
       } else if ((length(mods_gene) == 1) & (mods_gene == 'm6A')) {
-        # if ELIGOS DRACH+/DRACH- hits mapping on this gene are annotated only with m6A it is reported in the matrix 
+        # if ELIGOS DRACH+/DRACH- hits mapping on this gene are annotated only with m6A they are reported in the matrix 
         all_genes_mods_chr[x[i],] <<- 'm6A'
       }
     }, x=rownames(all_genes_mods_chr), y=hits_chr)
@@ -1044,7 +1044,7 @@ comparison_mods_combination_nascent_total_only_significant <- function(directory
         # if ELIGOS DRACH+/DRACH- hits mapping on this gene are annotated with multiple specific modification types they are reported in the matrix 
         all_genes_mods_chr[x[i],] <<- paste(sort(unique(unlist(strsplit(genes$mod_type, split=';')))[!unique(unlist(strsplit(genes$mod_type, split=';'))) %in% c('Unknown', 'Ambiguous')]), collapse='\n')
       } else if ((length(mods_gene) == 1) & (mods_gene == 'm6A')) {
-        # if ELIGOS DRACH+/DRACH- hits mapping on this gene are annotated only with m6A it is reported in the matrix 
+        # if ELIGOS DRACH+/DRACH- hits mapping on this gene are annotated only with m6A they are reported in the matrix 
         all_genes_mods_chr[x[i],] <<- 'm6A'
       }
     }, x=rownames(all_genes_mods_chr), y=hits_chr)
@@ -1202,7 +1202,7 @@ load("/path/to/R_data/protein_coding_genes_5UTR_3UTR_introns_exons_stop.Rda")
 
 
 ####
-# nascent + pre-existent RNAs
+# nascent + pre-existent RNAs SUM159
 
 load('/path/to/folder_random_hits_cluster/chr_ass_mod_type_DRACH.Rda')
 load('/path/to/folder_random_hits_cluster/chr_ass_mod_type_without_DRACH.Rda')
