@@ -1343,7 +1343,7 @@ all_mods <- c(unique(hits_eligos_chr_ass_confirmed_5_without_DRACH_with_bindings
               unique(hits_eligos_cyto_confirmed_5_with_DRACH_with_bindings$mod_type))
 all_mods <- unique(all_mods)
 all_mods <- unique(unlist(strsplit(all_mods, split=';')))
-all_mods <- c('m6A', 'Y', 'm1A','m5C', 'm7G', 'A-I','Nm', 'm6Am', 'Ambiguous')
+all_mods <- c('m6A', 'Y', 'm1A','m5C', 'm7G', 'A-I','Nm', 'Ambiguous')
 
 final_summary(all_mods,directory_hits = '/path/to/fractions_eligos_STORM_K562/eligos_total_reads/')
                                                                                                                                                                                     
