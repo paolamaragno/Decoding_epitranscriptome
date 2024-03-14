@@ -480,15 +480,23 @@ ELIGOS_hits_DB_marks <- function(directory_mod, directory_hits) {
   save(hits_eligos_cyto_confirmed_5_without_DRACH, file=paste0(directory_hits,'/without_DRACH/hits_eligos_cyto_confirmed_5_without_DRACH_mod_type.Rda'))
 }
 
+# SUM159 all reads
 ELIGOS_hits_DB_marks(directory_mod = '/path/to/mod', 
                      directory_hits = '/path/to/fractions_eligos_4sU_library_gene_subsampling_min05_min05_mag1/')
 
+# SUM159 nascent reads
 ELIGOS_hits_DB_marks(directory_mod = '/path/to/mod', 
                      directory_hits = '/path/to/fractions_eligos_4sU_library_gene_subsampling_nascent_min05_min05_mag1/')
 
+# SUM159 all reads with same library-level subsampling threshold used for nascent analysis
 ELIGOS_hits_DB_marks(directory_mod = '/path/to/mod', 
                      directory_hits = '/path/to/fractions_eligos_4sU_library_gene_subsampling_total_510645_min05_min05_mag1/')
 
+# K562 all reads
+ELIGOS_hits_DB_marks(directory_mod = '/path/to/mod', 
+                     directory_hits = '/path/to/fractions_eligos_K562_all_reads/')
+
+# K562 after STORM treatment (all reads)
 ELIGOS_hits_DB_marks(directory_mod = '/path/to/mod', 
                      directory_hits = '/path/to/fractions_eligos_STORM_K562/eligos_total_reads/')
 
@@ -1056,12 +1064,19 @@ ELIGOS_hits_DB_effectors <- function(directory_hits) {
   save(hits_eligos_cyto_confirmed_5_with_DRACH_with_bindings, file=paste0(directory_hits,'/hits_ELIGOS/hits_eligos_cyto_confirmed_5_with_DRACH_mod_type_RBP.Rda'))
 }
 
+# SUM159 all reads                                                                                                                                                                                    
 ELIGOS_hits_DB_effectors(directory_hits = '/path/to/fractions_eligos_4sU_library_gene_subsampling_min05_min05_mag1/')
 
+# SUM159 nascent reads                                                                                                                                                                                      
 ELIGOS_hits_DB_effectors(directory_hits = '/path/to/fractions_eligos_4sU_library_gene_subsampling_nascent_min05_min05_mag1/')
 
+# SUM159 all reads with same library-level subsampling threshold used for nascent analysis                                                                                                                                                                                       
 ELIGOS_hits_DB_effectors(directory_hits = '/path/to/fractions_eligos_4sU_library_gene_subsampling_total_510645_min05_min05_mag1/')
 
+# K562 all reads                                                                                                                                                                                         
+ELIGOS_hits_DB_effectors(directory_hits = '/path/to/fractions_eligos_K562_all_reads/')
+
+# K562 after STORM treatment (all reads)                                                                                                                                                                                        
 ELIGOS_hits_DB_effectors(directory_hits = '/path/to/fractions_eligos_STORM_K562/eligos_total_reads/')
 
 #############
@@ -1198,7 +1213,7 @@ final_summary <- function(all_mods, directory_hits) {
   write.xlsx(x = data.frame(number_hits_DRACH),file = paste0(directory_hits, '/mods_RBPs/', 'counts_mod_RBPs_DRACH.xlsx'),col.names = TRUE, row.names=TRUE)
 }
 
-# all the reads
+# SUM159 all the reads
 directory_hits = '/path/to/fractions_eligos_4sU_library_gene_subsampling_min05_min05_mag1/'
 
 load(paste0(directory_hits,'/without_DRACH/hits_eligos_chr_ass_confirmed_5_without_DRACH_mod_type_RBP.Rda'))
@@ -1222,7 +1237,7 @@ all_mods <- c('m6A', 'Y', 'm1A','m5C', 'm7G', 'A-I','Nm', 'm6Am', 'Ambiguous')
 
 final_summary(all_mods, directory_hits = '/path/to/fractions_eligos_4sU_library_gene_subsampling_min05_min05_mag1/')
 
-# nascent reads
+# SUM159 nascent reads
 directory_hits = '/path/to/fractions_eligos_4sU_library_gene_subsampling_nascent_min05_min05_mag1/'
 
 load(paste0(directory_hits,'/without_DRACH/hits_eligos_chr_ass_confirmed_5_without_DRACH_mod_type_RBP.Rda'))
@@ -1244,7 +1259,7 @@ all_mods <- c('m6A', 'Y', 'm1A','m5C', 'm7G', 'A-I','Nm', 'Ambiguous')
 
 final_summary(all_mods,directory_hits = '/path/to/fractions_eligos_4sU_library_gene_subsampling_nascent_min05_min05_mag1/')
 
-# all the reads with the same library-level subsampling threshold used for nascent reads
+# SUM159 all reads with the same library-level subsampling threshold used for nascent analysis
 directory_hits = '/path/to/fractions_eligos_4sU_library_gene_subsampling_total_510645_min05_min05_mag1/'
 
 load(paste0(directory_hits,'/without_DRACH/hits_eligos_chr_ass_confirmed_5_without_DRACH_mod_type_RBP.Rda'))
@@ -1266,7 +1281,51 @@ all_mods <- c('m6A', 'Y', 'm1A','m5C', 'm7G', 'A-I','Nm', 'm6Am', 'Ambiguous')
 
 final_summary(all_mods,directory_hits = '/path/to/fractions_eligos_4sU_library_gene_subsampling_total_510645_min05_min05_mag1/')
 
-# STORM
+                                                                                                                                                                                        # STORM
+directory_hits = '/path/to/fractions_eligos_STORM_K562/eligos_total_reads/'
+
+load(paste0(directory_hits,'/without_DRACH/hits_eligos_chr_ass_confirmed_5_without_DRACH_mod_type_RBP.Rda'))
+load(paste0(directory_hits,'/without_DRACH/hits_eligos_nucleo_confirmed_5_without_DRACH_mod_type_RBP.Rda'))
+load(paste0(directory_hits,'/without_DRACH/hits_eligos_cyto_confirmed_5_without_DRACH_mod_type_RBP.Rda'))
+load(paste0(directory_hits,'/hits_ELIGOS/hits_eligos_chr_ass_confirmed_5_with_DRACH_mod_type_RBP.Rda'))
+load(paste0(directory_hits,'/hits_ELIGOS/hits_eligos_nucleo_confirmed_5_with_DRACH_mod_type_RBP.Rda'))
+load(paste0(directory_hits,'/hits_ELIGOS/hits_eligos_cyto_confirmed_5_with_DRACH_mod_type_RBP.Rda'))
+
+all_mods <- c(unique(hits_eligos_chr_ass_confirmed_5_without_DRACH_with_bindings$mod_type),
+              unique(hits_eligos_nucleo_confirmed_5_without_DRACH_with_bindings$mod_type),
+              unique(hits_eligos_cyto_confirmed_5_without_DRACH_with_bindings$mod_type),
+              unique(hits_eligos_chr_ass_confirmed_5_with_DRACH_with_bindings$mod_type),
+              unique(hits_eligos_nucleo_confirmed_5_with_DRACH_with_bindings$mod_type),
+              unique(hits_eligos_cyto_confirmed_5_with_DRACH_with_bindings$mod_type))
+all_mods <- unique(all_mods)
+all_mods <- unique(unlist(strsplit(all_mods, split=';')))
+all_mods <- c('m6A', 'Y', 'm1A','m5C', 'm7G', 'A-I','Nm', 'm6Am', 'Ambiguous')
+
+final_summary(all_mods,directory_hits = '/path/to/fractions_eligos_STORM_K562/eligos_total_reads/')
+
+# K562 all reads
+directory_hits = '/path/to/fractions_eligos_K562_all_reads/'
+
+load(paste0(directory_hits,'/without_DRACH/hits_eligos_chr_ass_confirmed_5_without_DRACH_mod_type_RBP.Rda'))
+load(paste0(directory_hits,'/without_DRACH/hits_eligos_nucleo_confirmed_5_without_DRACH_mod_type_RBP.Rda'))
+load(paste0(directory_hits,'/without_DRACH/hits_eligos_cyto_confirmed_5_without_DRACH_mod_type_RBP.Rda'))
+load(paste0(directory_hits,'/hits_ELIGOS/hits_eligos_chr_ass_confirmed_5_with_DRACH_mod_type_RBP.Rda'))
+load(paste0(directory_hits,'/hits_ELIGOS/hits_eligos_nucleo_confirmed_5_with_DRACH_mod_type_RBP.Rda'))
+load(paste0(directory_hits,'/hits_ELIGOS/hits_eligos_cyto_confirmed_5_with_DRACH_mod_type_RBP.Rda'))
+
+all_mods <- c(unique(hits_eligos_chr_ass_confirmed_5_without_DRACH_with_bindings$mod_type),
+              unique(hits_eligos_nucleo_confirmed_5_without_DRACH_with_bindings$mod_type),
+              unique(hits_eligos_cyto_confirmed_5_without_DRACH_with_bindings$mod_type),
+              unique(hits_eligos_chr_ass_confirmed_5_with_DRACH_with_bindings$mod_type),
+              unique(hits_eligos_nucleo_confirmed_5_with_DRACH_with_bindings$mod_type),
+              unique(hits_eligos_cyto_confirmed_5_with_DRACH_with_bindings$mod_type))
+all_mods <- unique(all_mods)
+all_mods <- unique(unlist(strsplit(all_mods, split=';')))
+all_mods <- c('m6A', 'Y', 'm1A','m5C', 'm7G', 'A-I','Nm', 'm6Am', 'Ambiguous')
+
+final_summary(all_mods,directory_hits = '/path/to/fractions_eligos_K562_all_reads/')
+                                                                                                                                                                                                                                                                                                                                                                            
+# K562 after STORM treatment (all reads)
 directory_hits = '/path/to/fractions_eligos_STORM_K562/eligos_total_reads/'
 
 load(paste0(directory_hits,'/without_DRACH/hits_eligos_chr_ass_confirmed_5_without_DRACH_mod_type_RBP.Rda'))
