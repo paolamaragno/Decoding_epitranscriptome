@@ -700,7 +700,7 @@ DRACH_overlap_ELIGOS <- function(path_directory, hits_ELIGOS_chr, hits_ELIGOS_nu
   }
   
   heatmap_matrix_eligos <- heatmap_matrix_eligos[-1,]
-  heatmap_matrix_eligos_higher200x <- heatmap_matrix_eligos[-1,]
+  heatmap_matrix_eligos_higher200x <- heatmap_matrix_eligos
 
   # identify the genomic regions that do not have a coverage maximum of 20x in at least one of the 5 samplings 
   not_an_sites <- not_analysed_sites(paste0(path_directory, '/bed_regions_DRACHpos.bed'),path_directory)
@@ -868,7 +868,7 @@ DRACH_overlap_ELIGOS <- function(path_directory, hits_ELIGOS_chr, hits_ELIGOS_nu
   }
   
   heatmap_matrix_eligos <- heatmap_matrix_eligos[-1,]
-  heatmap_matrix_eligos_higher200x <- heatmap_matrix_eligos[-1,]
+  heatmap_matrix_eligos_higher200x <- heatmap_matrix_eligos
 
   # identify the genomic regions that do not have a coverage maximum of 20x in at least one of the 5 samplings 
   not_an_sites <- not_analysed_sites(paste0(path_directory, '/bed_regions_DRACHneg.bed'),path_directory)
