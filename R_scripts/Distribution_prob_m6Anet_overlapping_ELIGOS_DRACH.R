@@ -6,9 +6,9 @@ gtf_file <- "/path/to/Homo_sapiens.GRCh38.104.gtf"
 txdb <- makeTxDbFromGFF(gtf_file)
 genes_txdb <- GenomicFeatures::genes(txdb)
 
-# SNPs SUM159 on hg38
+# SNPs of SUM159TP on hg38
 bed_SNPs_SUM159 <-read.table("/path/to/SNPs_SUM159_hg38.bed")
-# SNPs k562 on hg38
+# SNPs of k562 on hg38
 vcf_SNPs_k562<-read.vcf("/path/to/SNPs_k562_hg38.vcf")
 bed_SNPs_k562<-vcf2bed(vcf_SNPs_k562, filename = NULL, header = FALSE, other = NULL, verbose = TRUE)
 
@@ -155,7 +155,7 @@ ELIGOS_results_min05_mag05_min1 <- function(path_directory, p, ap, OR) {
   return(gr)
 }
 
-# function to remove ELIGOS hits overlapping with the coordinates of the SNPs of SUM159 and k562 cell lines
+# function to remove ELIGOS hits overlapping with the coordinates of the SNPs of SUM159TP and k562 cell lines
 rm_SNPs <- function(bed_SNPs_SUM159, bed_SNPs_k562, hits) {
     
     grange_bed_SUM159 <- GRanges(seqnames = bed_SNPs_SUM159$V1,
