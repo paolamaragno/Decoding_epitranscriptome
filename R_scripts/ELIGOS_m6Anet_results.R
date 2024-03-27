@@ -883,7 +883,7 @@ DRACH_overlap_ELIGOS <- function(path_directory, hits_ELIGOS_chr, hits_ELIGOS_nu
   rownames(heatmap_matrix_eligos) <- 1:nrow(heatmap_matrix_eligos)
 
   # save a table with the coordinates of each genomic region and its annotation in the three cellular fractions 
-  regions_with_annotation <- cbind(bed_regions_DRACHpos, heatmap_matrix_eligos)
+  regions_with_annotation <- cbind(bed_regions_DRACHneg, heatmap_matrix_eligos)
   write.table(regions_with_annotation, file=paste0(path_directory, '/regions_with_annotation_DRACHneg.bed'), quote = FALSE, row.names = FALSE, col.names = TRUE, sep = "\t")
 
   # compute the mean coverage of each genomic region 
