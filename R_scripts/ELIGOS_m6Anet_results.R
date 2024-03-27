@@ -738,7 +738,7 @@ DRACH_overlap_ELIGOS <- function(path_directory, hits_ELIGOS_chr, hits_ELIGOS_nu
     }
   }
 
-  # compute a non parametric Wilcoxon-Mann-Whitney test to test whether the mean coverage of the genomic
+  # compute a non parametric Wilcoxon test to test whether the mean coverage of the genomic
   # regions without any hit is significantly lower than the one of the genomic regions with at least one hit
   print('DRACH+ mag20')
   print(wilcox.test(regions_without_hits,regions_with_hits,alternative = 'less'))
@@ -906,7 +906,7 @@ DRACH_overlap_ELIGOS <- function(path_directory, hits_ELIGOS_chr, hits_ELIGOS_nu
     }
   }
 
-  # compute a non parametric Wilcoxon-Mann-Whitney test to test whether the mean coverage of the genomic
+  # compute a non parametric Wilcoxon test to test whether the mean coverage of the genomic
   # regions without any hit is significantly lower than the one of the genomic regions with at least one hit
   print('DRACH- mag20')
   print(wilcox.test(regions_without_hits,regions_with_hits,alternative = 'less'))
