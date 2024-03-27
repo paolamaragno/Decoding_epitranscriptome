@@ -30,7 +30,7 @@ bam_files <- c("/path/to/native_filtered.bam",
                "/path/to/IVT_filtered.bam")
 
 # Specify the file labels
-bam_labels <- c("Native SUM159", "IVT SUM159")
+bam_labels <- c("Native SUM159", "IVT K562 - SUM159")
 
 # Create the list of GRanges objects
 granges_list <- create_granges_list(bam_files)
