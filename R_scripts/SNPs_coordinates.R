@@ -4,7 +4,7 @@ library('GenomicRanges')
 # download the full tables that you can find at these links: https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GPL6801 and 
 # https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM967817
 
-# SNPs SUM159 on hg19
+# SNPs of SUM159TP cells on hg19
 snps_SUM <- read.table('GSM967817-19203.txt', fill=TRUE, header = TRUE)[,c(1,2)]
 snps_SUM <- snps_SUM[snps_SUM$VALUE != 'NoCall',]
 
