@@ -1324,7 +1324,7 @@ comparison_ELIGOS_m6Anet <- function(path_directory, hits_ELIGOS_chr, hits_ELIGO
 }
 
 
-# SUM159: ELIGOS ANALYSIS ON NASCENT+PRE-EXISTING READS (pvalue<0.05, ad.pval<0.05, OR>1)
+# SUM159TP: ELIGOS ANALYSIS ON NASCENT+PRE-EXISTING READS (pvalue<0.05, ad.pval<0.05, OR>1)
 confirmed_hits_ELIGOS_min05_min05_mag1 <- ELIGOS_results(path_directory = '/path/to/fractions_eligos_4sU_library_gene_subsampling_min05_min05_mag1/',
                                                          name_pdf_overlap_5samplings_cyto = 'overlap_cyto_replicates_4sU_10nt.pdf', name_pdf_overlap_5samplings_chr_ass = 'overlap_chr_ass_replicates_4sU_10nt.pdf', name_pdf_overlap_5samplings_nucleo = 'overlap_nucleo_replicates_4sU_10nt.pdf',
                                                          name_pdf_histogram_cyto = 'number_rep_with_hit_cyto_4sU.pdf', name_pdf_histogram_chr_ass = 'number_rep_with_hit_chr_ass_4sU.pdf', name_pdf_histogram_nucleo = 'number_rep_with_hit_nucleo_4sU.pdf',
@@ -1333,7 +1333,7 @@ confirmed_hits_ELIGOS_min05_min05_mag1 <- ELIGOS_results(path_directory = '/path
 confirmed_hits_DRACH_ELIGOS_min05_min05_mag1 <- DRACH_overlap_ELIGOS(path_directory = '/path/to/fractions_eligos_4sU_library_gene_subsampling_min05_min05_mag1/',
                                                                      hits_ELIGOS_chr = confirmed_hits_ELIGOS_min05_min05_mag1[[1]], hits_ELIGOS_nucleo = confirmed_hits_ELIGOS_min05_min05_mag1[[2]], hits_ELIGOS_cyto = confirmed_hits_ELIGOS_min05_min05_mag1[[3]])
 
-# SUM159: m6Anet ANALYSIS ON NASCENT+PRE-EXISTING READS (prob.modification>0.75)
+# SUM159TP: m6Anet ANALYSIS ON NASCENT+PRE-EXISTING READS (prob.modification>0.75)
 # load the tsv file with the output of m6Anet for the three fractions for all the 5 samplings
 m6Anet_fractions_4sU_chr_ass <- list.files(path = '/path/to/fractions_m6anet_4sU_library_gene_subsampling_prob0.75/chr', pattern = 'tsv', full.names = TRUE)
 m6Anet_fractions_4sU_nucleo <- list.files(path = '/path/to/fractions_m6anet_4sU_library_gene_subsampling_prob0.75/nucleo', pattern = 'tsv', full.names = TRUE)
@@ -1440,7 +1440,7 @@ ELIGOS_vs_m6Anet <- comparison_ELIGOS_m6Anet(path_directory = '/path/to/fraction
                                              pdf_overlap_ELIGOS_m6Anet_DRACH_cyto = 'overlap_all_hits_eligos_hits_eligos_DRACH_all_hits_m6anet_cyto_10nt.pdf')
 
 ######################
-# SUM159: m6Anet ANALYSIS ON NASCENT+PRE-EXISTING READS (prob.modification>0.9)
+# SUM159TP: m6Anet ANALYSIS ON NASCENT+PRE-EXISTING READS (prob.modification>0.9)
 # load the tsv file with the output of m6Anet for the three fractions for all the 5 samplings
 m6Anet_fractions_4sU_chr_ass <- list.files(path = '/path/to/fractions_m6anet_4sU_library_gene_subsampling_prob0.9/chr', pattern = 'tsv', full.names = TRUE)
 m6Anet_fractions_4sU_nucleo <- list.files(path = '/path/to/fractions_m6anet_4sU_library_gene_subsampling_prob0.9/nucleo', pattern = 'tsv', full.names = TRUE)
@@ -1547,7 +1547,7 @@ ELIGOS_vs_m6Anet <- comparison_ELIGOS_m6Anet(path_directory = '/path/to/fraction
                                              pdf_overlap_ELIGOS_m6Anet_DRACH_cyto = 'overlap_all_hits_eligos_hits_eligos_DRACH_all_hits_m6anet_cyto_10nt.pdf')
 
 #######################
-# SUM159: ELIGOS ANALYSIS ON NASCENT+PRE-EXISTING READS from replicate 1 (pvalue<0.05, ad.pval<0.05, OR>1)
+# SUM159TP: ELIGOS ANALYSIS ON NASCENT+PRE-EXISTING READS from replicate 1 (pvalue<0.05, ad.pval<0.05, OR>1)
 
 confirmed_hits_ELIGOS_rep1_min05_min05_mag1 <- ELIGOS_results(path_directory = '/path/to/fractions_eligos_4sU_library_gene_subsampling_rep1_min05_min05_mag1/',
                                                               name_pdf_overlap_5samplings_cyto = 'overlap_cyto_replicates_4sU_10nt_rep1.pdf', name_pdf_overlap_5samplings_chr_ass = 'overlap_chr_ass_replicates_4sU_10nt_rep1.pdf', name_pdf_overlap_5samplings_nucleo = 'overlap_nucleo_replicates_4sU_10nt_rep1.pdf',
@@ -1558,7 +1558,7 @@ confirmed_hits_DRACH_ELIGOS_rep1_min05_min05_mag1 <- DRACH_overlap_ELIGOS(path_d
                                                                           hits_ELIGOS_chr = confirmed_hits_ELIGOS_rep1_min05_min05_mag1[[1]], hits_ELIGOS_nucleo = confirmed_hits_ELIGOS_rep1_min05_min05_mag1[[2]], hits_ELIGOS_cyto = confirmed_hits_ELIGOS_rep1_min05_min05_mag1[[3]])
 
 #######################
-# SUM159: ELIGOS ANALYSIS ON NASCENT+PRE-EXISTING READS from replicate 2 (pvalue<0.05, ad.pval<0.05, OR>1)
+# SUM159TP: ELIGOS ANALYSIS ON NASCENT+PRE-EXISTING READS from replicate 2 (pvalue<0.05, ad.pval<0.05, OR>1)
 
 confirmed_hits_ELIGOS_rep2_min05_min05_mag1 <- ELIGOS_results(path_directory = '/path/to/fractions_eligos_4sU_library_gene_subsampling_rep2_min05_min05_mag1/',
                                                               name_pdf_overlap_5samplings_cyto = 'overlap_cyto_replicates_4sU_10nt_rep2.pdf', name_pdf_overlap_5samplings_chr_ass = 'overlap_chr_ass_replicates_4sU_10nt_rep2.pdf', name_pdf_overlap_5samplings_nucleo = 'overlap_nucleo_replicates_4sU_10nt_rep2.pdf',
@@ -1570,7 +1570,7 @@ confirmed_hits_DRACH_ELIGOS_rep2_min05_min05_mag1 <- DRACH_overlap_ELIGOS(path_d
 
 
 ########################
-# SUM159: ELIGOS ANALYSIS ON NASCENT READS (pvalue<0.05, ad.pval<0.05, OR>1)
+# SUM159TP: ELIGOS ANALYSIS ON NASCENT READS (pvalue<0.05, ad.pval<0.05, OR>1)
 
 confirmed_hits_ELIGOS_nascent_min05_min05_mag1 <- ELIGOS_results(path_directory = '/path/to/fractions_eligos_4sU_library_gene_subsampling_nascent_min05_min05_mag1/',
                                                                  name_pdf_overlap_5samplings_cyto = 'overlap_cyto_replicates_4sU_10nt.pdf', name_pdf_overlap_5samplings_chr_ass = 'overlap_chr_ass_replicates_4sU_10nt.pdf', name_pdf_overlap_5samplings_nucleo = 'overlap_nucleo_replicates_4sU_10nt.pdf',
@@ -1597,7 +1597,7 @@ only_chr <- only_chr[-unique(queryHits(findOverlaps(only_chr, hits_eligos_cyto_c
 save(only_chr, file='/path/to/fractions_eligos_4sU_library_gene_subsampling_nascent_min05_min05_mag1/only_chr/without_DRACH/hits_eligos_only_chr_without_DRACH.Rda')
 
 ######################## 
-# SUM159: ELIGOS ANALYSIS ON NASCENT+PRE-EXISTING READS with library-level subsampling of nascent ELIGOS (pvalue<0.05, ad.pval<0.05, or>1)
+# SUM159TP: ELIGOS ANALYSIS ON NASCENT+PRE-EXISTING READS with library-level subsampling of nascent ELIGOS (pvalue<0.05, ad.pval<0.05, or>1)
 
 confirmed_hits_ELIGOS_2_min05_min05_mag1 <- ELIGOS_results(path_directory = '/path/to/fractions_eligos_4sU_library_gene_subsampling_total_510645_min05_min05_mag1/',
                                                            name_pdf_overlap_5samplings_cyto = 'overlap_cyto_replicates_4sU_10nt.pdf', name_pdf_overlap_5samplings_chr_ass = 'overlap_chr_ass_replicates_4sU_10nt.pdf', name_pdf_overlap_5samplings_nucleo = 'overlap_nucleo_replicates_4sU_10nt.pdf',
@@ -1619,14 +1619,217 @@ confirmed_hits_DRACH_K562_ELIGOS_min05_min05_mag1 <- DRACH_overlap_ELIGOS(path_d
                                                                      hits_ELIGOS_chr = confirmed_hits_ELIGOS_K562_min05_min05_mag1[[1]], hits_ELIGOS_nucleo = confirmed_hits_ELIGOS_K562_min05_min05_mag1[[2]], hits_ELIGOS_cyto = confirmed_hits_K562_ELIGOS_min05_min05_mag1[[3]])
 
 
-########################                                        
-# STORM K562: ELIGOS ANALYSIS ON NASCENT+PRE-EXISTING READS (pvalue<0.05, ad.pval<0.05, OR>1)
+########################                                          
+# K562: m6Anet ANALYSIS ON NASCENT+PRE-EXISTING READS (prob.modification>0.75)
+# load the tsv file with the output of m6Anet for the three fractions for all the 5 samplings
+m6Anet_fractions_4sU_chr_ass <- list.files(path = '/path/to/fractions_eligos_K562_all_reads_prob0.75/chr', pattern = 'tsv', full.names = TRUE)
+m6Anet_fractions_4sU_nucleo <- list.files(path = '/path/to/fractions_eligos_K562_all_reads_prob0.75/nucleo', pattern = 'tsv', full.names = TRUE)
+m6Anet_fractions_4sU_cyto <- list.files(path = '/path/to/fractions_eligos_K562_all_reads_prob0.75/cyto', pattern = 'tsv', full.names = TRUE)
 
-confirmed_hits_ELIGOS_K562_STORM_min05_min05_mag1 <- ELIGOS_results(path_directory = '/path/to/fractions_eligos_STORM_K562/eligos_total_reads/',
-                                                         name_pdf_overlap_5samplings_cyto = 'overlap_cyto_replicates_4sU_10nt.pdf', name_pdf_overlap_5samplings_chr_ass = 'overlap_chr_ass_replicates_4sU_10nt.pdf', name_pdf_overlap_5samplings_nucleo = 'overlap_nucleo_replicates_4sU_10nt.pdf',
-                                                         name_pdf_histogram_cyto = 'number_rep_with_hit_cyto_4sU.pdf', name_pdf_histogram_chr_ass = 'number_rep_with_hit_chr_ass_4sU.pdf', name_pdf_histogram_nucleo = 'number_rep_with_hit_nucleo_4sU.pdf',
-                                                         name_pdf_overlap_3fractions = 'overlap_hits_eligos_confirmed_5_4sU_10nt.pdf', p=0.05,ap=0.05,OR=1)
+# load the vector with the transcript names as names and the names of the gene from which 
+# they are transcribed as values
+load('/path/to/R_data/tx_gene.Rda')
+tx_txdb <- GenomicFeatures::transcripts(txdb)
 
-confirmed_hits_DRACH_ELIGOS_K562_STORM_min05_min05_mag1 <- DRACH_overlap_ELIGOS(path_directory = '/path/to/fractions_eligos_STORM_K562/eligos_total_reads/',
-                                                                     hits_ELIGOS_chr = confirmed_hits_ELIGOS_K562_STORM_min05_min05_mag1[[1]], hits_ELIGOS_nucleo = confirmed_hits_ELIGOS_K562_STORM_min05_min05_mag1[[2]], hits_ELIGOS_cyto = confirmed_hits_ELIGOS_K562_STORM_min05_min05_mag1[[3]])
+m6Anet_output <- function(dir) {
+  list_gr <- list()
+  
+  for (file in dir) {
+    t <- read.table(file, header=TRUE)
+    
+    gr <- GRanges(seqnames = Rle(t$Chr),
+                  ranges = IRanges(start = t$Start, end=t$End),
+                  strand = Rle(t$Strand),
+                  prob_mod = t$Prob_mod,
+                  gene_id = unname(tx_gene[t$Transcript_id]),
+                  tx_id = t$Transcript_id,
+                  rep = unlist(strsplit(strsplit(file, split = '/')[[1]][8], "_")[[1]][5]))
+    
+    # extract the analysed sites with a probability of modification of at least 0.75
+    gr <- gr[which(gr$prob_mod >= 0.75)]
+    gr <- resize(gr, 6, fix = 'center')
+    
+    list_gr <- c(list_gr, gr)
+  }
+  
+  return(list_gr)
+}
+
+gr_m6Anet_chr_ass_4sU <- m6Anet_output(m6Anet_fractions_4sU_chr_ass)
+gr_m6Anet_nucleo_4sU <- m6Anet_output(m6Anet_fractions_4sU_nucleo)
+gr_m6Anet_cyto_4sU <- m6Anet_output(m6Anet_fractions_4sU_cyto)
+
+# remove the hits mapping on transcripts that have been assigned to the wrong chromosome by m6Anet
+gr_m6Anet_chr_ass_4sU <- lapply(gr_m6Anet_chr_ass_4sU, function(x) {
+  rem <- c()
+  for (i in 1:length(x)) {
+    tx <- x[i]$tx_id
+    chr <- as.character(seqnames(x[i]))
+    if (chr != as.character(seqnames(tx_txdb[tx_txdb$tx_name == tx]))) {
+      rem <- c(rem, i)
+    }
+  }
+  if (length(rem) != 0) {
+    return(x[-rem])
+  } else {
+    return(x)
+  }
+})
+
+gr_m6Anet_nucleo_4sU <- lapply(gr_m6Anet_nucleo_4sU, function(x) {
+  rem <- c()
+  for (i in 1:length(x)) {
+    tx <- x[i]$tx_id
+    chr <- as.character(seqnames(x[i]))
+    if (chr != as.character(seqnames(tx_txdb[tx_txdb$tx_name == tx]))) {
+      rem <- c(rem, i)
+    }
+  }
+  if (length(rem) != 0) {
+    return(x[-rem])
+  } else {
+    return(x)
+  }
+})
+
+gr_m6Anet_cyto_4sU <- lapply(gr_m6Anet_cyto_4sU, function(x) {
+  rem <- c()
+  for (i in 1:length(x)) {
+    tx <- x[i]$tx_id
+    chr <- as.character(seqnames(x[i]))
+    if (chr != as.character(seqnames(tx_txdb[tx_txdb$tx_name == tx]))) {
+      rem <- c(rem, i)
+    }
+  }
+  if (length(rem) != 0) {
+    return(x[-rem])
+  } else {
+    return(x)
+  }
+})
+
+confirmed_hits_m6Anet_prob0.75 <- m6Anet_results(path_directory = '/path/to/fractions_eligos_K562_all_reads_prob0.75/',
+                                                 gr_m6Anet_chr_ass = gr_m6Anet_chr_ass_4sU, gr_m6Anet_nucleo = gr_m6Anet_nucleo_4sU, gr_m6Anet_cyto = gr_m6Anet_cyto_4sU,
+                                                 name_pdf_overlap_5samplings_chr_ass = 'overlap_chr_ass_replicates_4sU_10nt.pdf', name_pdf_overlap_5samplings_nucleo = 'overlap_nucleo_replicates_4sU_10nt.pdf', name_pdf_overlap_5samplings_cyto = 'overlap_cyto_replicates_4sU_10nt.pdf',
+                                                 name_pdf_histogram_chr_ass = 'number_rep_with_hit_chr_ass_4sU.pdf', name_pdf_histogram_nucleo = 'number_rep_with_hit_nucleo_4sU.pdf', name_pdf_histogram_cyto = 'number_rep_with_hit_cyto_4sU.pdf',
+                                                 name_pdf_overlap_3fractions = 'overlap_hits_m6anet_confirmed_5_4sU_10nt.pdf')
+
+confirmed_hits_DRACH_m6Anet_prob0.75 <- DRACH_overlap_m6Anet(path_directory = '/path/to/fractions_eligos_K562_all_reads_prob0.75/',
+                                                             hits_m6Anet_chr = confirmed_hits_m6Anet_prob0.75[[1]], hits_m6Anet_nucleo = confirmed_hits_m6Anet_prob0.75[[2]], hits_m6Anet_cyto = confirmed_hits_m6Anet_prob0.75[[3]])
+
+ELIGOS_vs_m6Anet <- comparison_ELIGOS_m6Anet(path_directory = '/path/to/fractions_eligos_K562_all_reads_prob0.75/',
+                                             hits_ELIGOS_chr = confirmed_hits_ELIGOS_K562_min05_min05_mag1[[1]], hits_ELIGOS_nucleo = confirmed_hits_ELIGOS_K562_min05_min05_mag1[[2]], hits_ELIGOS_cyto = confirmed_hits_ELIGOS_K562_min05_min05_mag1[[3]],
+                                             hits_ELIGOS_chr_DRACH = confirmed_hits_DRACH_K562_ELIGOS_min05_min05_mag1[[1]], hits_ELIGOS_nucleo_DRACH = confirmed_hits_DRACH_K562_ELIGOS_min05_min05_mag1[[2]], hits_ELIGOS_cyto_DRACH = confirmed_hits_DRACH_K562_ELIGOS_min05_min05_mag1[[3]],
+                                             hits_m6Anet_chr = confirmed_hits_m6Anet_prob0.75[[1]], hits_m6Anet_nucleo = confirmed_hits_m6Anet_prob0.75[[2]], hits_m6Anet_cyto = confirmed_hits_m6Anet_prob0.75[[3]],
+                                             hits_m6Anet_chr_DRACH = confirmed_hits_DRACH_m6Anet_prob0.75[[1]], hits_m6Anet_nucleo_DRACH = confirmed_hits_DRACH_m6Anet_prob0.75[[2]], hits_m6Anet_cyto_DRACH = confirmed_hits_DRACH_m6Anet_prob0.75[[3]],
+                                             pdf_overlap_ELIGOS_m6Anet_DRACH_chr = 'overlap_all_hits_eligos_hits_eligos_DRACH_all_hits_m6anet_chr_ass_10nt.pdf',
+                                             pdf_overlap_ELIGOS_m6Anet_DRACH_nucleo = 'overlap_all_hits_eligos_hits_eligos_DRACH_all_hits_m6anet_nucleo_10nt.pdf',
+                                             pdf_overlap_ELIGOS_m6Anet_DRACH_cyto = 'overlap_all_hits_eligos_hits_eligos_DRACH_all_hits_m6anet_cyto_10nt.pdf')
+
+######################
+# K562: m6Anet ANALYSIS ON NASCENT+PRE-EXISTING READS (prob.modification>0.9)
+# load the tsv file with the output of m6Anet for the three fractions for all the 5 samplings
+m6Anet_fractions_4sU_chr_ass <- list.files(path = '/path/to/fractions_eligos_K562_all_reads_prob0.9/chr', pattern = 'tsv', full.names = TRUE)
+m6Anet_fractions_4sU_nucleo <- list.files(path = '/path/to/fractions_eligos_K562_all_reads_prob0.9/nucleo', pattern = 'tsv', full.names = TRUE)
+m6Anet_fractions_4sU_cyto <- list.files(path = '/path/to/fractions_eligos_K562_all_reads_prob0.9/cyto', pattern = 'tsv', full.names = TRUE)
+
+# load the vector with the transcript names as names and the names of the gene from which 
+# they are transcribed as values
+load('/path/to/R_data/tx_gene.Rda')
+tx_txdb <- GenomicFeatures::transcripts(txdb)
+
+m6Anet_output <- function(dir) {
+  list_gr <- list()
+  
+  for (file in dir) {
+    t <- read.table(file, header=TRUE)
+    
+    gr <- GRanges(seqnames = Rle(t$Chr),
+                  ranges = IRanges(start = t$Start, end=t$End),
+                  strand = Rle(t$Strand),
+                  prob_mod = t$Prob_mod,
+                  gene_id = unname(tx_gene[t$Transcript_id]),
+                  tx_id = t$Transcript_id,
+                  rep = unlist(strsplit(strsplit(file, split = '/')[[1]][8], "_")[[1]][5]))
+    
+    # extract the analysed sites with a probability of modification of at least 0.9
+    gr <- gr[which(gr$prob_mod >= 0.9)]
+    gr <- resize(gr, 6, fix = 'center')
+    
+    list_gr <- c(list_gr, gr)
+  }
+  
+  return(list_gr)
+}
+
+gr_m6Anet_chr_ass_4sU <- m6Anet_output(m6Anet_fractions_4sU_chr_ass)
+gr_m6Anet_nucleo_4sU <- m6Anet_output(m6Anet_fractions_4sU_nucleo)
+gr_m6Anet_cyto_4sU <- m6Anet_output(m6Anet_fractions_4sU_cyto)
+
+# remove the hits mapping on transcripts that have been assigned to the wrong chromosome by m6Anet
+gr_m6Anet_chr_ass_4sU <- lapply(gr_m6Anet_chr_ass_4sU, function(x) {
+  rem <- c()
+  for (i in 1:length(x)) {
+    tx <- x[i]$tx_id
+    chr <- as.character(seqnames(x[i]))
+    if (chr != as.character(seqnames(tx_txdb[tx_txdb$tx_name == tx]))) {
+      rem <- c(rem, i)
+    }
+  }
+  if (length(rem) != 0) {
+    return(x[-rem])
+  } else {
+    return(x)
+  }
+})
+
+gr_m6Anet_nucleo_4sU <- lapply(gr_m6Anet_nucleo_4sU, function(x) {
+  rem <- c()
+  for (i in 1:length(x)) {
+    tx <- x[i]$tx_id
+    chr <- as.character(seqnames(x[i]))
+    if (chr != as.character(seqnames(tx_txdb[tx_txdb$tx_name == tx]))) {
+      rem <- c(rem, i)
+    }
+  }
+  if (length(rem) != 0) {
+    return(x[-rem])
+  } else {
+    return(x)
+  }
+})
+
+gr_m6Anet_cyto_4sU <- lapply(gr_m6Anet_cyto_4sU, function(x) {
+  rem <- c()
+  for (i in 1:length(x)) {
+    tx <- x[i]$tx_id
+    chr <- as.character(seqnames(x[i]))
+    if (chr != as.character(seqnames(tx_txdb[tx_txdb$tx_name == tx]))) {
+      rem <- c(rem, i)
+    }
+  }
+  if (length(rem) != 0) {
+    return(x[-rem])
+  } else {
+    return(x)
+  }
+})
+
+confirmed_hits_m6Anet_prob0.9 <- m6Anet_results(path_directory = '/path/to/fractions_eligos_K562_all_reads_prob0.9/',
+                                                gr_m6Anet_chr_ass = gr_m6Anet_chr_ass_4sU, gr_m6Anet_nucleo = gr_m6Anet_nucleo_4sU, gr_m6Anet_cyto = gr_m6Anet_cyto_4sU,
+                                                name_pdf_overlap_5samplings_chr_ass = 'overlap_chr_ass_replicates_4sU_10nt.pdf', name_pdf_overlap_5samplings_nucleo = 'overlap_nucleo_replicates_4sU_10nt.pdf', name_pdf_overlap_5samplings_cyto = 'overlap_cyto_replicates_4sU_10nt.pdf',
+                                                name_pdf_histogram_chr_ass = 'number_rep_with_hit_chr_ass_4sU.pdf', name_pdf_histogram_nucleo = 'number_rep_with_hit_nucleo_4sU.pdf', name_pdf_histogram_cyto = 'number_rep_with_hit_cyto_4sU.pdf',
+                                                name_pdf_overlap_3fractions = 'overlap_hits_m6anet_confirmed_5_4sU_10nt.pdf')
+
+confirmed_hits_DRACH_m6Anet_prob0.9 <- DRACH_overlap_m6Anet(path_directory = '/path/to/fractions_eligos_K562_all_reads_prob0.9/',
+                                                            hits_m6Anet_chr = confirmed_hits_m6Anet_prob0.9[[1]], hits_m6Anet_nucleo = confirmed_hits_m6Anet_prob0.9[[2]], hits_m6Anet_cyto = confirmed_hits_m6Anet_prob0.9[[3]])
+
+ELIGOS_vs_m6Anet <- comparison_ELIGOS_m6Anet(path_directory = '/path/to/fractions_eligos_K562_all_reads_prob0.9/',
+                                             hits_ELIGOS_chr = confirmed_hits_ELIGOS_K562_min05_min05_mag1[[1]], hits_ELIGOS_nucleo = confirmed_hits_ELIGOS_K562_min05_min05_mag1[[2]], hits_ELIGOS_cyto = confirmed_hits_ELIGOS_K562_min05_min05_mag1[[3]],
+                                             hits_ELIGOS_chr_DRACH = confirmed_hits_DRACH_K562_ELIGOS_min05_min05_mag1[[1]], hits_ELIGOS_nucleo_DRACH = confirmed_hits_DRACH_K562_ELIGOS_min05_min05_mag1[[2]], hits_ELIGOS_cyto_DRACH = confirmed_hits_DRACH_K562_ELIGOS_min05_min05_mag1[[3]],
+                                             hits_m6Anet_chr = confirmed_hits_m6Anet_prob0.9[[1]], hits_m6Anet_nucleo = confirmed_hits_m6Anet_prob0.9[[2]], hits_m6Anet_cyto = confirmed_hits_m6Anet_prob0.9[[3]],
+                                             hits_m6Anet_chr_DRACH = confirmed_hits_DRACH_m6Anet_prob0.9[[1]], hits_m6Anet_nucleo_DRACH = confirmed_hits_DRACH_m6Anet_prob0.9[[2]], hits_m6Anet_cyto_DRACH = confirmed_hits_DRACH_m6Anet_prob0.9[[3]],
+                                             pdf_overlap_ELIGOS_m6Anet_DRACH_chr = 'overlap_all_hits_eligos_hits_eligos_DRACH_all_hits_m6anet_chr_ass_10nt.pdf',
+                                             pdf_overlap_ELIGOS_m6Anet_DRACH_nucleo = 'overlap_all_hits_eligos_hits_eligos_DRACH_all_hits_m6anet_nucleo_10nt.pdf',
+                                             pdf_overlap_ELIGOS_m6Anet_DRACH_cyto = 'overlap_all_hits_eligos_hits_eligos_DRACH_all_hits_m6anet_cyto_10nt.pdf')
 
