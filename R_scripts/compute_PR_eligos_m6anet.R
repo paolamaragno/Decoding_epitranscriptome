@@ -20,7 +20,6 @@ for (i in 1:length(pr_ELIGOS$curve[,3])) {
 }
 
 pr_ELIGOS$curve[index,]
-#0.0378195648  0.9421052632 -0.0001008711
 
 # identify which row of the pr_ELIGOS$curve has the adjusted p-value closest to 0.05 
 difference <- 1
@@ -36,7 +35,6 @@ for (i in 1:length(pr_ELIGOS$curve[,3])) {
 }
 
 pr_ELIGOS$curve[index,]
-#0.07775195  0.83023125 -0.04998818
 
 m6anet_recall <- pr_m6anet$curve[,1]
 m6anet_precision <- pr_m6anet$curve[,2]
@@ -55,7 +53,6 @@ for (i in 1:length(pr_m6anet$curve[,3])) {
 }
 
 pr_m6anet$curve[index,]
-# 0.1595711 0.7730297 0.7500011
 
 # identify which row of the pr_m6anet$curve has the probability of modification closest to 0.9
 difference <- 1
@@ -71,8 +68,6 @@ for (i in 1:length(pr_m6anet$curve[,3])) {
 }
 
 pr_m6anet$curve[index,]
-# 0.09539404 0.88616290 0.89993680
-
 
 pdf('/path/to/PR_ELIGOS_m6Anet.pdf')
 plot(ELIGOS_recall, ELIGOS_precision,type = 'l', col='red',xlab='Recall', ylab = 'Precision', main='ELIGOS and m6Anet recall vs precision')
