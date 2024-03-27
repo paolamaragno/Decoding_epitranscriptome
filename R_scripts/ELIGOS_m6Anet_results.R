@@ -1061,18 +1061,18 @@ comparison_heatmaps_SUM159_K562 <- function(path_regions_with_annotation_SUM159,
     df[,1:3][df[,1:3] == 3] <- 'Hits' 
 
     if (DRACH) {
-        write.xlsx(df, paste0(path_output, "/overlap_genes_SUM159_K562_DRACH+.xlsx"))
+        write.xlsx(df, paste0(path_output, "/overlap_genes_SUM159_K562_DRACH+.xlsx"), row.names = FALSE, col.names = TRUE)
     } else {
-        write.xlsx(df, paste0(path_output, "/overlap_genes_SUM159_K562_DRACH-.xlsx"))
+        write.xlsx(df, paste0(path_output, "/overlap_genes_SUM159_K562_DRACH-.xlsx"), row.names = FALSE, col.names = TRUE)
     }
 
     # filter only the genomic regions that have at least one hit or without hits but a minimum coverage of at least 20x in all the 5 subsamplings
     df2 <- df[((df$Chromatin %in% c('Hits', 'Analysed cov_min>20')) & (df$Nucleoplasm %in% c('Hits', 'Analysed cov_min>20')) & (df$Cytoplasm %in% c('Hits', 'Analysed cov_min>20'))),]
 
     if (DRACH) {
-        write.xlsx(df2, paste0(path_output, "overlap_SUM159_K562_selected_DRACH+.xlsx"))
+        write.xlsx(df2, paste0(path_output, "overlap_SUM159_K562_selected_DRACH+.xlsx"), row.names = FALSE, col.names = TRUE)
     } else {
-        write.xlsx(df2, paste0(path_output, "overlap_SUM159_K562_selected_DRACH-.xlsx"))
+        write.xlsx(df2, paste0(path_output, "overlap_SUM159_K562_selected_DRACH-.xlsx"), row.names = FALSE, col.names = TRUE)
     }
 }
 
