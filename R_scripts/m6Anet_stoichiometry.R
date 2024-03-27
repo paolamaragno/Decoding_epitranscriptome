@@ -26,6 +26,6 @@ pdf('/path/to/stechiometry.pdf')
 par(mfrow = c(1,2))
 
 boxplot(stech_k562, main = ("Stoichiometry m6Anet\nanalysed sites - K562"))
-boxplot(stech_SUM159, main = ("Stoichiometry m6Anet\nanalysed sites - SUM159"))
+boxplot(stech_SUM159, main = ("Stoichiometry m6Anet\nanalysed sites - SUM159TP"))
 
 dev.off()
