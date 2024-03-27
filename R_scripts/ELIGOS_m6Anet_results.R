@@ -8,6 +8,7 @@ library('seqinr')
 library('xlsx')
 library('bedr')
 library('dplyr')
+library('pROC')
 
 # path to GTF annotation file
 gtf_file <- "/path/to/Homo_sapiens.GRCh38.104.gtf"
@@ -793,12 +794,14 @@ DRACH_overlap_ELIGOS <- function(path_directory, hits_ELIGOS_chr, hits_ELIGOS_nu
            legend_breaks = c(0,1,2,3), legend_labels = c('Not analysed','Analysed cov_min<20', 'Analysed cov_min>20', 'Hit'))
   dev.off()
 
-  # identify the regions that have a coverage minimum at least 200x in all the 5 samplings 
+  # identify the regions that have a coverage minimum at least 200x in all the 5 samplings of all the three cellular 
   cov_min_all_samplings <- min_coverage(paste0(path_directory, '/bed_regions_DRACHpos.bed'),path_directory,200)
-  heatmap_matrix_eligos_higher200x[cov_min_all_samplings[[1]][!cov_min_all_samplings[[1]] %in% which(heatmap_matrix_eligos_higher200x[,1]==3)],1] <- 2
-  heatmap_matrix_eligos_higher200x[cov_min_all_samplings[[2]][!cov_min_all_samplings[[2]] %in% which(heatmap_matrix_eligos_higher200x[,2]==3)],2] <- 2
-  heatmap_matrix_eligos_higher200x[cov_min_all_samplings[[3]][!cov_min_all_samplings[[3]] %in% which(heatmap_matrix_eligos_higher200x[,3]==3)],3] <- 2
-
+  regions_cov_min200_all <- intersect(intersect(cov_min_all_samplings[[1]], cov_min_all_samplings[[2]]),cov_min_all_samplings[[2]])
+  heatmap_matrix_eligos_higher200x[regions_cov_min200_all[!regions_cov_min200_all %in% which(heatmap_matrix_eligos_higher200x[,1]==3)],1] <- 2
+  heatmap_matrix_eligos_higher200x[regions_cov_min200_all[!regions_cov_min200_all %in% which(heatmap_matrix_eligos_higher200x[,2]==3)],2] <- 2
+  heatmap_matrix_eligos_higher200x[regions_cov_min200_all[!regions_cov_min200_all %in% which(heatmap_matrix_eligos_higher200x[,3]==3)],3] <- 2
+  heatmap_matrix_eligos_higher200x <- heatmap_matrix_eligos_higher200x[regions_cov_min200_all,]
+  
   colnames(heatmap_matrix_eligos_higher200x) <- c('Chromatin','Nucleoplasm','Cytoplasm')
   rownames(heatmap_matrix_eligos_higher200x) <- 1:nrow(heatmap_matrix_eligos_higher200x)
 
@@ -819,7 +822,7 @@ DRACH_overlap_ELIGOS <- function(path_directory, hits_ELIGOS_chr, hits_ELIGOS_nu
   
   pdf(paste0(path_directory,'/heatmap_DRACH_positive_ELIGOS_higher200x.pdf'))
   pheatmap(angle_col = 315,heatmap_matrix_eligos_higher200x,cluster_cols = FALSE, cluster_rows = FALSE, show_rownames = FALSE, 
-           border_color = 'black', color = c(brewer.pal(8, 'Reds')[1],brewer.pal(8, 'Reds')[3],brewer.pal(8, 'Reds')[5],brewer.pal(8, 'Reds')[8]), 
+           border_color = 'black', color = c(brewer.pal(8, 'Reds')[3],brewer.pal(8, 'Reds')[8]), 
            legend_breaks = c(2,3), legend_labels = c('Analysed cov_min>200', 'Hit'))
   dev.off()
   
@@ -959,12 +962,14 @@ DRACH_overlap_ELIGOS <- function(path_directory, hits_ELIGOS_chr, hits_ELIGOS_nu
            legend_breaks = c(0,1,2,3), legend_labels = c('Not analysed','Analysed cov_min<20', 'Analysed cov_min>20', 'Hit'))
   dev.off()
 
-  # identify the regions that have a coverage minimum at least 200x in all the 5 samplings 
+  # identify the regions that have a coverage minimum at least 200x in all the 5 samplings of all the three cellular 
   cov_min_all_samplings <- min_coverage(paste0(path_directory, '/bed_regions_DRACHneg.bed'),path_directory,200)
-  heatmap_matrix_eligos_higher200x[cov_min_all_samplings[[1]][!cov_min_all_samplings[[1]] %in% which(heatmap_matrix_eligos_higher200x[,1]==3)],1] <- 2
-  heatmap_matrix_eligos_higher200x[cov_min_all_samplings[[2]][!cov_min_all_samplings[[2]] %in% which(heatmap_matrix_eligos_higher200x[,2]==3)],2] <- 2
-  heatmap_matrix_eligos_higher200x[cov_min_all_samplings[[3]][!cov_min_all_samplings[[3]] %in% which(heatmap_matrix_eligos_higher200x[,3]==3)],3] <- 2
-
+  regions_cov_min200_all <- intersect(intersect(cov_min_all_samplings[[1]], cov_min_all_samplings[[2]]),cov_min_all_samplings[[2]])
+  heatmap_matrix_eligos_higher200x[regions_cov_min200_all[!regions_cov_min200_all %in% which(heatmap_matrix_eligos_higher200x[,1]==3)],1] <- 2
+  heatmap_matrix_eligos_higher200x[regions_cov_min200_all[!regions_cov_min200_all %in% which(heatmap_matrix_eligos_higher200x[,2]==3)],2] <- 2
+  heatmap_matrix_eligos_higher200x[regions_cov_min200_all[!regions_cov_min200_all %in% which(heatmap_matrix_eligos_higher200x[,3]==3)],3] <- 2
+  heatmap_matrix_eligos_higher200x <- heatmap_matrix_eligos_higher200x[regions_cov_min200_all,]
+  
   colnames(heatmap_matrix_eligos_higher200x) <- c('Chromatin','Nucleoplasm','Cytoplasm')
   rownames(heatmap_matrix_eligos_higher200x) <- 1:nrow(heatmap_matrix_eligos_higher200x)
 
@@ -985,7 +990,7 @@ DRACH_overlap_ELIGOS <- function(path_directory, hits_ELIGOS_chr, hits_ELIGOS_nu
   
   pdf(paste0(path_directory,'/heatmap_DRACH_negative_ELIGOS_higher200x.pdf'))
   pheatmap(angle_col = 315,heatmap_matrix_eligos_higher200x,cluster_cols = FALSE, cluster_rows = FALSE, show_rownames = FALSE, 
-           border_color = 'black', color = c(brewer.pal(8, 'Reds')[1],brewer.pal(8, 'Reds')[3],brewer.pal(8, 'Reds')[5],brewer.pal(8, 'Reds')[8]), 
+           border_color = 'black', color = c(brewer.pal(8, 'Reds')[3],brewer.pal(8, 'Reds')[8]), 
            legend_breaks = c(2,3), legend_labels = c('Analysed cov_min>200', 'Hit'))
   dev.off()
   
