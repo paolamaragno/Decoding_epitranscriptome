@@ -19,8 +19,8 @@ m6Anet_output <- function(dir) {
  return(stech)
 }
 
-stech_k562 <- m6Anet_output(m6Anet_stech_K562)
-stech_SUM159 <- m6Anet_output(m6Anet_stech_SUM159)
+stech_k562 <- m6Anet_output(m6Anet_K562)
+stech_SUM159 <- m6Anet_output(m6Anet_SUM159)
 
 pdf('/path/to/stechiometry.pdf')
 par(mfrow = c(1,2))
