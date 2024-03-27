@@ -104,13 +104,13 @@ count_mods <- function(directory) {
       }
       
       # create a matrix to annotate the biotype of the genes that lack of one or more gene parts
-      na_annotation <- matrix(0, nrow=3, ncol=6)
-      rownames(na_annotation) <- c('protein_coding','Mt_rRNA', 'pseudogene')
+      na_annotation <- matrix(0, nrow=length(unique(gene_biotype[rownames(m),])), ncol=6)
+      rownames(na_annotation) <- unique(gene_biotype[rownames(m),])
       colnames(na_annotation) <- c('5UTR', 'coding exon', 'intron', 'stop codon', '3UTR', 'Tot')
       
-      na_annotation[1,6] <- length(gene_biotype[rownames(m),][gene_biotype[rownames(m),]=='protein_coding'])
-      na_annotation[2,6] <- length(gene_biotype[rownames(m),][gene_biotype[rownames(m),]=='Mt_rRNA'])
-      na_annotation[3,6] <- length(rownames(m)) - sum(na_annotation[1,6],na_annotation[2,6])
+      for (t in unique(gene_biotype[rownames(m),])) {
+        na_annotation[t,6] <- length(gene_biotype[rownames(m),][gene_biotype[rownames(m),]==t])
+      }
       
       # iterate over the hits: considering the gene on which each hit maps, report 0 in m2 in correspondence of the gene
       # region(s) (if any) not present in that gene. Update m adding +1 in correspondence of the gene (row) and the gene part (column)
@@ -145,11 +145,7 @@ count_mods <- function(directory) {
           if (m2[r,c] == 0) {
             m[r,c] <- NA
             gene_type <- gene_biotype[rownames(m2)[r],]
-            if ('pseudogene' %in% unlist(strsplit(gene_type, split='_'))) {
-              na_annotation[3,c] <- na_annotation[3,c]+1
-            } else {
-              na_annotation[gene_type,c] <- na_annotation[gene_type,c]+1
-            }
+            na_annotation[gene_type,c] <- na_annotation[gene_type,c]+1
           }
         }
       }
