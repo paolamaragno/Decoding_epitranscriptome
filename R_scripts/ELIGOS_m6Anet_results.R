@@ -1981,6 +1981,6 @@ ELIGOS_vs_m6Anet <- comparison_ELIGOS_m6Anet(path_directory = '/path/to/fraction
                                              pdf_overlap_ELIGOS_m6Anet_DRACH_cyto = 'overlap_all_hits_eligos_hits_eligos_DRACH_all_hits_m6anet_cyto_10nt.pdf')
 
 ##############
-# Compare the genomic distribution of ELIGOS DRACH+/DRACH- hits bewteen SUM159 and K562 cells                                         
+# Compare the genomic distribution of ELIGOS DRACH+/DRACH- hits bewteen SUM159TP and K562 cells                                         
 comparison_heatmaps_SUM159_K562('/path/to/regions_with_annotation_DRACHpos_SUM159.bed', '/path/to/regions_with_annotation_DRACHpos_K562.bed', '/path/to/output_dir', TRUE)
 comparison_heatmaps_SUM159_K562('/path/to/regions_with_annotation_DRACHneg_SUM159.bed', '/path/to/regions_with_annotation_DRACHneg_K562.bed', '/path/to/output_dir', FALSE)
