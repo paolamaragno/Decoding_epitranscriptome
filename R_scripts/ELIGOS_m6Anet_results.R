@@ -749,7 +749,7 @@ DRACH_overlap_ELIGOS <- function(path_directory, hits_ELIGOS_chr, hits_ELIGOS_nu
   colnames(regions_with_hits) <- 'Mean_coverage'
   regions_with_hits$type <- 'Regions with hits'
   regions <- rbind(regions_without_hits,regions_with_hits)
-  regions$mean_cov[regions$mean_cov> 1000] <- 1000
+  regions$Mean_coverage[regions$Mean_coverage> 1000] <- 1000
 
   # plot the distribution of the mean coverage of the genomic regions without any hit 
   # and the mean coverage of the genomic regions with at least one hit, with saturation at 1000x
@@ -915,7 +915,7 @@ DRACH_overlap_ELIGOS <- function(path_directory, hits_ELIGOS_chr, hits_ELIGOS_nu
   colnames(regions_with_hits) <- 'Mean_coverage'
   regions_with_hits$type <- 'Regions with hits'
   regions <- rbind(regions_without_hits,regions_with_hits)
-  regions$mean_cov[regions$mean_cov> 1000] <- 1000
+  regions$Mean_coverage[regions$Mean_coverage> 1000] <- 1000
 
   # plot the distribution of the mean coverage of the genomic regions without any hit 
   # and the mean coverage of the genomic regions with at least one hit, with saturation at 1000x
