@@ -705,7 +705,7 @@ DRACH_overlap_ELIGOS <- function(path_directory, hits_ELIGOS_chr, hits_ELIGOS_nu
   heatmap_matrix_eligos[not_an_sites[[2]],2] <- 0
   heatmap_matrix_eligos[not_an_sites[[3]],3] <- 0
     
-  # identify the regions that have a coverage minimum of 20 in all the 5 samplings 
+  # identify the regions that have a coverage minimum at least 20x in all the 5 samplings 
   cov_min_all_samplings <- min_coverage(paste0(path_directory, '/bed_regions_DRACHpos.bed'),path_directory,20)
   heatmap_matrix_eligos[cov_min_all_samplings[[1]][!cov_min_all_samplings[[1]] %in% which(heatmap_matrix_eligos[,1]==3)],1] <- 2
   heatmap_matrix_eligos[cov_min_all_samplings[[2]][!cov_min_all_samplings[[2]] %in% which(heatmap_matrix_eligos[,2]==3)],2] <- 2
@@ -718,7 +718,7 @@ DRACH_overlap_ELIGOS <- function(path_directory, hits_ELIGOS_chr, hits_ELIGOS_nu
   regions_with_annotation <- cbind(bed_regions_DRACHpos, heatmap_matrix_eligos)
   write.table(regions_with_annotation, file=paste0(path_directory, '/regions_with_annotation_DRACHpos.bed'), quote = FALSE, row.names = FALSE, col.names = TRUE, sep = "\t")
 
-  # compute the coverage of each genomic region 
+  # compute the mean coverage of each genomic region 
   mean_cov_mag20 <- coverage_region(paste0(path_directory, '/bed_regions_DRACHpos.bed'), path_directory)
   
   regions_without_hits <- c()
@@ -742,7 +742,7 @@ DRACH_overlap_ELIGOS <- function(path_directory, hits_ELIGOS_chr, hits_ELIGOS_nu
   
   regions_without_hits <- as.data.frame(regions_without_hits)
   colnames(regions_without_hits) <- 'Mean_coverage'
-  regions_without_hits$type <- 'Regions without_hits'
+  regions_without_hits$type <- 'Regions without hits'
   regions_with_hits <- as.data.frame(regions_with_hits)
   colnames(regions_with_hits) <- 'Mean_coverage'
   regions_with_hits$type <- 'Regions with hits'
@@ -757,17 +757,17 @@ DRACH_overlap_ELIGOS <- function(path_directory, hits_ELIGOS_chr, hits_ELIGOS_nu
   ggsave(paste0(path_directory,'/mean_cov_DRACH+_mag20.pdf'), p, width = 7, height = 7)
 
   # compute the ROC curve and the AUC
-  cov <- unlist(mean_cov_mag20)
+  coverage <- unlist(mean_cov_mag20)
   classification <- c(heatmap_matrix_eligos[,1],heatmap_matrix_eligos[,2],heatmap_matrix_eligos[,3])
   classification[classification %in% c(1,2)] <- 0
   classification[classification == 3] <- 1
-  roc_curve <- roc(classification, cov)
+  roc_curve <- roc(classification, coverage)
   
   pdf(paste0(path_directory,'/AUC_DRACH+.pdf'))
   plot(roc_curve ,main = paste0("ROC curve; AUC: ", as.character(round(roc_curve$auc, 3))))
   dev.off()
     
-  order <- list(c(3,3,3), c(3,3,0), c(3,3,2), c(3,3,1), c(3,0,3), c(3,1,3), c(3,2,3), c(0,3,3), c(1,3,3),
+  order <- list(c(3,3,3), c(3,3,0), c(3,3,1), c(3,3,2), c(3,0,3), c(3,1,3), c(3,2,3), c(0,3,3), c(1,3,3),
                 c(2,3,3), c(3,0,0), c(3,0,1), c(3,0,2), c(3,1,0), c(3,2,0), c(3,1,1), c(3,2,2), c(3,1,2),
                 c(3,2,1), c(0,3,0), c(0,3,1), c(0,3,2), c(1,3,0), c(2,3,0), c(1,3,1), c(2,3,2), c(1,3,2), 
                 c(2,3,1), c(0,0,3), c(1,0,3), c(2,0,3), c(0,1,3), c(0,2,3), c(1,1,3), c(2,2,3), c(1,2,3), c(2,1,3))
@@ -794,71 +794,136 @@ DRACH_overlap_ELIGOS <- function(path_directory, hits_ELIGOS_chr, hits_ELIGOS_nu
   # heatmap representing the spatial overlap between DRACH- hits of the three fractions
   union_hits_eligos <- c(hits_eligos_chr_ass_confirmed_5_without_DRACH, hits_eligos_nucleo_confirmed_5_without_DRACH, hits_eligos_cyto_confirmed_5_without_DRACH)
   union_hits_eligos <- reduce(union_hits_eligos, ignore.strand = FALSE)
-  
+
+  bed_regions_DRACHneg <- cbind(as.vector(seqnames(union_hits_eligos)), start(union_hits_eligos), end(union_hits_eligos), '.', as.vector(strand(union_hits_eligos)))
+  colnames(bed_regions_DRACHneg) <- c("chr", "start", "end", "score", "strand")
+  write.table(bed_regions_DRACHneg, paste0(path_directory, '/bed_regions_DRACHneg.bed'), quote = FALSE, row.names = FALSE, col.names = FALSE, sep = "\t")
+    
   heatmap_matrix_eligos <- matrix(NA,ncol = 3)
   for (i in 1:length(union_hits_eligos)) { 
     if ((length(queryHits(findOverlaps(union_hits_eligos[i],hits_eligos_chr_ass_confirmed_5_without_DRACH, type = 'any')))!=0) &
         (length(queryHits(findOverlaps(union_hits_eligos[i],hits_eligos_nucleo_confirmed_5_without_DRACH, type = 'any')))!=0) &
         (length(queryHits(findOverlaps(union_hits_eligos[i],hits_eligos_cyto_confirmed_5_without_DRACH, type = 'any')))!=0))  {
-      heatmap_matrix_eligos <- rbind(heatmap_matrix_eligos, c(1,1,1))
+      heatmap_matrix_eligos <- rbind(heatmap_matrix_eligos, c(3,3,3))
     } else if ((length(queryHits(findOverlaps(union_hits_eligos[i],hits_eligos_chr_ass_confirmed_5_without_DRACH, type = 'any')))!=0) &
                (length(queryHits(findOverlaps(union_hits_eligos[i],hits_eligos_nucleo_confirmed_5_without_DRACH, type = 'any')))!=0) &
                (length(queryHits(findOverlaps(union_hits_eligos[i],hits_eligos_cyto_confirmed_5_without_DRACH, type = 'any')))==0)) {
-      heatmap_matrix_eligos <- rbind(heatmap_matrix_eligos, c(1,1,0))
+      heatmap_matrix_eligos <- rbind(heatmap_matrix_eligos, c(3,3,1))
     } else if ((length(queryHits(findOverlaps(union_hits_eligos[i],hits_eligos_chr_ass_confirmed_5_without_DRACH, type = 'any')))!=0) &
                (length(queryHits(findOverlaps(union_hits_eligos[i],hits_eligos_nucleo_confirmed_5_without_DRACH, type = 'any')))==0) &
                (length(queryHits(findOverlaps(union_hits_eligos[i],hits_eligos_cyto_confirmed_5_without_DRACH, type = 'any')))!=0)) {
-      heatmap_matrix_eligos <- rbind(heatmap_matrix_eligos, c(1,0,1))
+      heatmap_matrix_eligos <- rbind(heatmap_matrix_eligos, c(3,1,3))
     } else if ((length(queryHits(findOverlaps(union_hits_eligos[i],hits_eligos_chr_ass_confirmed_5_without_DRACH, type = 'any')))!=0) &
                (length(queryHits(findOverlaps(union_hits_eligos[i],hits_eligos_nucleo_confirmed_5_without_DRACH, type = 'any')))==0) &
                (length(queryHits(findOverlaps(union_hits_eligos[i],hits_eligos_cyto_confirmed_5_without_DRACH, type = 'any')))==0)) {
-      heatmap_matrix_eligos <- rbind(heatmap_matrix_eligos, c(1,0,0))
+      heatmap_matrix_eligos <- rbind(heatmap_matrix_eligos, c(3,1,1))
     } else if ((length(queryHits(findOverlaps(union_hits_eligos[i],hits_eligos_chr_ass_confirmed_5_without_DRACH, type = 'any')))==0) &
                (length(queryHits(findOverlaps(union_hits_eligos[i],hits_eligos_nucleo_confirmed_5_without_DRACH, type = 'any')))!=0) &
                (length(queryHits(findOverlaps(union_hits_eligos[i],hits_eligos_cyto_confirmed_5_without_DRACH, type = 'any')))!=0)) {
-      heatmap_matrix_eligos <- rbind(heatmap_matrix_eligos, c(0,1,1))
+      heatmap_matrix_eligos <- rbind(heatmap_matrix_eligos, c(1,3,3))
     } else if ((length(queryHits(findOverlaps(union_hits_eligos[i],hits_eligos_chr_ass_confirmed_5_without_DRACH, type = 'any')))==0) &
                (length(queryHits(findOverlaps(union_hits_eligos[i],hits_eligos_nucleo_confirmed_5_without_DRACH, type = 'any')))!=0) &
                (length(queryHits(findOverlaps(union_hits_eligos[i],hits_eligos_cyto_confirmed_5_without_DRACH, type = 'any')))==0)) {
-      heatmap_matrix_eligos <- rbind(heatmap_matrix_eligos, c(0,1,0))
+      heatmap_matrix_eligos <- rbind(heatmap_matrix_eligos, c(1,3,1))
     } else if ((length(queryHits(findOverlaps(union_hits_eligos[i],hits_eligos_chr_ass_confirmed_5_without_DRACH, type = 'any')))==0) &
                (length(queryHits(findOverlaps(union_hits_eligos[i],hits_eligos_nucleo_confirmed_5_without_DRACH, type = 'any')))==0) &
                (length(queryHits(findOverlaps(union_hits_eligos[i],hits_eligos_cyto_confirmed_5_without_DRACH, type = 'any')))!=0)) {
-      heatmap_matrix_eligos <- rbind(heatmap_matrix_eligos, c(0,0,1))
+      heatmap_matrix_eligos <- rbind(heatmap_matrix_eligos, c(1,1,3))
     }
   }
   
   heatmap_matrix_eligos <- heatmap_matrix_eligos[-1,]
+
+  # identify the genomic regions that do not have a coverage maximum of 20x in at least one of the 5 samplings 
+  not_an_sites <- not_analysed_sites(paste0(path_directory, '/bed_regions_DRACHneg.bed'),path_directory)
+  heatmap_matrix_eligos[not_an_sites[[1]],1] <- 0
+  heatmap_matrix_eligos[not_an_sites[[2]],2] <- 0
+  heatmap_matrix_eligos[not_an_sites[[3]],3] <- 0
+    
+  # identify the regions that have a coverage minimum at least 20x in all the 5 samplings 
+  cov_min_all_samplings <- min_coverage(paste0(path_directory, '/bed_regions_DRACHneg.bed'),path_directory,20)
+  heatmap_matrix_eligos[cov_min_all_samplings[[1]][!cov_min_all_samplings[[1]] %in% which(heatmap_matrix_eligos[,1]==3)],1] <- 2
+  heatmap_matrix_eligos[cov_min_all_samplings[[2]][!cov_min_all_samplings[[2]] %in% which(heatmap_matrix_eligos[,2]==3)],2] <- 2
+  heatmap_matrix_eligos[cov_min_all_samplings[[3]][!cov_min_all_samplings[[3]] %in% which(heatmap_matrix_eligos[,3]==3)],3] <- 2
+  
   colnames(heatmap_matrix_eligos) <- c('Chromatin','Nucleoplasm','Cytoplasm')
   rownames(heatmap_matrix_eligos) <- 1:nrow(heatmap_matrix_eligos)
-  order <- list(c(1,0,0), c(0,1,0), c(0,0,1),c(1,1,0), c(0,1,1), c(1,0,1),c(1,1,1))
+
+  # save a table with the coordinates of each genomic region and its annotation in the three cellular fractions 
+  regions_with_annotation <- cbind(bed_regions_DRACHpos, heatmap_matrix_eligos)
+  write.table(regions_with_annotation, file=paste0(path_directory, '/regions_with_annotation_DRACHneg.bed'), quote = FALSE, row.names = FALSE, col.names = TRUE, sep = "\t")
+
+  # compute the mean coverage of each genomic region 
+  mean_cov_mag20 <- coverage_region(paste0(path_directory, '/bed_regions_DRACHneg.bed'), path_directory)
   
-  order2 <- as.numeric(unlist(lapply(order, function(x) {
-    rownames(heatmap_matrix_eligos[heatmap_matrix_eligos[,1]==x[1] & heatmap_matrix_eligos[,2]==x[2] & heatmap_matrix_eligos[,3]==x[3],])
-  })))
+  regions_without_hits <- c()
+  regions_with_hits <- c()
+
+  # save in two vectors the mean coverage of each genomic region depending on whether it has at least one hit or not
+  for (r in 1:nrow(heatmap_matrix_eligos)) {
+    for (c in colnames(heatmap_matrix_eligos)) {
+      if (heatmap_matrix_eligos[r,c] == 3) {
+        regions_with_hits <- c(regions_with_hits, mean_cov_mag20[[c]][[r]])
+      } else {
+        regions_without_hits <- c(regions_without_hits, mean_cov_mag20[[c]][[r]])
+      }
+    }
+  }
+
+  # compute a non parametric Wilcoxon-Mann-Whitney test to test whether the mean coverage of the genomic
+  # regions without any hit is significantly lower than the one of the genomic regions with at least one hit
+  print('DRACH- mag20')
+  print(wilcox.test(regions_without_hits,regions_with_hits,alternative = 'less'))
   
-  number <- unlist(lapply(order, function(x) {
-    paste0(as.character(nrow(heatmap_matrix_eligos[heatmap_matrix_eligos[,1]==x[1] & heatmap_matrix_eligos[,2]==x[2] & heatmap_matrix_eligos[,3]==x[3],])),' - ', as.character(round(nrow(heatmap_matrix_eligos[heatmap_matrix_eligos[,1]==x[1] & heatmap_matrix_eligos[,2]==x[2] & heatmap_matrix_eligos[,3]==x[3],])*100/nrow(heatmap_matrix_eligos),2)),'%')
+  regions_without_hits <- as.data.frame(regions_without_hits)
+  colnames(regions_without_hits) <- 'Mean_coverage'
+  regions_without_hits$type <- 'Regions without hits'
+  regions_with_hits <- as.data.frame(regions_with_hits)
+  colnames(regions_with_hits) <- 'Mean_coverage'
+  regions_with_hits$type <- 'Regions with hits'
+  regions <- rbind(regions_without_hits,regions_with_hits)
+  regions$mean_cov[regions$mean_cov> 1000] <- 1000
+
+  # plot the distribution of the mean coverage of the genomic regions without any hit 
+  # and the mean coverage of the genomic regions with at least one hit, with saturation at 1000x
+  p <- ggplot(regions, aes(x=Mean_coverage, color = type))+
+    geom_density() +
+    labs(x = "Mean coverage")
+  ggsave(paste0(path_directory,'/mean_cov_DRACH-_mag20.pdf'), p, width = 7, height = 7)
+
+  # compute the ROC curve and the AUC
+  coverage <- unlist(mean_cov_mag20)
+  classification <- c(heatmap_matrix_eligos[,1],heatmap_matrix_eligos[,2],heatmap_matrix_eligos[,3])
+  classification[classification %in% c(1,2)] <- 0
+  classification[classification == 3] <- 1
+  roc_curve <- roc(classification, coverage)
+  
+  pdf(paste0(path_directory,'/AUC_DRACH-.pdf'))
+  plot(roc_curve ,main = paste0("ROC curve; AUC: ", as.character(round(roc_curve$auc, 3))))
+  dev.off()
+    
+  order <- list(c(3,3,3), c(3,3,0), c(3,3,1), c(3,3,2), c(3,0,3), c(3,1,3), c(3,2,3), c(0,3,3), c(1,3,3),
+                c(2,3,3), c(3,0,0), c(3,0,1), c(3,0,2), c(3,1,0), c(3,2,0), c(3,1,1), c(3,2,2), c(3,1,2),
+                c(3,2,1), c(0,3,0), c(0,3,1), c(0,3,2), c(1,3,0), c(2,3,0), c(1,3,1), c(2,3,2), c(1,3,2), 
+                c(2,3,1), c(0,0,3), c(1,0,3), c(2,0,3), c(0,1,3), c(0,2,3), c(1,1,3), c(2,2,3), c(1,2,3), c(2,1,3))
+  
+  order2 <- unlist(lapply(order, function(x) {
+    rows <- c()
+    for (r in 1:nrow(heatmap_matrix_eligos)) {
+      if (identical(as.vector(heatmap_matrix_eligos[r,]), x)) {
+        rows <- c(rows, as.numeric(rownames(heatmap_matrix_eligos)[r]))
+      }
+    }
+    rows
   }))
-  
-  ann_col <- data.frame(
-    Fraction = factor(rep(number, c(unlist(lapply(order, function(x) {
-      nrow(heatmap_matrix_eligos[heatmap_matrix_eligos[,1]==x[1] & heatmap_matrix_eligos[,2]==x[2] & heatmap_matrix_eligos[,3]==x[3],])
-    })))), levels = number))
-  
-  rownames(ann_col) <- 1:nrow(heatmap_matrix_eligos)
-  
-  colors <-  brewer.pal(n = 7, name = "Dark2")
-  names(colors) <- number
-  mycolors <- list(Fraction = colors)
   
   heatmap_matrix_eligos2 <- heatmap_matrix_eligos[order2,]
   rownames(heatmap_matrix_eligos2) <- 1:nrow(heatmap_matrix_eligos2)
   
   pdf(paste0(path_directory,'/heatmap_DRACH_negative_ELIGOS.pdf'))
   pheatmap(angle_col = 315,heatmap_matrix_eligos2,cluster_cols = FALSE, cluster_rows = FALSE, show_rownames = FALSE, 
-           border_color = 'black', color = c(brewer.pal(8, 'Reds')[2],brewer.pal(8, 'Reds')[8]),legend_breaks = 0:1, 
-           legend_labels = c('0','1'),annotation_row = ann_col,annotation_colors = mycolors)
+           border_color = 'black', color = c(brewer.pal(8, 'Reds')[1],brewer.pal(8, 'Reds')[3],brewer.pal(8, 'Reds')[5],brewer.pal(8, 'Reds')[8]), 
+           legend_breaks = c(0,1,2,3), legend_labels = c('Not analysed','Analysed cov_min<20', 'Analysed cov_min>20', 'Hit'))
   dev.off()
   
   return(confirmed_hits_DRACH)
