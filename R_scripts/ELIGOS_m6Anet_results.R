@@ -13,13 +13,13 @@ gtf_file <- "/path/to/Homo_sapiens.GRCh38.104.gtf"
 txdb <- makeTxDbFromGFF(gtf_file)
 genes_txdb <- GenomicFeatures::genes(txdb)
 
-# SNPs SUM159 on hg38
+# SNPs of SUM159TP cells on hg38
 bed_SNPs_SUM159 <-read.table("/path/to/SNPs_SUM159_hg38.bed")
-# SNPs k562 on hg38
+# SNPs of k562 cells on hg38
 vcf_SNPs_k562<-read.vcf("/path/to/SNPs_k562_hg38.vcf")
 bed_SNPs_k562<-vcf2bed(vcf_SNPs_k562, filename = NULL, header = FALSE, other = NULL, verbose = TRUE)
 
-# function to remove ELIGOS hits overlapping with the coordinates of the SNPs of SUM159 and k562 cell lines
+# function to remove ELIGOS hits overlapping with the coordinates of the SNPs of SUM159TP and k562 cell lines
 rm_SNPs <- function(bed_SNPs_SUM159, bed_SNPs_k562, hits) {
     
     grange_bed_SUM159 <- GRanges(seqnames = bed_SNPs_SUM159$V1,
@@ -291,6 +291,281 @@ ELIGOS_results <- function(path_directory,
   
   return(overlap_hits_eligos_confirmed_5)
 }
+
+# function to identify the genomic regions that were not analysed by ELIGOS, so the ones in which, at least in one of the 5 samplings,
+# all the bases have a coverage minor than 20x
+not_analysed_sites <- function(regions_file, path_directory) {
+    
+    Calculate_max_coverage <- function(bam_file, regions_file) {
+      # import the regions_file as a GRanges object
+      regions_df <- read.table(regions_file, quote = "")
+      regions <- GRanges(seqnames = regions_df$V1,
+                         ranges = IRanges(start = regions_df$V2,
+                                          end = regions_df$V3),
+                         strand = regions_df$V5)
+    
+      pu_par <- PileupParam(max_depth=1000000, min_base_quality=0, min_mapq=0,
+                            min_nucleotide_depth=0, min_minor_allele_depth=0,
+                            distinguish_strands=FALSE, distinguish_nucleotides=FALSE,
+                            ignore_query_Ns=TRUE, include_deletions=FALSE, include_insertions=FALSE,
+                            left_bins=NULL, query_bins=NULL, cycle_bins=NULL)
+    
+      # import bam file
+      pileup_tot <- pileup(file = bam_file, index = paste0(bam_file, ".bai"), pileupParam = pu_par)
+    
+      # this command must be executed only if the transcript names in the bam file contain additional information,
+      # like the gene name and the Ensembl gene id, and you want to remove these additional data taking only the
+      # Ensembl transcript id
+      pileup_tot$seqnames <- gsub(x=as.vector(pileup_tot$seqnames), pattern='\\|.*', replacement = '')
+    
+      pileup_GR <- GRanges(seqnames = pileup_tot$seqnames,
+                           ranges = IRanges(start = pileup_tot$pos, end = pileup_tot$pos))
+      mcols(pileup_GR) <- pileup_tot$count
+      colnames(mcols(pileup_GR)) <- "coverage"
+    
+      hits <- findOverlaps(query = pileup_GR, subject = regions, ignore.strand = TRUE)
+      coverage_split <- split(pileup_GR[queryHits(hits)], subjectHits(hits))
+
+      # compute the maximum coverage for each genomic region
+      cov_max <- unlist(lapply(coverage_split, function(x) max(x$coverage)))
+      # if one region does not have any read mapping on it, the maximum coverage is set to 0
+      if (length(unique(subjectHits(hits))) != nrow(regions_df)) {
+        without_reads <- setdiff(1:nrow(regions_df),unique(subjectHits(hits)))
+        for (i in 1:length(without_reads))
+          cov_max <- c(cov_max[1:(without_reads[i]-1)], 0, cov_max[without_reads[i]:length(cov_max)])
+      }
+    
+      return(cov_max)
+    }
+
+    # compute for each genomic region the maximum coverage on that region considering each of the 5 sets of reads deriving from
+    # the two levels of subsamplings on the reads from chromatin fraction
+    max_cov_5_samplings_chr <- lapply(list.files(paste0(path_directory, '/chr'), pattern = '.bam$', full.names = TRUE), function(x) {
+      max_cov <- Calculate_max_coverage(x, regions_file)
+    })
+    
+    # return the index of the genomic regions that, at least in one of the 5 subsamplings, does not reach the maximum coverage of 20x 
+    not_analysed_chr <- unlist(lapply(seq_along(1:length(max_cov_5_samplings_chr[[1]])), function(x)
+      if ((max_cov_5_samplings_chr[[1]][x] < 20) | (max_cov_5_samplings_chr[[2]][x] < 20) | (max_cov_5_samplings_chr[[3]][x] < 20) | (max_cov_5_samplings_chr[[4]][x] < 20) | (max_cov_5_samplings_chr[[5]][x] < 20)) {
+        return(x)
+      }
+    ))
+    
+    max_cov_5_samplings_nucleo <- lapply(list.files(paste0(path_directory, '/nucleo'), pattern = '.bam$', full.names = TRUE), function(x) {
+      max_cov <- Calculate_max_coverage(x, regions_file)
+    })
+    
+    not_analysed_nucleo <- unlist(lapply(seq_along(1:length(max_cov_5_samplings_nucleo[[1]])), function(x)
+      if ((max_cov_5_samplings_nucleo[[1]][x] < 20) | (max_cov_5_samplings_nucleo[[2]][x] < 20) | (max_cov_5_samplings_nucleo[[3]][x] < 20) | (max_cov_5_samplings_nucleo[[4]][x] < 20) | (max_cov_5_samplings_nucleo[[5]][x] < 20)) {
+        return(x)
+      }
+    ))
+    
+    max_cov_5_samplings_cyto <- lapply(list.files(paste0(path_directory, '/cyto'), pattern = '.bam$', full.names = TRUE), function(x) {
+      max_cov <- Calculate_max_coverage(x, regions_file)
+    })
+    
+    not_analysed_cyto <- unlist(lapply(seq_along(1:length(max_cov_5_samplings_cyto[[1]])), function(x)
+      if ((max_cov_5_samplings_cyto[[1]][x] < 20) | (max_cov_5_samplings_cyto[[2]][x] < 20) | (max_cov_5_samplings_cyto[[3]][x] < 20) | (max_cov_5_samplings_cyto[[4]][x] < 20) | (max_cov_5_samplings_cyto[[5]][x] < 20)) {
+        return(x)
+      }
+    ))
+    
+    return(list(not_analysed_chr,not_analysed_nucleo,not_analysed_cyto))
+}
+
+# function to identify the genomic regions that, in all the 5 samplings, have all the bases with a coverage at least equal to the 
+# threshold given in input
+min_coverage <- function(regions_file, path_directory, threshold) {
+    
+  Calculate_min_coverage <- function(bam_file, regions_file) {
+    # import the regions_file as a GRanges object
+    regions_df <- read.table(regions_file, quote = "")
+    regions <- GRanges(seqnames = regions_df$V1,
+                       ranges = IRanges(start = regions_df$V2,
+                                        end = regions_df$V3),
+                       strand = regions_df$V5)
+    
+    pu_par <- PileupParam(max_depth=1000000, min_base_quality=0, min_mapq=0,
+                          min_nucleotide_depth=0, min_minor_allele_depth=0,
+                          distinguish_strands=FALSE, distinguish_nucleotides=FALSE,
+                          ignore_query_Ns=TRUE, include_deletions=FALSE, include_insertions=FALSE,
+                          left_bins=NULL, query_bins=NULL, cycle_bins=NULL)
+    
+    # import bam file
+    pileup_tot <- pileup(file = bam_file, index = paste0(bam_file, ".bai"), pileupParam = pu_par)
+    
+    # this command must be executed only if the transcript names in the bam file contain additional information,
+    # like the gene name and the Ensembl gene id, and you want to remove these additional data taking only the
+    # Ensembl transcript id
+    pileup_tot$seqnames <- gsub(x=as.vector(pileup_tot$seqnames), pattern='\\|.*', replacement = '')
+    
+    pileup_GR <- GRanges(seqnames = pileup_tot$seqnames,
+                         ranges = IRanges(start = pileup_tot$pos, end = pileup_tot$pos))
+    mcols(pileup_GR) <- pileup_tot$count
+    colnames(mcols(pileup_GR)) <- "coverage"
+
+    hits <- findOverlaps(query = pileup_GR, subject = regions, ignore.strand = TRUE)
+    coverage_split <- split(pileup_GR[queryHits(hits)], subjectHits(hits))
+    # compute the minimum coverage for each genomic region
+    cov_min <- unlist(lapply(coverage_split, function(x) min(x$coverage)))
+    # if one region does not have any read mapping on it, the minimum coverage is set to 0
+    if (length(unique(subjectHits(hits))) != nrow(regions_df)) {
+      without_reads <- setdiff(1:nrow(regions_df),unique(subjectHits(hits)))
+      for (i in 1:length(without_reads))
+        cov_min <- c(cov_min[1:(without_reads[i]-1)], 0, cov_min[without_reads[i]:length(cov_min)])
+    }
+    
+    return(cov_min)
+  }
+
+  # compute for each genomic region the minimum coverage on that region considering each of the 5 sets of reads deriving from
+  # the two levels of subsamplings on the reads from chromatin fraction
+  min_cov_5_samplings_chr <- lapply(list.files(paste0(path_directory, '/chr'), pattern = '.bam$', full.names = TRUE), function(x) {
+    min_cov <- Calculate_min_coverage(x, regions_file)
+  })
+  
+  # return the index of the genomic regions that, in all the 5 subsamplings, have all the bases with a coverage at least equal to
+  # the threshold
+  min_all_samplings_chr <- unlist(lapply(seq_along(1:length(min_cov_5_samplings_chr[[1]])), function(x)
+    if ((min_cov_5_samplings_chr[[1]][x] >= threshold) & (min_cov_5_samplings_chr[[2]][x] >= threshold) & (min_cov_5_samplings_chr[[3]][x] >= threshold) & (min_cov_5_samplings_chr[[4]][x] >= threshold) & (min_cov_5_samplings_chr[[5]][x] >= threshold)) {
+      return(x)
+    }
+  ))
+  
+  min_cov_5_samplings_nucleo <- lapply(list.files(paste0(path_directory, '/nucleo'), pattern = '.bam$', full.names = TRUE), function(x) {
+    min_cov <- Calculate_min_coverage(x, regions_file)
+  })
+  
+  min_all_samplings_nucleo <- unlist(lapply(seq_along(1:length(min_cov_5_samplings_nucleo[[1]])), function(x)
+    if ((min_cov_5_samplings_nucleo[[1]][x] >= threshold) & (min_cov_5_samplings_nucleo[[2]][x] >= threshold) & (min_cov_5_samplings_nucleo[[3]][x] >= threshold) & (min_cov_5_samplings_nucleo[[4]][x] >= threshold) & (min_cov_5_samplings_nucleo[[5]][x] >= threshold)) {
+      return(x)
+    }
+  ))
+  
+  min_cov_5_samplings_cyto <- lapply(list.files(paste0(path_directory, '/cyto'), pattern = '.bam$', full.names = TRUE), function(x) {
+    min_cov <- Calculate_min_coverage(x, regions_file)
+  })
+  
+  min_all_samplings_cyto <- unlist(lapply(seq_along(1:length(min_cov_5_samplings_cyto[[1]])), function(x)
+    if ((min_cov_5_samplings_cyto[[1]][x] >= threshold) & (min_cov_5_samplings_cyto[[2]][x] >= threshold) & (min_cov_5_samplings_cyto[[3]][x] >= threshold) & (min_cov_5_samplings_cyto[[4]][x] >= threshold) & (min_cov_5_samplings_cyto[[5]][x] >= threshold)) {
+      return(x)
+    }
+  ))
+  
+  return(list(min_all_samplings_chr,min_all_samplings_nucleo,min_all_samplings_cyto))
+}
+
+# function to compute the coverage of a genomic region as the mean coverage between the coverage values higher than 20x considering
+# all the bases of that genomic region in all the 5 subsamplings               
+coverage_region <- function(regions_file, path_directory) {
+    
+  Calculate_coverage <- function(bam_file, regions_file) {
+    # import the regions_file as a GRanges object
+    regions_df <- read.table(regions_file, quote = "")
+    regions <- GRanges(seqnames = regions_df$V1,
+                       ranges = IRanges(start = regions_df$V2,
+                                        end = regions_df$V3),
+                       strand = regions_df$V5)
+    
+    pu_par <- PileupParam(max_depth=1000000, min_base_quality=0, min_mapq=0,
+                          min_nucleotide_depth=0, min_minor_allele_depth=0,
+                          distinguish_strands=FALSE, distinguish_nucleotides=FALSE,
+                          ignore_query_Ns=TRUE, include_deletions=FALSE, include_insertions=FALSE,
+                          left_bins=NULL, query_bins=NULL, cycle_bins=NULL)
+    
+    # import bam file
+    pileup_tot <- pileup(file = bam_file, index = paste0(bam_file, ".bai"), pileupParam = pu_par)
+    
+    # this command must be executed only if the transcript names in the bam file contain additional information, 
+    # like the gene name and the Ensembl gene id, and you want to remove these additional data taking only the 
+    # Ensembl transcript id
+    pileup_tot$seqnames <- gsub(x=as.vector(pileup_tot$seqnames), pattern='\\|.*', replacement = '')
+    
+    pileup_GR <- GRanges(seqnames = pileup_tot$seqnames,
+                         ranges = IRanges(start = pileup_tot$pos, end = pileup_tot$pos))
+    mcols(pileup_GR) <- pileup_tot$count
+    colnames(mcols(pileup_GR)) <- "coverage"
+    
+    hits <- findOverlaps(query = pileup_GR, subject = regions, ignore.strand = TRUE)
+    coverage_split <- split(pileup_GR[queryHits(hits)], subjectHits(hits))
+    # if one genomic region does not have any read mapping on it the coverage is set to 0
+    if (length(unique(subjectHits(hits))) != nrow(regions_df)) {
+      without_reads <- setdiff(1:nrow(regions_df),unique(subjectHits(hits)))
+      for (i in 1:length(without_reads)) 
+        coverage_split <- c(coverage_split[1:(without_reads[i]-1)], GRanges(seqnames = 1,ranges = IRanges(start=1, end=1), coverage=0), coverage_split[without_reads[i]:length(coverage_split)])
+    }
+    
+    cov <- lapply(seq_along(1:length(coverage_split)), function(x) {
+      if (length(coverage_split[[x]]) < width(regions[x])) {
+        # if one genomic region does not have any read mapping on it the coverage is set to 0 for each base contained in that region
+        if (unique(is.na(coverage_split[[x]]$coverage))) {
+          cov <- rep(0, width(regions[x]))
+        } else {
+          # if one genomic region has some bases without any read mapping on them, the coverage of these bases is set to 0 
+          cov <- c(coverage_split[[x]]$coverage, rep(0, (width(regions[x])-length(coverage_split[[x]]))))
+        }
+      } else {
+        cov <- coverage_split[[x]]$coverage
+      }
+      cov
+    })
+    
+    return(cov)
+  }
+
+  # compute the coverage of each base of each genomic region considering each of the 5 sets of reads from the two levels
+  # of subsamplings of the reads from chromatin fraction
+  cov_5_samplings_chr <- lapply(list.files(paste0(path_directory, '/chr'), pattern = '.bam$', full.names = TRUE), function(x) {
+    Calculate_coverage(x, regions_file)
+  })
+  
+  # compute the coverage of a genomic region as the mean between the coverage values of each base of that region considering
+  # all the 5 sets of reads. Only the coverages at least equal to 20x are considered. If all the coverages are lower than 20, 
+  # the mean coverage is set to 0
+  mean_cov_chr <- lapply(seq_along(1:length(cov_5_samplings_chr[[1]])), function(x) {
+    all_cov <- c(cov_5_samplings_chr[[1]][[x]],cov_5_samplings_chr[[2]][[x]],cov_5_samplings_chr[[3]][[x]],cov_5_samplings_chr[[4]][[x]],cov_5_samplings_chr[[5]][[x]])
+    all_cov <-  all_cov[all_cov>=20]
+    if (length(all_cov) != 0) {
+        mean(all_cov)
+      } else {
+        0
+      }
+      })
+
+  cov_5_samplings_nucleo <- lapply(list.files(paste0(path_directory, '/nucleo'), pattern = '.bam$', full.names = TRUE), function(x) {
+    Calculate_coverage(x, regions_file)
+  })
+  
+  mean_cov_nucleo <- lapply(seq_along(1:length(cov_5_samplings_nucleo[[1]])), function(x) {
+    all_cov <- c(cov_5_samplings_nucleo[[1]][[x]],cov_5_samplings_nucleo[[2]][[x]],cov_5_samplings_nucleo[[3]][[x]],cov_5_samplings_nucleo[[4]][[x]],cov_5_samplings_nucleo[[5]][[x]])
+    all_cov <-  all_cov[all_cov>=20]
+    if (length(all_cov) != 0) {
+      mean(all_cov)
+    } else {
+      0
+    }
+  })
+  
+  cov_5_samplings_cyto <- lapply(list.files(paste0(path_directory, '/cyto'), pattern = '.bam$', full.names = TRUE), function(x) {
+    Calculate_coverage(x, regions_file)
+  })
+  
+  
+  mean_cov_cyto <- lapply(seq_along(1:length(cov_5_samplings_cyto[[1]])), function(x) {
+    all_cov <- c(cov_5_samplings_cyto[[1]][[x]],cov_5_samplings_cyto[[2]][[x]],cov_5_samplings_cyto[[3]][[x]],cov_5_samplings_cyto[[4]][[x]],cov_5_samplings_cyto[[5]][[x]])
+    all_cov <-  all_cov[all_cov>=20]
+    if (length(all_cov) != 0) {
+      mean(all_cov)
+    } else {
+      0
+    }
+  })
+  
+  l <- list(mean_cov_chr,mean_cov_nucleo,mean_cov_cyto)
+  names(l) <- c('Chromatin','Nucleoplasm','Cytoplasm')
+  return(l)
+}                                       
 
 # path_directory is the path to the directory containing three folders: /chr/, /nucleo/, /cyto/ each with the 5 txt files 
 # produced by ELIGOS for each of the 5 samplings
