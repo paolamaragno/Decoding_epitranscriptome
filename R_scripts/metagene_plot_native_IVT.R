@@ -30,7 +30,7 @@ bam_files <- c("/path/to/native_filtered.bam",
                "/path/to/IVT_filtered.bam")
 
 # Specify the file labels
-bam_labels <- c("Native SUM159", "IVT K562 - SUM159")
+bam_labels <- c("Native SUM159TP", "IVT K562 - SUM159TP")
 
 # Create the list of GRanges objects
 granges_list <- create_granges_list(bam_files)
@@ -46,7 +46,7 @@ metagene_plot_of_coverage <- GuitarPlot(stGRangeLists = granges_list,
                                         enableCI = FALSE) 
 
 
-pdf("/path/to/coverage_native_IVT.pdf")
+pdf("/path/to/coverage_native_SUM159TP_IVT.pdf")
 metagene_plot_of_coverage + 
   scale_fill_manual(values=rep(c("transparent"),length(bam_labels))) +
   theme_void() +
