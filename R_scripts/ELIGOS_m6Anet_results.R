@@ -7,6 +7,7 @@ library('RColorBrewer')
 library('seqinr')
 library('xlsx')
 library('bedr')
+library('dplyr')
 
 # path to GTF annotation file
 gtf_file <- "/path/to/Homo_sapiens.GRCh38.104.gtf"
@@ -991,6 +992,85 @@ DRACH_overlap_ELIGOS <- function(path_directory, hits_ELIGOS_chr, hits_ELIGOS_nu
   return(confirmed_hits_DRACH)
 }
 
+# function to compare the genomic distribution of ELIGOS DRACH+/DRACH- hits bewteen SUM159 and K562 cells
+comparison_heatmaps_SUM159_K562 <- function(path_regions_with_annotation_SUM159, path_regions_with_annotation_K562, path_output, DRACH) {
+
+    # import the file with the coordinates of the genomic regions containing at least one hit in at least one cellular fraction
+    # and their annotation in the different fractions of SUM159 cells
+    regions_SUM159_file <- read.table(file = path_regions_with_annotation_SUM159, header = TRUE,sep = "\t")
+    regions_SUM159 <- GRanges(seqnames = regions_SUM159_file$chr, ranges = IRanges(start=regions_SUM159_file$start, end=regions_SUM159_file$end),
+            strand = regions_SUM159_file$strand)
+
+    # associate each genomic region with the gene on which it maps
+    overlap_with_genes_SUM159 <- findOverlaps(genes_txdb,regions_SUM159)
+    mcols(regions_SUM159) <- cbind(mcols(regions_SUM159), gene_id = NA)
+    lapply(seq_along(1:length(regions_SUM159)), function(x) {
+      regions_SUM159[x]$gene_id <<- genes_txdb[queryHits(overlap_with_genes_SUM159[subjectHits(overlap_with_genes_SUM159) == x])]$gene_id
+    })
+    regions_SUM159_genes <- cbind(gene_id = regions_SUM159$gene_id, regions_SUM159_file[,6:8])
+
+    # import the file with the coordinates of the genomic regions containing at least one hit in at least one cellular fraction
+    # and their annotation in the different fractions of K562 cells
+    regions_K562_file <- read.table(file = path_regions_with_annotation_K562, sep = "\t", header = TRUE)
+    regions_K562 <- GRanges(seqnames = regions_K562_file$chr, ranges = IRanges(start=regions_K562_file$start, end=regions_K562_file$end),
+                                 strand = regions_K562_file$strand)
+
+    # associate each genomic region with the gene on which it maps
+    overlap_with_genes_K562 <- findOverlaps(genes_txdb,regions_K562)
+    mcols(regions_K562) <- cbind(mcols(regions_K562), gene_id = NA)
+    lapply(seq_along(1:length(regions_K562)), function(x) {
+      regions_K562[x]$gene_id <<- genes_txdb[queryHits(overlap_with_genes_K562[subjectHits(overlap_with_genes_K562) == x])]$gene_id
+    })
+    regions_K562_genes <- cbind(gene_id = regions_K562$gene_id, regions_K562_file[,6:8])
+
+    # identify the genes in common between the two cell lines
+    tot_genes_SUM159 <- unique(regions_SUM159$gene_id)
+    tot_genes_K562 <- unique(regions_K562$gene_id)
+    genes_common <- intersect(tot_genes_SUM159,tot_genes_K562)
+
+    # filter the genomic regions on the genes in common
+    regions_SUM159_on_common_genes <- regions_SUM159_genes[regions_SUM159_genes$gene_id %in% genes_common,]
+    combinations_SUM159 <- regions_SUM159_on_common_genes[,2:4] %>% distinct()
+    
+    regions_K562_on_common_genes <- regions_K562_genes[regions_K562_genes$gene_id %in% genes_common,]
+    combinations_K562 <- regions_K562_on_common_genes[,2:4] %>% distinct()
+
+    # identify all the possible combinations of annotations
+    all_combinations <- rbind(combinations_SUM159,combinations_K562)
+    all_combinations <- all_combinations %>% distinct()
+    
+    df <- data.frame(Chromatin=all_combinations[,1], Nucleoplasm = all_combinations[,2], Cytoplasm = all_combinations[,3], Overlap = NA, Number_of_common_genes = NA)
+
+    # for each combination of annotations compute how many genes have that combination in both cell lines with respect to the overall
+    # number of genes with that combination in at least one cell line
+    lapply(seq_along(1:nrow(all_combinations)), function(x) {
+      SUM159_genes <- regions_SUM159_on_common_genes[which(colSums(t(regions_SUM159_on_common_genes[,2:4]) == as.numeric(all_combinations[x,])) == 3),1]
+      K562_genes <- regions_K562_on_common_genes[which(colSums(t(regions_K562_on_common_genes[,2:4]) == as.numeric(all_combinations[x,])) == 3),1]
+      df[x,4] <<- length(intersect(SUM159_genes,K562_genes))/length(unique(union(SUM159_genes,K562_genes)))
+      df[x,5] <<- length(intersect(SUM159_genes,K562_genes))
+    })
+
+    df[,1:3][df[,1:3] == 0] <- 'Not analysed' 
+    df[,1:3][df[,1:3] == 1] <- 'Analysed cov_min<20' 
+    df[,1:3][df[,1:3] == 2] <- 'Analysed cov_min>20' 
+    df[,1:3][df[,1:3] == 3] <- 'Hits' 
+
+    if (DRACH) {
+        write.xlsx(df, paste0(path_output, "/overlap_genes_SUM159_K562_DRACH+.xlsx"))
+    } else {
+        write.xlsx(df, paste0(path_output, "/overlap_genes_SUM159_K562_DRACH-.xlsx"))
+    }
+
+    # filter only the genomic regions that have at least one hit or without hits but a minimum coverage of at least 20x in all the 5 subsamplings
+    df2 <- df[((df$Chromatin %in% c('Hits', 'Analysed cov_min>20')) & (df$Nucleoplasm %in% c('Hits', 'Analysed cov_min>20')) & (df$Cytoplasm %in% c('Hits', 'Analysed cov_min>20'))),]
+
+    if (DRACH) {
+        write.xlsx(df2, paste0(path_output, "overlap_SUM159_K562_selected_DRACH+.xlsx"))
+    } else {
+        write.xlsx(df2, paste0(path_output, "overlap_SUM159_K562_selected_DRACH-.xlsx"))
+    }
+}
+
 # path_directory is the path to the directory containing three folders: /chr/, /nucleo/, /cyto/ each with the 5 tsv files 
 # produced by m6Anet for each of the 5 samplings
 m6Anet_results <- function(path_directory, gr_m6Anet_chr_ass, gr_m6Anet_nucleo, gr_m6Anet_cyto,
@@ -1895,3 +1975,7 @@ ELIGOS_vs_m6Anet <- comparison_ELIGOS_m6Anet(path_directory = '/path/to/fraction
                                              pdf_overlap_ELIGOS_m6Anet_DRACH_nucleo = 'overlap_all_hits_eligos_hits_eligos_DRACH_all_hits_m6anet_nucleo_10nt.pdf',
                                              pdf_overlap_ELIGOS_m6Anet_DRACH_cyto = 'overlap_all_hits_eligos_hits_eligos_DRACH_all_hits_m6anet_cyto_10nt.pdf')
 
+##############
+# Compare the genomic distribution of ELIGOS DRACH+/DRACH- hits bewteen SUM159 and K562 cells                                         
+comparison_heatmaps_SUM159_K562('/path/to/regions_with_annotation_DRACHpos_SUM159.bed', '/path/to/regions_with_annotation_DRACHpos_K562.bed', '/path/to/output_dir', TRUE)
+comparison_heatmaps_SUM159_K562('/path/to/regions_with_annotation_DRACHneg_SUM159.bed', '/path/to/regions_with_annotation_DRACHneg_K562.bed', '/path/to/output_dir', FALSE)
