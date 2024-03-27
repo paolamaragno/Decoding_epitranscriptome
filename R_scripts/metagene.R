@@ -297,7 +297,6 @@ count_mods(directory='/path/to/fractions_eligos_4sU_library_gene_subsampling_rep
 count_mods(directory='/path/to/fractions_eligos_4sU_library_gene_subsampling_nascent_min05_min05_mag1/')
 count_mods(directory='/path/to/fractions_eligos_4sU_library_gene_subsampling_total_510645_min05_min05_mag1/')
 count_mods(directory='/path/to/fractions_eligos_K562_all_reads/')
-count_mods(directory='/path/to/fractions_eligos_STORM_K562/eligos_total_reads/')
 
 
 ###########
