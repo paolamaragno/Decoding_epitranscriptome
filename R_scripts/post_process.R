@@ -1297,7 +1297,7 @@ RNA_mods_chr_nascent <- post_process_mods(chr_ass_mod_type_without_DRACH[c(1,2,3
                                           '/path/to/folder_random_hits_cluster_nascent/')
 
 pvalues_without_DRACH_chr_nascent <- RNA_mods_chr_nascent[[1]]
-pvalues_with_DRACH_chr_nascent <- RNA_mods_chr[[2]]
+pvalues_with_DRACH_chr_nascent <- RNA_mods_chr_nascent[[2]]
 significant_RNA_mods_without_DRACH_chr_nascent <- RNA_mods_chr_nascent[[3]]
 significant_RNA_mods_with_DRACH_chr_nascent <- RNA_mods_chr_nascent[[4]]
 
