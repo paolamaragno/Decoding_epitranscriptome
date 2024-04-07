@@ -1,6 +1,5 @@
 This repository is a workflow for decoding the whole epitranscriptome and determining whether it changes during the RNA life cycle.
-It is implemented to analyse data obtained through Nanopore direct RNA sequencing of RNA present within chromatin, nucleoplasm and cytoplasm of SUM159 cells,
-an in vitro model of triple negative breast cancer. 
+It is implemented to analyse data obtained through Nanopore direct RNA sequencing of RNAs present within chromatin, nucleoplasm and cytoplasm of SUM159 cells, an in vitro model of triple negative breast cancer cells, and K562 lymphoblast cells. 
 
 Two different tools - ELIGOS and m6Anet - were used to identify RNA marks by analysing Nanopore reads. 
 The comparative analysis against an IVT baseline in which RNAs were devoid of any mark allowed characterising the whole epitranscriptome. In particular, 
@@ -8,7 +7,7 @@ this analysis focuses on all the marks whose removal impacted Nanopore signal an
 ELIGOS hits were characterised by motif discovery analysis and associated with specific RNA marks using public databases. 
 
 In this way, it was possible to decipher which modifications were present on the RNAs and where, as well as if the levels of the different RNA 
-modifications and their localization inside the gene body change across the different cellular compartments.
+modifications and their localization inside the gene body change across the different cellular fractions.
 
 To better understand the spatial and temporal evolution of RNA modifications, the nano-ID tool was used to classify the reads into two classes: 
 those representing newly-synthetized nascent RNAs and those from pre-existing RNAs. 
@@ -16,12 +15,9 @@ those representing newly-synthetized nascent RNAs and those from pre-existing RN
 Finally, the combinatorial co-occurrence of various modifications within the transcripts of the same genes was studied. 
 
 # Repository content
-* eligos-v2.1.0: folder containing the Dockerfile to assemble all the images required by the pipeline, a bash script to run the nextflow pipeline (nf-eligos.sh),
-  the nextflow pipeline main script (nf-eligos.nf) the nextflow pipeline configuration file (nf-eligos.conf) and a sample.txt;
-* m6Anet-v2.1.0: folder containing the Dockerfile to assemble all the images required by the pipeline, a bash script to run the nextflow pipeline (nf-m6anet.sh),
-  the nextflow pipeline main script (nf-m6anet.nf) and the nextflow pipeline configuration file (nf-m6anet.conf) and a sample.txt;
-* nanoID: folder containing a bash script to run the nextflow pipeline (nanoID.sh), the nextflow pipeline main script (nanoID.nf) and the nextflow
-  pipeline configuration file (nanoID.conf) and a sample.txt.
+* eligos-v2.1.0: folder containing the Dockerfile to assemble all the images required by the pipeline, a bash script to run the nextflow pipeline (nf-eligos.sh), the nextflow pipeline main script (nf-eligos.nf), the nextflow pipeline configuration file (nf-eligos.conf) and a sample.txt;
+* m6Anet-v2.1.0: folder containing the Dockerfile to assemble all the images required by the pipeline, a bash script to run the nextflow pipeline (nf-m6anet.sh), the nextflow pipeline main script (nf-m6anet.nf), the nextflow pipeline configuration file (nf-m6anet.conf) and a sample.txt;
+* nanoID: folder containing a bash script to run the nextflow pipeline (nanoID.sh), the nextflow pipeline main script (nanoID.nf), the nextflow pipeline configuration file (nanoID.conf) and a sample.txt.
 * R_scripts: folder containing a set of R scripts for data pre and post-processing.
 
 # Getting started
@@ -38,7 +34,7 @@ Rscript subsampling_reads.R [list of arguments]
 --path_fastq_chr_ass                                     Path to the fastq file of chromatin fraction
 --path_fastq_nucleo                                      Path to the fastq file of nucleoplasm fraction
 --path_fastq_cyto                                        Path to the fastq file of cytoplasm fraction
---path_reference_genome                                  Path to the reference genome (*)
+--path_reference_genome                                  Path to the reference genome in fasta format (*)
 --path_gtf_file                                          Path to the gtf file (*)
 --threads                                                Number of threads for the mapping (*)
 --num_reads                                              Minimum number of reads mapping on each gene (*)
@@ -46,9 +42,9 @@ Rscript subsampling_reads.R [list of arguments]
 --minimap2                                               Path to minimap2 (*)
 --samtools                                               Path to samtools (*)
 --seqtk                                                  Path to seqtk (*)
---cond1                                                  Different conditions with the same order of the corresponding fastq files 
---cond2                                                  Different conditions with the same order of the corresponding fastq files
---cond3                                                  Different conditions with the same order of the corresponding fastq files
+--cond1                                                  Condition of the first fastq file given in input
+--cond2                                                  Condition of the second fastq file given in input
+--cond3                                                  Condition of the third fastq file given in input
 
 For all the parameters indicated with (*) the default values can be set directly inside the R script.
 
