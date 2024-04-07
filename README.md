@@ -17,7 +17,7 @@ Finally, the combinatorial co-occurrence of various modifications within the tra
 # Repository content
 * eligos-v2.1.0: folder containing the Dockerfile to assemble all the images required by the pipeline, a bash script to run the nextflow pipeline (nf-eligos.sh), the nextflow pipeline main script (nf-eligos.nf), the nextflow pipeline configuration file (nf-eligos.conf) and a sample.txt;
 * m6Anet-v2.1.0: folder containing the Dockerfile to assemble all the images required by the pipeline, a bash script to run the nextflow pipeline (nf-m6anet.sh), the nextflow pipeline main script (nf-m6anet.nf), the nextflow pipeline configuration file (nf-m6anet.conf) and a sample.txt;
-* nanoID: folder containing a bash script to run the nextflow pipeline (nanoID.sh), the nextflow pipeline main script (nanoID.nf), the nextflow pipeline configuration file (nanoID.conf) and a sample.txt.
+* nanoID: folder containing a bash script to run the nextflow pipeline (nanoID.sh), the nextflow pipeline main script (nanoID.nf), the nextflow pipeline configuration file (nanoID.conf) and a sample.txt;
 * R_scripts: folder containing a set of R scripts for data pre and post-processing.
 
 # Getting started
