@@ -45,10 +45,11 @@ Rscript subsampling_reads.R [list of arguments]
 --cond1                                                  Condition of the first fastq file given in input
 --cond2                                                  Condition of the second fastq file given in input
 --cond3                                                  Condition of the third fastq file given in input
-
+```
 For all the parameters indicated with (*) the default values can be set directly inside the R script.
 
 Example of execution with default parameters:
+```
 Rscript subsampling_reads.R path_fastq_chr_ass='/path/to/chromatin_associated_PASS_reads.fastq' path_fastq_nucleo='/path/to/nucleoplasmic_PASS_reads.fastq' path_fastq_cyto='/path/to/cytoplasmic_PASS_reads.fastq' cond1='chr' cond2='nucleo' cond3='cyto'
 ```
 
