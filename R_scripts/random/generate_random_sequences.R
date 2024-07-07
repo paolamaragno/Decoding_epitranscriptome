@@ -28,21 +28,21 @@ coordinates_exons_genes_hits_chr <- lapply(coordinates_exons_genes_hits_chr, fun
 })
 coordinates_exons_genes_hits_chr <- unlist(as(coordinates_exons_genes_hits_chr, 'GRangesList'))
 # create a vector reporting, for each exon of each selected gene, the chr_start_end_strand
-coordinates_exons_genes_vector_chr <- paste0(seqnames(coordinates_exons_genes_hits_chr), "_", start(coordinates_exons_genes_hits_chr), "_", end(coordinates_exons_genes_hits_chr), '_', strand(coordinates_exons_genes_hits_chr))
+coordinates_exons_genes_vector_chr <- paste0(names(coordinates_exons_genes_hits_chr),'_',seqnames(coordinates_exons_genes_hits_chr), "_", start(coordinates_exons_genes_hits_chr), "_", end(coordinates_exons_genes_hits_chr), '_', strand(coordinates_exons_genes_hits_chr))
 
 coordinates_exons_genes_hits_nucleo <- exon_coord_red[genes_nucleo]
 coordinates_exons_genes_hits_nucleo <- lapply(coordinates_exons_genes_hits_nucleo, function(x) {
   x[width(x) >= 10] 
 })
 coordinates_exons_genes_hits_nucleo <- unlist(as(coordinates_exons_genes_hits_nucleo, 'GRangesList'))
-coordinates_exons_genes_vector_nucleo <- paste0(seqnames(coordinates_exons_genes_hits_nucleo), "_", start(coordinates_exons_genes_hits_nucleo), "_", end(coordinates_exons_genes_hits_nucleo), '_', strand(coordinates_exons_genes_hits_nucleo))
+coordinates_exons_genes_vector_nucleo <- paste0(names(coordinates_exons_genes_hits_chr),'_',seqnames(coordinates_exons_genes_hits_nucleo), "_", start(coordinates_exons_genes_hits_nucleo), "_", end(coordinates_exons_genes_hits_nucleo), '_', strand(coordinates_exons_genes_hits_nucleo))
 
 coordinates_exons_genes_hits_cyto <- exon_coord_red[genes_cyto]
 coordinates_exons_genes_hits_cyto <- lapply(coordinates_exons_genes_hits_cyto, function(x) {
   x[width(x) >= 10] 
 })
 coordinates_exons_genes_hits_cyto <- unlist(as(coordinates_exons_genes_hits_cyto, 'GRangesList'))
-coordinates_exons_genes_vector_cyto <- paste0(seqnames(coordinates_exons_genes_hits_cyto), "_", start(coordinates_exons_genes_hits_cyto), "_", end(coordinates_exons_genes_hits_cyto), '_', strand(coordinates_exons_genes_hits_cyto))
+coordinates_exons_genes_vector_cyto <- paste0(names(coordinates_exons_genes_hits_chr),'_',seqnames(coordinates_exons_genes_hits_cyto), "_", start(coordinates_exons_genes_hits_cyto), "_", end(coordinates_exons_genes_hits_cyto), '_', strand(coordinates_exons_genes_hits_cyto))
 
 # function to generate, for each fraction, for 1,000 times a number of random sequences equal to
 # the overall number of ELIGOS hits (both DRACH+ and DRACH-) from the same fraction
@@ -66,20 +66,22 @@ generate_random_hits <- function(number_hits, fraction) {
     # equal to the overall number of ELIGOS hits (both DRACH+ and DRACH-) from the same fraction
     random_coordinates <- sample(coordinates_exons_genes_vector,number_hits, replace = TRUE)
     hits <- unlist(lapply(as.list(random_coordinates), function(x){
-      chr <- unlist(strsplit(x, split='_'))[1]
-      start <- as.numeric(unlist(strsplit(x, split='_'))[2])
-      end <- as.numeric(unlist(strsplit(x, split='_'))[3])
-      strand <- unlist(strsplit(x, split='_'))[4]
+      gene <- unlist(strsplit(x, split='_'))[1]
+      chr <- unlist(strsplit(x, split='_'))[2]
+      start <- as.numeric(unlist(strsplit(x, split='_'))[3])
+      end <- as.numeric(unlist(strsplit(x, split='_'))[4])
+      strand <- unlist(strsplit(x, split='_'))[5]
       # extract a random position between the starting position of the exon and the final position - 9
       start_random_hit <- sample(start:(end-9), 1)
-      return(paste0(chr,'_', as.character(start_random_hit), '_', as.character(start_random_hit+9), '_', strand))
+      return(paste0(gene, '_',chr,'_', as.character(start_random_hit), '_', as.character(start_random_hit+9), '_', strand))
     }))
     
-    gr <- GRanges(seqnames = unlist(lapply(as.list(hits), function(x) unlist(strsplit(x, split='_'))[1])),
-                  ranges = IRanges(as.numeric(unlist(lapply(as.list(hits), function(x) unlist(strsplit(x, split='_'))[2]))),
-                                   as.numeric(unlist(lapply(as.list(hits), function(x) unlist(strsplit(x, split='_'))[3])))),
-                  strand = unlist(lapply(as.list(hits), function(x) unlist(strsplit(x, split='_'))[4])))
-    
+    gr <- GRanges(seqnames = unlist(lapply(as.list(hits), function(x) unlist(strsplit(x, split='_'))[2])),
+                  ranges = IRanges(as.numeric(unlist(lapply(as.list(hits), function(x) unlist(strsplit(x, split='_'))[3]))),
+                                   as.numeric(unlist(lapply(as.list(hits), function(x) unlist(strsplit(x, split='_'))[4])))),
+                  strand = unlist(lapply(as.list(hits), function(x) unlist(strsplit(x, split='_'))[5])),
+                  gene = unlist(lapply(as.list(hits), function(x) unlist(strsplit(x, split='_'))[1])))
+                                        
     # identify which random hits contain the DRACH motif and which not
     overlap_DRACH <- findOverlaps(gr, DRACH, type='any', ignore.strand=FALSE)
     random_hits_DRACH <- c(random_hits_DRACH, gr[unique(queryHits(overlap_DRACH))])
